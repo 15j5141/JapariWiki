@@ -1,0 +1,21 @@
+# image
+*.jpg
+*.jpeg
+*.png
+*.bmp
+*.gif
+*.ico
+
+# audio
+*.ogg
+*.mp3
+*.wav
+
+# other
+.vscode
+#text/*
+#!text/site_*
+img/*
+!img/site_*
+.well-known/acme-challenge/*
+.well-known_/acme-challenge/*

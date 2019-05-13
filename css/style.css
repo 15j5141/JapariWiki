@@ -1,0 +1,192 @@
+﻿body {
+    background-color: rgba(00, 00, 00, 1.0);
+    color: #ffffff;
+    background-image: url(img/site_BackGround.png);
+    background-repeat: no-repeat;
+    background-position: top center;
+    background-attachment: fixed;
+}
+
+div#header {
+    background: rgba(48, 48, 48, 0.8);
+    padding: 10px;
+    font-size: 32px;
+}
+
+div#side {
+    float: left;
+    /* 左寄せにする */
+    width: 20%;
+    /* 幅 */
+}
+
+div#side_menu {
+    background: rgba(48, 48, 48, 0.8);
+    margin: 10px 10px 10px 25px;
+    /* 位置調整（IE6のバグに注意） */
+    display: inline;
+    /* IE6のマージン算出のバグ対策 */
+    padding: 10px;
+    width: 90%;
+    float: left;
+    /* 左寄せにする */
+    overflow: auto;
+    /* はみ出ないように */
+}
+
+div#side_history {
+    background: rgba(48, 48, 48, 0.8);
+    margin: 10px 10px 10px 25px;
+    /* 位置調整（IE6のバグに注意） */
+    display: inline;
+    /* IE6のマージン算出のバグ対策 */
+    padding: 10px;
+    width: 90%;
+    float: left;
+    /* 左寄せにする */
+}
+
+div#content {
+    background: rgba(64, 64, 64, 0.2);
+    width: 70%;
+    margin: 10px 20px 10px 0px;
+    /* 幅の指定と位置調整 */
+    float: right;
+    /* 右寄せにする */
+}
+
+div#content_body {
+    background: rgba(48, 48, 48, 0.8);
+    /* width:90%; */
+    margin: 5px 5px 5px 5px;
+    /* 幅の指定と位置調整 */
+    /* float:left; */
+    /* 右寄せにする */
+    padding: 10px;
+    min-height: 60vh;
+    /* ajax時に背景をチラ見にないように vw=Viewport Height*/
+}
+
+div#footer {
+    background: rgba(48, 48, 48, 0.8);
+    min-height: 12px;
+    text-align: center;
+    clear: both;
+    padding: 10px;
+}
+
+p.asta1,
+p.Asta1 {
+    /*
+*/
+    margin: 4px 10px 2px 0px;
+    text-indent: 1em;
+    background-color: #105050;
+}
+
+p.asta2,
+p.Asta2 {
+    margin: 4px 10px 10px 20px;
+    text-indent: 1em;
+    background-color: #105050;
+}
+
+p.asta3,
+p.Asta3 {
+    margin: 4px 10px 20px 40px;
+    text-indent: 1em;
+    background-color: #105050;
+}
+
+a {
+    color: #FFD700;
+}
+
+img.tag {
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 100%;
+}
+
+#modal-content {
+    /* 追加分 */
+    z-index: 2;
+    width: 90%;
+    height: 80%;
+    /* display:none; */
+    position: fixed;
+    top: 10%;
+    left: 5%;
+    background-color: #303030;
+    padding: 10px;
+    /* 余白 */
+    overflow: auto;
+    /* はみ出ないように */
+    margin: 0 auto;
+}
+
+#modal-overlay {
+    /* 追加分 */
+    z-index: 1;
+    width: 100%;
+    height: 120%;
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.70);
+}
+
+table,
+td,
+th {
+    border: 1px #ffffff solid;
+    border-collapse: collapse;
+}
+
+table {
+    width: 80%;
+    /* min-width: auto; */
+}
+
+td,
+th {
+    width: 10%;
+    /* max-width: auto; */
+}
+
+table.uploaded_list {
+    margin: 0 auto;
+}
+
+table.uploaded_list {
+    width: 100%;
+}
+
+td.uploaded_list {
+    text-align: center;
+    width: 30%;
+}
+
+#site_history {
+    height: 10em;
+    width: 100%;
+    overflow: auto;
+    /* はみ出ないように */
+    font-size: 50%;
+    /* white-space: nowrap; */
+}
+
+#login_history {
+    height: 10em;
+    width: 100%;
+    overflow: auto;
+    /* はみ出ないように */
+    font-size: 50%;
+    /* white-space: nowrap; */
+}
+
+ul {
+    margin: auto;
+}
