@@ -1,8 +1,8 @@
 <?php
 
 ini_set( 'display_errors', 1 );
-require('./lib/module_convertHTML.php');
-require('./lib/module_login.php');
+require_once(__DIR__.'/lib/module_convertHTML.php');
+require_once(__DIR__.'/lib/module_login.php');
 
 if(isset($_GET['page'])){
 	$_SESSION['page']=htmlspecialchars($_GET['page'], ENT_QUOTES|ENT_HTML5);

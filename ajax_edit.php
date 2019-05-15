@@ -1,7 +1,7 @@
 <?php
 // php/init
 header('Content-Type: text/html; charset=UTF-8');
-require('./lib/module_dataBase.php');
+require_once(__DIR__.'/lib/module_dataBase.php');
 ?>
 
 

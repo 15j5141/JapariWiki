@@ -1,11 +1,10 @@
 <?php
 
-//require(dirname(__FILE__) . '../db.php');
 ini_set( 'display_errors', 1 );
 ini_set('log_errors', 1);
 ini_set('error_log', 'php_err.txt');
 
-require('./lib/module_dataBase.php');
+require_once(__DIR__.'/lib/module_dataBase.php');
 
 if(isset($_POST["user_id"])){
   $user_id=$_POST["user_id"];

@@ -2,7 +2,7 @@
 ini_set( 'display_errors', 1 );
 
 
-require($_SERVER['DOCUMENT_ROOT'] . '/../db.php');
+require_once(__DIR__.'/../db.php');
 
 function sqlbind($sql, $types, ...$params){
   global $db;
@@ -19,7 +19,7 @@ function sqlbind($sql, $types, ...$params){
   if ($stmt = $mysqli->prepare($sql)) {
 $a=array($params[0], &$params[1]);
 //var_dump($a);
-    if( call_user_func_array(array($stmt, 'bind_param'), $params) ){ 
+    if( call_user_func_array(array($stmt, 'bind_param'), $params) ){
       $stmt->execute();
       $result=$stmt->get_result();
       if($result!==false){
@@ -60,7 +60,7 @@ function sqlbind2($sql, $types, $params){
   if ($stmt = $mysqli->prepare($sql)) {
 $a=array($types, &$params);
 //var_dump($a);
-    if( call_user_func_array(array($stmt, 'bind_param'), $a) ){ 
+    if( call_user_func_array(array($stmt, 'bind_param'), $a) ){
       $stmt->execute();
       $result=$stmt->get_result();
       if($result!==false){
@@ -134,4 +134,3 @@ function sqlexec($sql){
 
 */
 ?>
-
