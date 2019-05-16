@@ -2,7 +2,7 @@
 
 ini_set( 'display_errors', 0 );
 header('Content-Type: text/html; charset=UTF-8');
-require('./lib/module_dataBase.php');
+require_once(__DIR__.'/lib/module_dataBase.php');
 session_start();
 
 
@@ -43,9 +43,9 @@ else:
 ?>
 
 <!-- データのエンコード方式である enctype は、必ず以下のようにしなければなりません -->
- <form id="form_upload" enctype="multipart/form-data" action="ajax_upload.php" method="POST"> 
+ <form id="form_upload" enctype="multipart/form-data" action="ajax_upload.php" method="POST">
 <!-- MAX_FILE_SIZE は、必ず "file" input フィールドより前になければなりません -->
- <input type="hidden" name="MAX_FILE_SIZE" value="10240000" /> 
+ <input type="hidden" name="MAX_FILE_SIZE" value="10240000" />
 <!-- input 要素の name 属性の値が、$_FILES 配列のキーになります -->
  アップロード(Max 10MB): <input name="userfile" type="file" />
  <input type="submit" value="ファイルを送信" /> </form>

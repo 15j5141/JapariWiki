@@ -1,6 +1,6 @@
 <?php
 //ini_set( 'display_errors', 1 );
-require($_SERVER['DOCUMENT_ROOT']. '/lib/module_ajaxContents.php');
+require_once(__DIR__.'/lib/module_ajaxContents.php');
 ?>
 
 <!-- affiliates kasu -->
