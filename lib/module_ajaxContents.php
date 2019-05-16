@@ -20,7 +20,6 @@ function DateDiff($date2='2036-01-01', $date1='NOW'){
   }
 }
 
-require_once(__DIR__.'/lib/module_login.php');
 // run
 if(!isAjax()){
   echo "error.";
