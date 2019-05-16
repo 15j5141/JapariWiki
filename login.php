@@ -5,6 +5,7 @@ ini_set('log_errors', 1);
 ini_set('error_log', 'php_err.txt');
 
 require_once(__DIR__.'/lib/module_dataBase.php');
+require_once(__DIR__.'/../config.php');
 
 if(isset($_POST["user_id"])){
   $user_id=$_POST["user_id"];
@@ -85,7 +86,7 @@ function sqlexec_(){
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DUMMY</title>
+  <title><?= $JWConfig["title"] ?></title>
   <script type="text/javascript" src="lib/md5.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <?php echo '<link rel="stylesheet" type="text/css" href="css/login.css?' . mt_rand() .  '" />'; ?>

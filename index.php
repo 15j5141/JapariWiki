@@ -3,6 +3,7 @@
 ini_set( 'display_errors', 1 );
 require_once(__DIR__.'/lib/module_convertHTML.php');
 require_once(__DIR__.'/lib/module_login.php');
+require_once(__DIR__.'/../config.php');
 
 if(isset($_GET['page'])){
 	$_SESSION['page']=htmlspecialchars($_GET['page'], ENT_QUOTES|ENT_HTML5);
@@ -17,7 +18,7 @@ $page = isset($_SESSION['page']) ? $_SESSION['page'] : 'FrontPage';
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<link rel="stylesheet" type="text/css" href="css/style.css?<?= mt_rand(); ?>" />
-	<title>DUMMY</title>
+	<title><?= $JWConfig["title"] ?></title>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script type="text/javascript">
 
