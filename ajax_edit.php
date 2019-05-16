@@ -34,13 +34,12 @@ if(isset($_POST['fileData'])){
   //ex) 2001-03-10 17:16:18 (MySQL DATETIME format)
   $lines=''. $today . '&br;[[' . $page . "]]&br;\n";
   $count=0;
-  $line = fgets($fp);
-  if(preg_match('/.*\[\['. $page. ']].*/', $line)!==1){
-    $lines.=$line;
-  }
   while (($line = fgets($fp)) && $count < 9) {
     //$line=htmlspecialchars($line, ENT_QUOTES, 'UTF-8');
-    $lines.=$line;
+    // 履歴内の重複ページはスキップ
+    if(preg_match('/.*\[\['. $page. ']].*/', $line)!==1){
+      $lines.=$line;
+    }
     $count++;
   }
 
