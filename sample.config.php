@@ -24,7 +24,7 @@ $JWConfig["isWarnNotHTTPS"]=true;
 /* - The following settings are automatic.
 But if it doesn't work please enter it manually. */
 $JWConfig["rootURL"]=$JWConfig["rootURL"] . (substr($JWConfig["rootURL"], -1)!='/'? '/': '');// slash check.
-preg_match("|^https?://([-\w\.]+)(:\d+)?/(.*)$|", $JWConfig["rootURL"], $out, PREG_PATTERN_ORDER);
+preg_match("|^https?://([-\w\.]+)(:\d+)?/(.*)$|", $JWConfig["rootURL"], $out);
 $JWConfig["siteDomain"]=$out[1];//strtok($_SERVER['HTTP_HOST'],':');
 $JWConfig["sitePort"]=$out[2];//':'. $_SERVER['REMOTE_PORT']
 $JWConfig["siteDir"]=$out[3];
