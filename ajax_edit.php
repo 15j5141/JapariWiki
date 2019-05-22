@@ -47,9 +47,8 @@ if(isset($_POST['fileData'])){
   file_put_contents('./text/site_History.txt', $lines);
 
   $sql="INSERT INTO app_page (pageName,user_id,text,dateTime) VALUES (? ,? ,?, ?) ON DUPLICATE KEY UPDATE text = VALUES(text)";
-  //$sql="INSERT INTO app_page (pageName,user_id,text,dateTime) VALUES ('$page','asd','$fileData','$today') ON DUPLICATE KEY UPDATE text = VALUES(text)";
-  sqlbind($sql, 'ssss', $page, 'asd', $fileData, $today);
-
+  //sqlbind($sql, 'ssss', $page, 'asd', $fileData, $today);
+  // ↑使ってないので一時コメント化
 
   exit();
 }

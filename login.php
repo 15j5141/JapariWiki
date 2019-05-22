@@ -6,6 +6,11 @@ ini_set('error_log', 'php_err.txt');
 
 require_once(__DIR__.'/lib/module_dataBase.php');
 require_once(__DIR__.'/../config.php');
+if($JWConfig["isHTTPS"]&&!isset($_SERVER['HTTPS'])){
+  // configでhttpsにしてるのにhttpでアクセスされたらhttps付きへリダイレクト
+  header( "Location: ". $JWConfig["rootURL"]. "login.php" ) ;
+  exit;
+}
 
 if(isset($_POST["user_id"])){
   $user_id=$_POST["user_id"];
@@ -28,9 +33,10 @@ if($user_id!='null' && $user_pass !='null'){
     $loginResult= 'success';
 
     // リダイレクト(移動)
-    if( parse_url($_SERVER['REQUEST_URI'], PHP_URL_QUERY )!=''){ header(
-    "Location: /?". parse_url($_SERVER['REQUEST_URI'], PHP_URL_QUERY )); }else{
-    header( "Location: /" );
+    if( parse_url($_SERVER['REQUEST_URI'], PHP_URL_QUERY )!=''){
+      header("Location: index.php?". parse_url($_SERVER['REQUEST_URI'], PHP_URL_QUERY ));
+    }else{
+      header( "Location: index.php" );
     }
 
   }else{
@@ -86,7 +92,7 @@ function sqlexec_(){
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title><?= $JWConfig["title"] ?></title>
+  <title><?= $JWConfig["siteTitle"] ?></title>
   <script type="text/javascript" src="lib/md5.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <?php echo '<link rel="stylesheet" type="text/css" href="css/login.css?' . mt_rand() .  '" />'; ?>
@@ -110,10 +116,11 @@ function sqlexec_(){
   });
 </script>
 <div class='body'>
+  <?= $JWConfig['isWarnNotHTTPS']&&!$JWConfig["isHTTPS"]? 'Wiki警告：HTTPSの利用を推奨します。（当警告はconfig.phpより非表示にできます。）': '' ?>
   <form id="form_id" action="" method="POST">
     <fieldset>
       <legend align='center'>
-        <img src='/img/site_loginTitleLogo.png' id='TitleLogo'>
+        <img src='img/site_loginTitleLogo.png' id='TitleLogo'>
       </legend>
       <div>
         <p>

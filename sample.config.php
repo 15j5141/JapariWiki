@@ -1,28 +1,32 @@
 <?php
-/* JapariWikiConfig */
+/* - JapariWikiConfig */
+/* -- site name and title(<title>this</title>) */
+$JWConfig["siteName"]='SiteName';
+$JWConfig["siteTitle"]='SiteTitle';
 
-$JWConfig["name"]='SiteName';
-$JWConfig["title"]='SiteTitle';
-
-$JWConfig["domain"]=strtok($_SERVER['HTTP_HOST'],':'); /* if error then must manual coding */
-$JWConfig["root"]='/';
-$JWConfig["baseURL"]=(
-  'http'. (isset($_SERVER['HTTPS'])? 's': ''). '://'. /* if https then auto append 's' */
-  $JWConfig["domain"].
-  //':'. $_SERVER['REMOTE_PORT']. /* if setting other port then uncomment */
-  $JWConfig["root"]
-);
-
-// ex: https://www.abc.xxx:8888/app/wiki/index.php
-/* ----------------
-$JWConfig["domain"]='www.abc.xxx';
-$JWConfig["root"]='/app/wiki/';
-$JWConfig["baseURL"]=(
-  'http'. (isset($_SERVER['HTTPS'])? 's': ''). '://'.
-  $JWConfig["domain"].
-  ':'. $_SERVER['REMOTE_PORT'].
-  $JWConfig["root"]
-);
+/* -- path of index.php */
+$JWConfig["rootURL"]='https://www.abc.xxx/app/wiki/';
+/* example----------------
+If https://www.abc.xxx/index.php
+Then $JWConfig["rootURL"]='http://www.abc.xxx/';
+If http://www.abc.xxx:8888/app/wiki/index.php
+Then $JWConfig["rootURL"]='https://www.abc.xxx:8888/app/wiki/';
 ---------------- */
 
+/* -- Warnning settings  */
+/* --- Warn when not https access.  */
+$JWConfig["isWarnNotHTTPS"]=true;
+
+
+
+
+
+/* - The following settings are automatic.
+But if it doesn't work please enter it manually. */
+$JWConfig["rootURL"]=$JWConfig["rootURL"] . (substr($JWConfig["rootURL"], -1)!='/'? '/': '');// slash check.
+preg_match("|^https?://([-\w\.]+)(:\d+)?/(.*)$|", $JWConfig["rootURL"], $out);
+$JWConfig["siteDomain"]=$out[1];//strtok($_SERVER['HTTP_HOST'],':');
+$JWConfig["sitePort"]=$out[2];//':'. $_SERVER['REMOTE_PORT']
+$JWConfig["siteDir"]=$out[3];
+$JWConfig["isHTTPS"]= 'https' === substr($JWConfig["rootURL"], 0, 5);
 ?>

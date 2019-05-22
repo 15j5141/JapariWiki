@@ -79,8 +79,8 @@ function loadTextFromString($input){
       $line= preg_replace('/&amp;size\((\d+)\)\{(.*)\}/U', '<span style="font-size:$1px">$2</span>', $line);
       $line= preg_replace('/&amp;color\((#[0-9A-F]{6})\)\{(.*)\}/U', '<span style="color:$1">$2</span>', $line);
 
-      $line= preg_replace('/&amp;image\(([\._a-zA-Z0-9]+)\)/U', '<img class="tag" src="/up/$1" />', $line);
-      $line= preg_replace('/&amp;image\(([\._a-zA-Z0-9]+),([0-9]*),([0-9]*)\)/U', '<img src="/up/$1" width="$2px" height="$3px" />', $line);
+      $line= preg_replace('/&amp;image\(([\._a-zA-Z0-9]+)\)/U', '<img class="tag" src="up/$1" />', $line);
+      $line= preg_replace('/&amp;image\(([\._a-zA-Z0-9]+),([0-9]*),([0-9]*)\)/U', '<img src="up/$1" width="$2px" height="$3px" />', $line);
 
       //強制imgタグ
       $line= preg_replace('/&amp;img\((https?:\/\/.+)\)/U', '<img src="$1" />', $line);

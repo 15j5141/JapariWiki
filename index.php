@@ -1,9 +1,19 @@
 <?php
+/* php-init*/
 
 ini_set( 'display_errors', 1 );
 require_once(__DIR__.'/lib/module_convertHTML.php');
 require_once(__DIR__.'/lib/module_login.php');
 require_once(__DIR__.'/../config.php');
+if($JWConfig["isHTTPS"]&&!isset($_SERVER['HTTPS'])){
+  // configでhttpsにしてるのにhttpでアクセスされたらhttps付きへリダイレクト
+  header( "Location: ". $JWConfig["rootURL"]. "index.php" ) ;
+  exit;
+}
+?>
+
+<?php
+/* php-run */
 
 if(isset($_GET['page'])){
 	$_SESSION['page']=htmlspecialchars($_GET['page'], ENT_QUOTES|ENT_HTML5);
@@ -13,12 +23,14 @@ if(isset($_GET['page'])){
 $page = isset($_SESSION['page']) ? $_SESSION['page'] : 'FrontPage';
 //$page = $page==='' ?  : '';
 ?>
+
+<!-- html-body -->
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<link rel="stylesheet" type="text/css" href="css/style.css?<?= mt_rand(); ?>" />
-	<title><?= $JWConfig["title"] ?></title>
+	<title><?= $JWConfig["siteTitle"] ?></title>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script type="text/javascript">
 
@@ -72,8 +84,8 @@ $page = isset($_SESSION['page']) ? $_SESSION['page'] : 'FrontPage';
       <iframe src="https://discordapp.com/widget?id=xxxxxxxx&amp;theme=dark" width="250" height="300" allowtransparency="true" frameborder="0"></iframe>
     </div>
     <div id='side_twitter'>
-      <a class="twitter-timeline" data-theme="dark" href="https://twitter.com/xxx">
-        Tweets by XXX
+      <a class="twitter-timeline" data-theme="dark" href="https://twitter.com/">
+        Tweets by ___
       </a>
       <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
     </div>

@@ -1,10 +1,11 @@
 <?php
+require_once(__DIR__.'/../config.php');
 
 
 session_start();
 session_destroy();
-//header( "Location: /login.php" ) ;
-//exit;
+/*header( "Location: ". $JWConfig["rootURL"]. "login.php" ) ;
+exit*/;
 ?>
 
 <HTML>
@@ -13,7 +14,7 @@ session_destroy();
 <TITLE>logout</TITLE>
 
 <!-- 5秒後に移動する場合 -->
-<meta http-equiv="refresh" content="1;URL=https://<?php echo $_SERVER["HTTP_HOST"]; ?>/login.php?<?= parse_url($_SERVER['REQUEST_URI'], PHP_URL_QUERY ) ?>" >
+<meta http-equiv="refresh" content="1;URL=<?= $JWConfig["rootURL"] ?>login.php?<?= parse_url($_SERVER['REQUEST_URI'], PHP_URL_QUERY ) ?>" >
 
 
 </HEAD>
@@ -21,13 +22,13 @@ session_destroy();
 ログアウトかタイムアウトしました。<br />
 1 秒後にログインページへ移動します。
 
-<a href='https://<?php echo $_SERVER["HTTP_HOST"]; ?>/login.php'>あるいはここからログインページへ移動</a>
+<a href='<?= $JWConfig["rootURL"] ?>login.php'>あるいはここからログインページへ移動</a>
 <!-- fixme クエリ付加 -->
 
 <script type="text/javascript">
 setTimeout("refreshURL()", 3000);
 function refreshURL(){
-    //window.location = "https://xxx.xxx/login.php";
+    //window.location = "<?= $JWConfig['rootURL'] ?>login.php";
 }
 
 </script>
