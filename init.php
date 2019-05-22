@@ -16,7 +16,9 @@ $sql="CREATE TABLE app_account (
   user_id varchar(16) NOT NULL,
   user_name varchar(16) NOT NULL,
   user_pass varchar(255) NOT NULL,
-  lastdate timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+  lastdate timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE(user_id),
+  PRIMARY KEY(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
 
 $result='';
