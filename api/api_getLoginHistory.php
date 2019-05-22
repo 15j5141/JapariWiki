@@ -12,7 +12,7 @@ echo var_dump($a);
 echo $_SERVER['REQUEST_URI'];
 echo $_SERVER['HTTP_HOST'];
 */
-$a= download(<?= $JWConfig['rootURL']?>. 'api/api_getReverseStringLines.php?nSplit=1&max=0&type=uri&data=../text/log_LoginHistory.txt');
+$a= download($JWConfig['rootURL']. 'api/api_getReverseStringLines.php?nSplit=1&max=0&type=uri&data=../text/log_LoginHistory.txt');
 echo str_replace("\n", "<br />\n", $a);
 //echo file_get_contents(__DIR__. '/../text/log_LoginHistory.txt');
 
