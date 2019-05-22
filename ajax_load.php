@@ -13,7 +13,7 @@ if(isset($_GET['page'])) {
   $page = isAjax() ? urldecode($_GET['page']) : $_GET['page'];
   if (!file_exists('text/' . $page . '.txt')){
     http_response_code(302);
-    header('Location: /ajax_edit.php?page=' . $_GET['page']);
+    header('Location: ajax_edit.php?page=' . $_GET['page']);
     exit();
     $page = 'FrontPage';
   }

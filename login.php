@@ -120,7 +120,7 @@ function sqlexec_(){
   <form id="form_id" action="" method="POST">
     <fieldset>
       <legend align='center'>
-        <img src='/img/site_loginTitleLogo.png' id='TitleLogo'>
+        <img src='img/site_loginTitleLogo.png' id='TitleLogo'>
       </legend>
       <div>
         <p>

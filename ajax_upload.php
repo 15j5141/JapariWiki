@@ -89,7 +89,7 @@ function sqlexec_($user_id){
     while($row=$result->fetch_assoc()){
     // 連想配列を取得
       //$verify.= $row["aliasName"] . ':' ;
-      $verify.= '<td class="uploaded_list"><img class="uploaded_list" src="/up/'.$row["fileName"] . '" width="auto" height="128" alt="image" /><br />';
+      $verify.= '<td class="uploaded_list"><img class="uploaded_list" src="up/'.$row["fileName"] . '" width="auto" height="128" alt="image" /><br />';
       $verify.= '<input name="b" type="text" value="&image(' . $row["fileName"] . ')" readonly="readonly" /></td>';
       if($cnt % 3 ==2){
         $verify.= '</tr><tr>';

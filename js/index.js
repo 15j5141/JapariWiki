@@ -106,9 +106,9 @@ $(function() {
     });
 
     ajaxLoad("#content_add", "ajax_load.php?page=" + encodeURIComponent(page));
-    ajaxLoad("#header", "/index_" + "header.php");
-    ajaxLoad("#footer", "/index_" + "footer.php");
-    ajaxLoad("#login_history", "/api/api_getLoginHistory.php");
+    ajaxLoad("#header", "index_" + "header.php");
+    ajaxLoad("#footer", "index_" + "footer.php");
+    ajaxLoad("#login_history", "api/api_getLoginHistory.php");
     if (history.state == null) {
         history.replaceState('' + page, null, null);
     }
