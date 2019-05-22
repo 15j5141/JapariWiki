@@ -33,9 +33,10 @@ if($user_id!='null' && $user_pass !='null'){
     $loginResult= 'success';
 
     // リダイレクト(移動)
-    if( parse_url($_SERVER['REQUEST_URI'], PHP_URL_QUERY )!=''){ header(
-    "Location: /?". parse_url($_SERVER['REQUEST_URI'], PHP_URL_QUERY )); }else{
-    header( "Location: /" );
+    if( parse_url($_SERVER['REQUEST_URI'], PHP_URL_QUERY )!=''){
+      header("Location: index.php?". parse_url($_SERVER['REQUEST_URI'], PHP_URL_QUERY ));
+    }else{
+      header( "Location: index.php" );
     }
 
   }else{
