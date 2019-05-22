@@ -77,8 +77,8 @@ $page = isset($_SESSION['page']) ? $_SESSION['page'] : 'FrontPage';
       <iframe src="https://discordapp.com/widget?id=xxxxxxxx&amp;theme=dark" width="250" height="300" allowtransparency="true" frameborder="0"></iframe>
     </div>
     <div id='side_twitter'>
-      <a class="twitter-timeline" data-theme="dark" href="https://twitter.com/xxx">
-        Tweets by XXX
+      <a class="twitter-timeline" data-theme="dark" href="https://twitter.com/">
+        Tweets by ___
       </a>
       <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
     </div>
