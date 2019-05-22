@@ -13,6 +13,10 @@ $JWConfig["rootURL"]='http://www.abc.xxx/';
 $JWConfig["rootURL"]='https://www.abc.xxx:8888/app/wiki/';
 ---------------- */
 
+/* -- Warnning settings  */
+/* --- Warn when not https access.  */
+$JWConfig["isWarnNotHTTPS"]=true;
+
 
 
 

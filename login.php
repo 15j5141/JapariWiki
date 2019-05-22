@@ -115,6 +115,7 @@ function sqlexec_(){
   });
 </script>
 <div class='body'>
+  <?= JWConfig['isWarnNotHTTPS']&&!$JWConfig["isHTTPS"]? 'Wiki警告：HTTPSの利用を推奨します。（当警告はconfig.phpより非表示にできます。）': '' ?>
   <form id="form_id" action="" method="POST">
     <fieldset>
       <legend align='center'>
