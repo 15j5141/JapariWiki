@@ -18,7 +18,7 @@ $page = isset($_SESSION['page']) ? $_SESSION['page'] : 'FrontPage';
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<link rel="stylesheet" type="text/css" href="css/style.css?<?= mt_rand(); ?>" />
-	<title><?= $JWConfig["title"] ?></title>
+	<title><?= $JWConfig["siteTitle"] ?></title>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script type="text/javascript">
 
