@@ -1,4 +1,5 @@
 <?php
+/* php-init*/
 
 ini_set( 'display_errors', 1 );
 require_once(__DIR__.'/lib/module_convertHTML.php');
@@ -9,6 +10,10 @@ if($JWConfig["isHTTPS"]&&!isset($_SERVER['HTTPS'])){
   header( "Location: <?= $JWConfig["rootURL"] ?>index.php" ) ;
   exit;
 }
+?>
+
+<?php
+/* php-run */
 
 if(isset($_GET['page'])){
 	$_SESSION['page']=htmlspecialchars($_GET['page'], ENT_QUOTES|ENT_HTML5);
@@ -18,6 +23,8 @@ if(isset($_GET['page'])){
 $page = isset($_SESSION['page']) ? $_SESSION['page'] : 'FrontPage';
 //$page = $page==='' ?  : '';
 ?>
+
+<!-- html-body -->
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
