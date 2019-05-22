@@ -4,7 +4,7 @@ require_once(__DIR__.'/../config.php');
 
 session_start();
 session_destroy();
-/*header( "Location: <?= $JWConfig["rootURL"] ?>login.php" ) ;
+/*header( "Location: ". $JWConfig["rootURL"]. "login.php" ) ;
 exit*/;
 ?>
 
@@ -28,7 +28,7 @@ exit*/;
 <script type="text/javascript">
 setTimeout("refreshURL()", 3000);
 function refreshURL(){
-    //window.location = "<?= $JWConfig["rootURL"] ?>login.php";
+    //window.location = "<?= $JWConfig['rootURL'] ?>login.php";
 }
 
 </script>
