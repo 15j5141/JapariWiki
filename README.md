@@ -1,6 +1,9 @@
-﻿# やること
-## sample.db.php、sample.config.phpファイル作成
-### ドキュメントルートより上へ移動
+# やること
+- db.php、config.phpファイル配置・編集
+- init.phpをブラウザ等から実行
+
+## db.php、config.phpファイル配置・編集
+### sampleをドキュメントルートより上へ移動
 ```bash
 $ mv sample.db.php ../mv db.php
 $ mv sample.config.php ../config.php
