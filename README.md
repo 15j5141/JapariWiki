@@ -32,8 +32,9 @@ $db['options']=[
 - config.phpの例
 ```php
 <?php
-$config["domainName"]='abc.xxx';
-$config["siteName"]='SiteTitle';
+$JWConfig["siteName"]='SiteName';
+$JWConfig["siteTitle"]='SiteTitle';
+$JWConfig["rootURL"]='https://www.abc.xxx/app/wiki/';
 ?>
 ```
 

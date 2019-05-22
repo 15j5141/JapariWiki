@@ -5,12 +5,12 @@ $JWConfig["siteName"]='SiteName';
 $JWConfig["siteTitle"]='SiteTitle';
 
 /* -- path of index.php */
-$JWConfig["rootURL"]='https://www.abc.xxx:8888/app/wiki/';
-/* ----------------
-// ex: https://www.abc.xxx/index.php
-$JWConfig["rootURL"]='http://www.abc.xxx/';
-// ex: http://www.abc.xxx:8888/app/wiki/index.php
-$JWConfig["rootURL"]='https://www.abc.xxx:8888/app/wiki/';
+$JWConfig["rootURL"]='https://www.abc.xxx/app/wiki/';
+/* example----------------
+If https://www.abc.xxx/index.php
+Then $JWConfig["rootURL"]='http://www.abc.xxx/';
+If http://www.abc.xxx:8888/app/wiki/index.php
+Then $JWConfig["rootURL"]='https://www.abc.xxx:8888/app/wiki/';
 ---------------- */
 
 /* -- Warnning settings  */
