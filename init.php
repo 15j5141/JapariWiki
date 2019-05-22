@@ -1,6 +1,6 @@
 <?php
 /* php-init */
-header('Content-Type: text/html; charset=UTF-8');
+header('Content-Type: text/plain; charset=UTF-8');
 require_once(__DIR__.'/../db.php');
 //require_once(__DIR__.'/lib/module_dataBase.php');
 ?>
@@ -24,13 +24,14 @@ $sql="CREATE TABLE app_account (
 $result='';
 $mysqli = new mysqli($db['host'], $db['id'], $db['pass'], $db['dbname']);
 if ($mysqli->connect_error) {
-  $result = $mysqli->connect_error;
+  $result .= $mysqli->connect_error;
 }else{
   $mysqli->set_charset("utf8");
-  $result = $mysqli->query($sql);
+  $result .= $mysqli->query($sql);
   $mysqli->close();
 }
-
+$result .= $mysqli->error;
+$result .= '...exit.';
 ?>
 
 <!-- html-css -->
