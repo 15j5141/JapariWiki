@@ -4,6 +4,11 @@ ini_set( 'display_errors', 1 );
 require_once(__DIR__.'/lib/module_convertHTML.php');
 require_once(__DIR__.'/lib/module_login.php');
 require_once(__DIR__.'/../config.php');
+if($JWConfig["isHTTPS"]&&!isset($_SERVER['HTTPS'])){
+  // configでhttpsにしてるのにhttpでアクセスされたらhttps付きへリダイレクト
+  header( "Location: <?= $JWConfig["rootURL"] ?>index.php" ) ;
+  exit;
+}
 
 if(isset($_GET['page'])){
 	$_SESSION['page']=htmlspecialchars($_GET['page'], ENT_QUOTES|ENT_HTML5);

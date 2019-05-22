@@ -24,5 +24,5 @@ preg_match("|^https?://([-\w\.]+)(:\d+)?/(.*)$|", $JWConfig["rootURL"], $out, PR
 $JWConfig["siteDomain"]=$out[1];//strtok($_SERVER['HTTP_HOST'],':');
 $JWConfig["sitePort"]=$out[2];//':'. $_SERVER['REMOTE_PORT']
 $JWConfig["siteDir"]=$out[3];
-
+$JWConfig["isHTTPS"]= 'https' === substr($JWConfig["rootURL"], 0, 5);
 ?>

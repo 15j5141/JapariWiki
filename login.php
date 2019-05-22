@@ -6,6 +6,11 @@ ini_set('error_log', 'php_err.txt');
 
 require_once(__DIR__.'/lib/module_dataBase.php');
 require_once(__DIR__.'/../config.php');
+if($JWConfig["isHTTPS"]&&!isset($_SERVER['HTTPS'])){
+  // configでhttpsにしてるのにhttpでアクセスされたらhttps付きへリダイレクト
+  header( "Location: <?= $JWConfig["rootURL"] ?>login.php" ) ;
+  exit;
+}
 
 if(isset($_POST["user_id"])){
   $user_id=$_POST["user_id"];
