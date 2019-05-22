@@ -5,7 +5,7 @@
 ## db.php、config.phpファイル配置・編集
 ### sampleをドキュメントルートより上へ移動
 ```bash
-$ mv sample.db.php ../mv db.php
+$ mv sample.db.php ../db.php
 $ mv sample.config.php ../config.php
 ```
 
