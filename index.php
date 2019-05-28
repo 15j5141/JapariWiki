@@ -60,7 +60,7 @@ $page = isset($_SESSION['page']) ? $_SESSION['page'] : 'FrontPage';
   </div>
   <div id="side">
     <div id="side_menu">
-      <p class="bar">メニュー</p><br />
+      <p class="bar">メニュー</p>
       <?php echo 'アカウント名：' . $_SESSION['id'] . '<br />'; ?>
       <a href='logout.php'>ログアウト</a><br />
       お知らせ<br />
