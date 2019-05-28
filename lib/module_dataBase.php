@@ -113,7 +113,16 @@ function sqlexec($sql){
   $mysqli->close();
   return $results;
 }
-
+function newMysqli(){
+  global $db;
+  $mysqli = new mysqli($db['host'], $db['id'], $db['pass'], $db['dbname']);
+  if ($mysqli->connect_error) {
+    return $mysqli->connect_error;
+  }else{
+    $mysqli->set_charset("utf8");
+  }
+  return $mysqli;
+}
 /*
 
 
