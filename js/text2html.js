@@ -70,12 +70,18 @@ function checkComment(rawText, ncmb) { // コメントフォームの差し替�
       ids.push(getComment(Comment, match[1]));
     }
     //return
-    Promise.all(ids).then(function(cforms) { //
+    Promise.all(ids).then(function(cforms) { // 並列で各コメントの受信, cforms=commentForms
       console.info('all fullfilled, v cforms v');
       console.log(cforms);
       // 構文置換
       for (var i = 0; i < cforms.length; i++) {
-        resultText = resultText.replace('#comment(' + cforms[i][0].commentObjectId + ')', cforms[i].map(v => v.content));
+        resultText = resultText.replace('#comment(' + cforms[i][0].commentObjectId + ')', // plzme ここでは配列だけ作って返した先でhtml化したほうがいいかも.
+          '<div style="background-color:#ccc;">' +
+          '<form action="" style="margin:0px;"><p"><input type="text" name="content" size="20" value="本文"/><input type="submit" /></p></form>' +
+          '<ul>' +
+          cforms[i].map(v => `<li>${v.contributor}: ${v.content}</li>`).reduce((c0, c1) => c0 + c1) +
+          '</ul>' + '</div>'
+        );
       }
       //return user.logout();
     }).then(function() {
