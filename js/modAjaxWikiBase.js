@@ -55,17 +55,6 @@ $(function() {
   });*/
   txt = "start<br />\n#comment(8YxY37D1Il)<br />\n#comment(8YxY37D1I2)<br />\n#comment(8YxY37D1Il)<br />\nend<br />";
   $('body').append('<br >loading...<br >');
-  /*
-    let user = new ncmb.User({
-      userName: 'commenter',
-      password: 'commenter'
-    });
-    ncmb.User.login(user).then(function(user) {
-      setComment(ncmb.DataStore("Comment"), '8YxY37D1I2', rndStr(24), 'commenter').then(function(x) {
-        console.log(x);
-      });
-    });
-  */
 });
 
 /* // TestClass
@@ -131,19 +120,6 @@ $(function() {
   return;
   ncmb.User.login(username, password)
     .then(function(user) {
-      /*
-      var Comment = ncmb.DataStore("Comment");
-      var comment = new Comment();
-      comment.set("content", "コンテンツ")
-        .set("contributor", "19j5000")
-        .save()
-        .then(function(gameScore) {
-          console.log("zz1");
-        })
-        .catch(function(err) {
-          console.log("zz2");
-        });
-        */
       var Comment = ncmb.DataStore("Comment");
       Comment.equalTo("objectId", "8IiBSttkFYmyKG3G")
         //.order("score", true)
