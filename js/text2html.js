@@ -77,7 +77,7 @@ function checkComment(rawText, ncmb) { // コメントフォームの差し替�
       for (var i = 0; i < cforms.length; i++) {
         resultText = resultText.replace('#comment(' + cforms[i][0].commentObjectId + ')', // plzme ここでは配列だけ作って返した先でhtml化したほうがいいかも.
           '<div style="background-color:#ccc;">' +
-          '<form action="" style="margin:0px;"><p"><input type="text" name="content" size="20" value="本文"/><input type="submit" /></p></form>' +
+          '<form class="CommentForm" action_="javascript:void(0);" data-objid="' + cforms[i][0].commentObjectId + '" style="margin:0px;"><p"><input type="text" name="content" size="20" value="" placeholder="コメント本文" /><input type="submit" value="投稿" /></p></form>' +
           '<ul>' +
           cforms[i].map(v => `<li>${v.contributor}: ${v.content}</li>`).reduce((c0, c1) => c0 + c1) +
           '</ul>' + '</div>'

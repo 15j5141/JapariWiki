@@ -36,6 +36,18 @@ function OnLogin() {
     });
   });
 }
+$(document).on('submit', '.CommentForm', function(e) {
+  e.preventDefault(); // submit破棄
+  let comObjId = $(this).attr('data-objid'); // コメントID
+  let content = $('input[name=content]', this).val(); // コメント内容
+  if (comObjId == '' || content == '') {
+    return false; // 空なら送信しない
+  }
+  setComment(ncmb.DataStore("Comment"), comObjId, content, 'commenter').then(x => console.log(x)); // コメント投稿
+  $('input[name=content]', this).val(''); // 空にする.
+  return false;
+});
+
 $(function() {
   txt = "fdgwhsdijfpv\n#comment()\nnobsgjprgnb";
   /*checkBeforeSavingPage(txt, ncmb).then(function(result){
@@ -43,7 +55,6 @@ $(function() {
   });*/
   txt = "start<br />\n#comment(8YxY37D1Il)<br />\n#comment(8YxY37D1I2)<br />\n#comment(8YxY37D1Il)<br />\nend<br />";
   $('body').append('<br >loading...<br >');
-
   /*
     let user = new ncmb.User({
       userName: 'commenter',
