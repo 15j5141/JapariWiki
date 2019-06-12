@@ -11,7 +11,8 @@ if (currentUser) {
   //ncmb.User.logout();
   console.log("未ログインまたは取得に失敗");
 }
-ncmb.User.login(username, password)
+//ncmb.User.login(username, password)
+ncmb.User.loginAsAnonymous() // とりあえず同時ログイン対策.
   .then(function(user) {
     console.log('login: success!');
     console.log(user);
