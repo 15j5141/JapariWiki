@@ -40,11 +40,15 @@ $(document).on('submit', '.CommentForm', function(e) {
   e.preventDefault(); // submit破棄
   let comObjId = $(this).attr('data-objid'); // コメントID
   let content = $('input[name=content]', this).val(); // コメント内容
+  let contributor = $('input[name=contributor]', this).val(); // 投稿者
+  // 調整
+  contributor = contributor == '' ? '名無し' : contributor;
   if (comObjId == '' || content == '') {
     return false; // 空なら送信しない
   }
-  setComment(ncmb.DataStore("Comment"), comObjId, content, 'commenter').then(x => console.log(x)); // コメント投稿
-  $('input[name=content]', this).val(''); // 空にする.
+  setComment(ncmb.DataStore("Comment"), comObjId, content, contributor).then(x => console.log(x)); // コメント投稿
+  $('input[type=submit]', this).prop("disabled", true); // 連続投稿対策
+  $('input[type=submit]', this).val('要リロード');
   return false;
 });
 
