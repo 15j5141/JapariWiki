@@ -2,8 +2,8 @@ var appKey = "73214ee5293b310aba334aaf6b58cb41cb89873a1eb88ab505fa7d48dcc2b911";
 var clientKey = "79d3a32839ef780c0fe16236d8efc7bdd338312ec1d969945346a181ffc9442f";
 var ncmb = new NCMB(appKey, clientKey);
 var user = new ncmb.User();
-username = 'commenter';
-password = 'commenter';
+username = '';
+password = '';
 var currentUser = ncmb.User.getCurrentUser();
 if (currentUser) {
   console.log("ログイン中のユーザー: " + currentUser.get("userName"));
@@ -11,21 +11,25 @@ if (currentUser) {
   //ncmb.User.logout();
   console.log("未ログインまたは取得に失敗");
 }
-//ncmb.User.login(username, password)
-ncmb.User.loginAsAnonymous() // とりあえず同時ログイン対策.
-  .then(function(user) {
-    console.log('login: success!');
-    console.log(user);
-    return OnLogin();
-  }).then(function(out) {
-    console.log(out);
-  }).catch(err => console.log(err));
+async function koubunCheck(txt) {
+  let result = await checkComment(txt, ncmb);
+  console.log('koubunCheck: OK');
+  return 0;
+}
+async function OnLogin2() {
+  let result = await checkComment(txt, ncmb);
+  $('body').append(result);
+  console.log(result);
+  let b = await checkAfterLodingPage(result, ncmb);
+  console.log('checkAfterLodingPage: success');
+  console.log('all: success');
+  return 0;
+}
 
 function OnLogin() {
   return new Promise((resolve, reject) => {
     checkComment(txt, ncmb).then(function(result) {
-      $('body').append(result);
-      console.log(result);
+      $('#content_add').append(result);
       return checkAfterLodingPage(result, ncmb);
     }).then(function(result) {
       resolve('checkAfterLodingPage: success');
@@ -36,6 +40,7 @@ function OnLogin() {
     });
   });
 }
+
 $(document).on('submit', '.CommentForm', function(e) {
   e.preventDefault(); // submit破棄
   let comObjId = $(this).attr('data-objid'); // コメントID
@@ -46,52 +51,35 @@ $(document).on('submit', '.CommentForm', function(e) {
   if (comObjId == '' || content == '') {
     return false; // 空なら送信しない
   }
-  setComment(ncmb.DataStore("Comment"), comObjId, content, contributor).then(x => console.log(x)); // コメント投稿
+  let ncmbC = new NCMBComment();
+  ncmbC.setComment(ncmb.DataStore("Comment"), comObjId, content, contributor).then(x => console.log(x)); // コメント投稿
   $('input[type=submit]', this).prop("disabled", true); // 連続投稿対策
   $('input[type=submit]', this).val('要リロード');
   return false;
 });
-
+$(document).on('change', '#content_add', function(event) {
+  console.log('event');
+  // ページが読み込み終わったらjsで構文チェックを行う.
+  koubunCheck().then(function(result) {
+    console.log('event2');
+  })
+});
 $(function() {
   txt = "fdgwhsdijfpv\n#comment()\nnobsgjprgnb";
   /*checkBeforeSavingPage(txt, ncmb).then(function(result){
     console.log(result);
   });*/
   txt = "start<br />\n#comment(8YxY37D1Il)<br />\n#comment(8YxY37D1I2)<br />\n#comment(8YxY37D1Il)<br />\nend<br />";
-  $('body').append('<br >loading...<br >');
+  $('body').append('<br >loading...<br ><div id="content_add"></div>');
+
+  /*
+  //ncmb.User.login(username, password)
+  ncmb.User.loginAsAnonymous() // とりあえず同時ログイン対策.
+    .then(function(user) {
+      console.log('login: success!');
+      return OnLogin();*/
 });
 
-/* // TestClass
-  var TestClass = ncmb.DataStore("TestClass");
-  var testClass = new TestClass();
-  testClass.set("message", "Hello, NCMB!");
-  testClass.save()
-         .then(function(){
-            console.log("S");
-          })
-         .catch(function(err){
-            console.log("B");
-          });
-</script>
-*/
-/* // ログインテスト
-user.set("userName", username)
-  .set("password", password)
-  .signUpByAccount()
-  .then(function(user) {
-      // [NCMB] userインスタンスでログイン
-      ncmb.User.login(user)
-               .then(function(user) {
-                   console.log(user);
-               })
-               .catch(function(error) {
-                 console.log("b");
-               });
-  })
-  .catch(function(error) {
-      console.log("c");
-  });
-*/
 /* // ロール追加テスト
   ncmb.User.login(username, password)
     .then(function(user) {
@@ -120,24 +108,3 @@ user.set("userName", username)
     .catch(function(error) {
     });
 */
-$(function() {
-  return;
-  ncmb.User.login(username, password)
-    .then(function(user) {
-      var Comment = ncmb.DataStore("Comment");
-      Comment.equalTo("objectId", "8IiBSttkFYmyKG3G")
-        //.order("score", true)
-        .fetchAll().then(function(results) {
-          console.log("Successfully retrieved " + results.length + " scores.");
-          for (var i = 0; i < results.length; i++) {
-            var object = results[i];
-            console.log(object.content + " - " + object.get("contributor"));
-          }
-        }).catch(function(err) {
-          console.log(err);
-        });
-    })
-    .catch(function(err) {
-      console.log(err);
-    });
-});

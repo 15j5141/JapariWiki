@@ -1,18 +1,13 @@
 // require ncmb.min.js
-function checkBeforeSavingPage(rawText, ncmb) { // 編集後の保存前の確認.
+function checkBeforeSavingPage(rawText) { // 編集後の保存前の確認.
   return new Promise(function(resolve, reject) {
     var resultText = rawText;
     // 新規コメント文法検出.(1個だけ)
     // fixme 同時に複数の新規コメントフォーム設置
     // fixme コメントidの重複確認
-    checkBSP_NewCommentForm(resultText).then(
-      result => {
-        return checkBSP_NewCommentForm(result);
-      }
-    ).then(result => {
+    checkBSP_NewCommentForm(resultText).then(result => {
       resolve(result);
     }).catch(err => {
-      console.log(err);
       resolve(err);
     });
   });
@@ -54,22 +49,15 @@ function checkComment(rawText, ncmb) { // コメントフォームの差し替�
     // 初期化
     var resultText = rawText;
     var regexp = /#comment\(([a-zA-Z0-9]{6,10})\)/g;
-    // commenterでログイン.
-    let user = new ncmb.User({
-      userName: 'commenter',
-      password: 'commenter'
-    });
-    //user
-    //ncmb.User.login(user).then(function(user) {
+    let ncmbC = new NCMBComment();
     var Comment = ncmb.DataStore("Comment");
     var comment = new Comment();
     let match;
     let ids = [];
     // コメントのobjIDのみ取り出し
     while ((match = regexp.exec(resultText)) !== null) {
-      ids.push(getComment(Comment, match[1]));
+      ids.push(ncmbC.getComment(Comment, match[1]));
     }
-    //return
     Promise.all(ids).then(function(cforms) { // 並列で各コメントの受信, cforms=commentForms
       console.info('all fullfilled, v cforms v');
       console.log(cforms);
@@ -83,48 +71,12 @@ function checkComment(rawText, ncmb) { // コメントフォームの差し替�
           '</ul>' + '</div>'
         );
       }
-      //return user.logout();
     }).then(function() {
       resolve(resultText);
     }).catch(function(err) {
       console.log(err);
       reject(err);
     });
-  });
-}
-// コメント受信
-function getComment(commentClass, id) {
-  return new Promise((resolve, reject) => {
-    // Commentデータストアに接続.
-    commentClass.equalTo("commentObjectId", id)
-      .order("createDate", true)
-      .fetchAll() // 受信
-      .then(function(results) {
-        console.log("Successfully retrieved " + results.length + " scores.");
-        resolve(results);
-      })
-      .catch(function(err) {
-        console.log(err);
-        reject(err);
-      });
-  });
-}
-
-function setComment(CommentClass, comObj, content, contributor) {
-  return new Promise((resolve, reject) => {
-    //var Comment = ncmb.DataStore("Comment");
-    var comment = new CommentClass();
-    comment
-      .set("commentObjectId", comObj) // コメントID
-      .set("content", content) // 内容
-      .set("contributor", contributor) // 投稿者
-      .save() // データストアに接続.
-      .then(function(obj) {
-        resolve(obj)
-      })
-      .catch(function(err) {
-        reject(err);
-      });
   });
 }
 // lengthの長さのランダムな文字列を生成
@@ -137,4 +89,41 @@ function rndStr(length) {
     i++;
   }
   return result;
+}
+class NCMBComment {
+  // コメント受信
+  getComment(commentClass, id) {
+    return new Promise((resolve, reject) => {
+      // Commentデータストアに接続.
+      commentClass.equalTo("commentObjectId", id)
+        .order("createDate", true)
+        .fetchAll() // 受信
+        .then(function(results) {
+          console.log("Successfully retrieved " + results.length + " scores.");
+          resolve(results);
+        })
+        .catch(function(err) {
+          console.log(err);
+          reject(err);
+        });
+    });
+  }
+
+  setComment(CommentClass, comObj, content, contributor) {
+    return new Promise((resolve, reject) => {
+      //var Comment = ncmb.DataStore("Comment");
+      var comment = new CommentClass();
+      comment
+        .set("commentObjectId", comObj) // コメントID
+        .set("content", content) // 内容
+        .set("contributor", contributor) // 投稿者
+        .save() // データストアに接続.
+        .then(function(obj) {
+          resolve(obj)
+        })
+        .catch(function(err) {
+          reject(err);
+        });
+    });
+  }
 }

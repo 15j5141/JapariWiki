@@ -31,6 +31,10 @@ $page = isset($_SESSION['page']) ? $_SESSION['page'] : 'FrontPage';
 	<link rel="stylesheet" type="text/css" href="css/style.css?<?= mt_rand(); ?>" />
 	<title><?= $JWConfig["siteTitle"] ?></title>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script type="text/javascript" src="lib/ncmb.min.js" charset="utf-8">
+  </script>
+  <script type="text/javascript" src="js/modAjaxWikiBase.js"></script>
+  <script type="text/javascript" src="js/text2html.js"></script>
   <script type="text/javascript">
 
     $(function(){

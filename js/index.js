@@ -15,11 +15,11 @@ $(function() {
 
 
   $(document).on('click', 'a.ajaxLoad', function(event) {
+    event.preventDefault();
     /* 連打対策 */
     if (doneAjax == 1) {
       doneAjax = 0;
 
-      event.preventDefault();
       page = $(this).attr('value');
       $("#content_add").html('読み込み中・・・。');
       $.ajax({
@@ -39,6 +39,7 @@ $(function() {
               });
             } else {
               $("#content_add").html(data);
+              $('#content_add').change(); // 発火させる
             }
             $("#content_add").fadeIn('1');
             doneAjax = 1;
@@ -120,6 +121,7 @@ $(function() {
       cache: false,
       success: function(html) {
         $(Content).html(html);
+        $(Content).change(); // 発火させる
       }
     });
   }
