@@ -13,9 +13,10 @@
 
 # other
 .vscode
-#text/*
-#!text/site_*
+text/*
+!text/site_*
 img/*
 !img/site_*
+!img/log_*
 .well-known/acme-challenge/*
 .well-known_/acme-challenge/*
