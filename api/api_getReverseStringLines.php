@@ -1,5 +1,5 @@
-﻿<?php
-ini_set( 'display_errors', 1 );
+<?php
+//ini_set( 'display_errors', 1 );
 //ini_set( 'allow_url_fopen', 1 );
 header('Content-Type: text/plain; charset=UTF-8');
 if (isset($_GET['type'], $_GET['data'])) {

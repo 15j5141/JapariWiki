@@ -1,5 +1,5 @@
-﻿<?php
-ini_set( 'display_errors', 1 );
+<?php
+//ini_set( 'display_errors', 1 );
 //ini_set( 'allow_url_fopen', 1 );
 require_once(__DIR__.'/../../config.php');
 
@@ -25,6 +25,9 @@ function download($url){
   curl_setopt($cp, CURLOPT_URL, $url);// URL指定
   curl_setopt($cp, CURLOPT_TIMEOUT, 10);// タイムアウト
   //curl_setopt($cp, CURLOPT_USERAGENT, $_SERVER['HTTP_USER_AGENT']);// ユーザーエージェント
+  curl_setopt($cp,CURLOPT_FOLLOWLOCATION,true);// 以下3行: 環境によって正しくリダイレクトされるように.
+  curl_setopt($cp,CURLOPT_MAXREDIRS,10);
+  curl_setopt($cp,CURLOPT_AUTOREFERER,true);
   $file = curl_exec($cp);
   curl_close($cp);
   return $file;

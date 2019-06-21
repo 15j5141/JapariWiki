@@ -1,7 +1,7 @@
 <?php
 /* php-init*/
 
-ini_set( 'display_errors', 1 );
+//ini_set( 'display_errors', 1 );
 require_once(__DIR__.'/lib/module_convertHTML.php');
 require_once(__DIR__.'/lib/module_login.php');
 require_once(__DIR__.'/../config.php');
@@ -11,7 +11,6 @@ if($JWConfig["isHTTPS"]&&!isset($_SERVER['HTTPS'])){
   exit;
 }
 ?>
-
 <?php
 /* php-run */
 

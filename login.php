@@ -1,8 +1,8 @@
 <?php
 
-ini_set( 'display_errors', 1 );
-ini_set('log_errors', 1);
-ini_set('error_log', 'php_err.txt');
+//ini_set( 'display_errors', 1 );
+//ini_set('log_errors', 1);
+//ini_set('error_log', 'php_err.txt');
 
 require_once(__DIR__.'/lib/module_dataBase.php');
 require_once(__DIR__.'/../config.php');
@@ -27,7 +27,7 @@ if($user_id!='null' && $user_pass !='null'){
   $passHash = password_hash($user_pass, PASSWORD_DEFAULT);
 
   if(sqlexec_()===true){
-    session_regenerate_id(true);
+    //session_regenerate_id(true);
     session_start();
     $_SESSION['id'] = $user_id;
     $loginResult= 'success';

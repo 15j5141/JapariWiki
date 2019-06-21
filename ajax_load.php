@@ -1,8 +1,4 @@
 <?php
-
-
-ini_set( 'display_errors', 1 );
-
 require_once(__DIR__.'/lib/module_convertHTML.php');
 
 header('Content-Type: text/html; charset=UTF-8');

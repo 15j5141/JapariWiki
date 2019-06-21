@@ -1,6 +1,5 @@
-﻿<?php
+<?php
 
-ini_set( 'display_errors', 0 );
 header('Content-Type: text/html; charset=UTF-8');
 require_once(__DIR__.'/lib/module_dataBase.php');
 session_start();

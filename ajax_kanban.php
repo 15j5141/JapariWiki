@@ -1,15 +1,12 @@
-﻿<?php
+<?php
 // php/init
-ini_set( 'display_errors', 1 );
 header('Content-Type: text/html; charset=UTF-8');
 require_once(__DIR__.'/lib/module_dataBase.php');
 ?>
-
 <?php
 // php/run
 
 ?>
-
 <!-- html/css -->
 <style>
 .kanban-note-area{
