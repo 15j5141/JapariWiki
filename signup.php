@@ -15,7 +15,7 @@ if($user_id!='null' && $user_pass !='null'){
   $passHash = password_hash($user_pass, PASSWORD_DEFAULT);
 
   if(sql_register($user_id, $passHash)===true){
-    session_regenerate_id(true);
+    //session_regenerate_id(true);
     session_start();
     $_SESSION['id'] = $user_id;
     $loginResult= 'success';
