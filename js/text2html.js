@@ -83,7 +83,7 @@ function checkComment(rawText, ncmb) { // コメントフォームの差し替�
           '</p></form>' +
           '<ul>' +
           // 取得したコメントデータをhtml化する.
-          commentLists[key].map(v => `<li>${v.contributor}: ${v.content}</li>`).reduce((c0, c1) => c0 + c1) + /*1件も無ければここが空になる*/
+          commentLists[key].map(v => `<li>${v.contributor}: ${v.content}</li>`).reduce((c0, c1) => c0 + c1, '') + /*1件も無ければここが空になる*/
           '</ul>' + '</div>';
         resultText = resultText.replace('#comment(' + key + ')', html);
       });
