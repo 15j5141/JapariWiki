@@ -66,7 +66,7 @@ function checkComment(rawText, ncmb) { // コメントフォームの差し替�
 
     // コメントフォームだけ置換. 1件以上コメントがあれば下でコメント一覧を入れる.
     let promises = ids.map(id => ncmbC.getComment(Comment, id)); // idsからPromise作成.
-    Promise.all(ids).then(function(cforms) { // 並列で各コメントの受信, cforms=commentForms
+    Promise.all(promises).then(function(cforms) { // 並列で各コメントの受信, cforms=commentForms
       console.info('all fullfilled, v cforms v');
       console.log(cforms);
       // 0件コメントがあっても扱いやすいようにコメントフォームの数分の連想配列作成する.
