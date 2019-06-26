@@ -60,7 +60,7 @@ $(document).on('submit', '.CommentForm', function(e) {
 $(document).on('change', '#content_add', function(event) {
   console.log('event');
   // ページが読み込み終わったらjsで構文チェックを行う.
-  koubunCheck().then(function(result) {
+  koubunCheck($('#content_add').html()).then(function(result) {
     console.log('event2');
     $('#content_add').html(result);
   })
