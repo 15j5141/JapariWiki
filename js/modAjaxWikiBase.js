@@ -14,7 +14,7 @@ if (currentUser) {
 async function koubunCheck(txt) {
   let result = await checkComment(txt, ncmb);
   console.log('koubunCheck: OK');
-  return 0;
+  return result;
 }
 async function OnLogin2() {
   let result = await checkComment(txt, ncmb);
@@ -62,6 +62,7 @@ $(document).on('change', '#content_add', function(event) {
   // ページが読み込み終わったらjsで構文チェックを行う.
   koubunCheck().then(function(result) {
     console.log('event2');
+    $('#content_add').html(result);
   })
 });
 $(function() {
