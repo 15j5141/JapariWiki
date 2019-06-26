@@ -53,24 +53,40 @@ function checkComment(rawText, ncmb) { // コメントフォームの差し替�
     var Comment = ncmb.DataStore("Comment");
     var comment = new Comment();
     let match;
-    let ids = [];
-    // コメントのobjIDのみ取り出し
+    let ids = []; // コメントオブジェID
+
+    // コメントのcommentObjctIDのみ本文から取り出す.
     while ((match = regexp.exec(resultText)) !== null) {
-      ids.push(ncmbC.getComment(Comment, match[1]));
+      ids.push(match[1]);
     }
+
+    // コメント取得結果を入れる連想配列を用意する.
+    let commentLists = {}; // idでの連想配列でコメント一覧.
+    ids.forEach(id => commentLists[id] = '');
+
+    // コメントフォームだけ置換. 1件以上コメントがあれば下でコメント一覧を入れる.
+    let promises = ids.map(id => ncmbC.getComment(Comment, id)); // idsからPromise作成.
     Promise.all(ids).then(function(cforms) { // 並列で各コメントの受信, cforms=commentForms
       console.info('all fullfilled, v cforms v');
       console.log(cforms);
-      // 構文置換
+      // 0件コメントがあっても扱いやすいようにコメントフォームの数分の連想配列作成する.
       for (var i = 0; i < cforms.length; i++) {
-        resultText = resultText.replace('#comment(' + cforms[i][0].commentObjectId + ')', // plzme ここでは配列だけ作って返した先でhtml化したほうがいいかも.
-          '<div style="background-color:#ccc;">' +
-          '<form class="CommentForm" action_="javascript:void(0);" data-objid="' + cforms[i][0].commentObjectId + '" style="margin:0px;"><p"><input type="text" name="content" size="25" value="" placeholder="コメント本文" /><input type="text" name="contributor" size="10" value="" placeholder="名前" /><input type="submit" value="投稿" /></p></form>' +
-          '<ul>' +
-          cforms[i].map(v => `<li>${v.contributor}: ${v.content}</li>`).reduce((c0, c1) => c0 + c1) +
-          '</ul>' + '</div>'
-        );
+        commentLists[cforms[i][0].commentObjectId] = cforms[i];
       }
+      // 構文置換
+      Object.keys(commentLists).forEach(function(key) {
+        let html = '<div style="background-color:#ccc;">' +
+          '<form class="CommentForm" data-objid="' + key + '" style="margin:0px;"><p>' +
+          '<input type="text" name="content" size="25" value="" placeholder="コメント本文" />' +
+          '<input type="text" name="contributor" size="10" value="" placeholder="名前" />' +
+          '<input type="submit" value="投稿" />' +
+          '</p></form>' +
+          '<ul>' +
+          // 取得したコメントデータをhtml化する.
+          commentLists[key].map(v => `<li>${v.contributor}: ${v.content}</li>`).reduce((c0, c1) => c0 + c1) + /*1件も無ければここが空になる*/
+          '</ul>' + '</div>';
+        resultText = resultText.replace('#comment(' + cforms[i][0].commentObjectId + ')', html);
+      });
     }).then(function() {
       resolve(resultText);
     }).catch(function(err) {
