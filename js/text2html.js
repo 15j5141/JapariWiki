@@ -71,6 +71,7 @@ function checkComment(rawText, ncmb) { // コメントフォームの差し替�
       console.log(cforms);
       // 0件コメントがあっても扱いやすいようにコメントフォームの数分の連想配列作成する.
       for (var i = 0; i < cforms.length; i++) {
+        if (cforms[i].length == 0) continue; // 空なら次へ.
         commentLists[cforms[i][0].commentObjectId] = cforms[i];
       }
       // 構文置換
