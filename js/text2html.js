@@ -62,7 +62,7 @@ function checkComment(rawText, ncmb) { // コメントフォームの差し替�
 
     // コメント取得結果を入れる連想配列を用意する.
     let commentLists = {}; // idでの連想配列でコメント一覧.
-    ids.forEach(id => commentLists[id] = '');
+    ids.forEach(id => commentLists[id] = []); // 念の為arrayで初期化.
 
     // コメントフォームだけ置換. 1件以上コメントがあれば下でコメント一覧を入れる.
     let promises = ids.map(id => ncmbC.getComment(Comment, id)); // idsからPromise作成.
@@ -71,8 +71,7 @@ function checkComment(rawText, ncmb) { // コメントフォームの差し替�
       console.log(cforms);
       // 0件コメントがあっても扱いやすいようにコメントフォームの数分の連想配列作成する.
       for (var i = 0; i < cforms.length; i++) {
-        if (cforms[i].length == 0) continue; // 空なら次へ.
-        commentLists[cforms[i][0].commentObjectId] = cforms[i];
+        commentLists[cforms[i].commentObjectId] = cforms[i].data;
       }
       // 構文置換
       Object.keys(commentLists).forEach(function(key) {
@@ -117,7 +116,10 @@ class NCMBComment {
         .fetchAll() // 受信
         .then(function(results) {
           console.log("Successfully retrieved " + results.length + " scores.");
-          resolve(results);
+          resolve({
+            commentObjectId: id,
+            data: results
+          });
         })
         .catch(function(err) {
           console.log(err);
