@@ -39,7 +39,7 @@ $(function() {
               });
             } else {
               $("#content_add").html(data);
-              $('#content_add').change(); // 発火させる
+              $('#content_add').trigger('rewrite'); // 発火させる
             }
             $("#content_add").fadeIn('1');
             doneAjax = 1;
@@ -121,7 +121,7 @@ $(function() {
       cache: false,
       success: function(html) {
         $(Content).html(html);
-        $(Content).change(); // 発火させる
+        $(Content).trigger('rewrite'); // 発火させる
       }
     });
   }

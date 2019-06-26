@@ -57,7 +57,7 @@ $(document).on('submit', '.CommentForm', function(e) {
   $('input[type=submit]', this).val('要リロード');
   return false;
 });
-$(document).on('change', '#content_add', function(event) {
+$(document).on('rewrite', '#content_add', function(event) {
   console.log('event');
   // ページが読み込み終わったらjsで構文チェックを行う.
   koubunCheck($('#content_add').html()).then(function(result) {
