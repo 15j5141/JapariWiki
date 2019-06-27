@@ -102,11 +102,11 @@ $(function() {
 
   $(window).on('popstate', function(e) {
     if (isCanBeHistory) {
-      ajaxLoad("#content_add", "ajax_load.php?page=" + encodeURIComponent(history.state));
+      ajaxLoad("#content_add", "ajax_load.php?page=" + encodeURIComponent(history.state), () => $("#content_add").trigger('rewrite'););
     }
   });
 
-  ajaxLoad("#content_add", "ajax_load.php?page=" + encodeURIComponent(page));
+  ajaxLoad("#content_add", "ajax_load.php?page=" + encodeURIComponent(page), () => $("#content_add").trigger('rewrite'););
   ajaxLoad("#header", "index_" + "header.php");
   ajaxLoad("#footer", "index_" + "footer.php");
   ajaxLoad("#login_history", "api/api_getLoginHistory.php");
@@ -115,13 +115,13 @@ $(function() {
   }
 
   // FixMe ajaxエラー時処理を加える
-  function ajaxLoad(Content, Url) {
+  function ajaxLoad(Content, Url, callbackSuccess) {
     $.ajax({
       url: "" + Url,
       cache: false,
       success: function(html) {
         $(Content).html(html);
-        $(Content).trigger('rewrite'); // 発火させる
+        if (typeof callbackSuccess === 'function') callbackSuccess();
       }
     });
   }
