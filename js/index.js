@@ -20,6 +20,7 @@ $(function() {
     if (doneAjax == 1) {
       doneAjax = 0;
 
+      $('#content_add').attr("data-ajax", "load"); // 現在のajax画面.
       page = $(this).attr('value');
       $("#content_add").html('読み込み中・・・。');
       $.ajax({

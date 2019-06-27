@@ -99,6 +99,7 @@ if(isset($_GET['page'])):
   var intervalObj;
   var textarea_oldValue;
   $(function(){
+    $('#content_add').attr("data-ajax","edit");// 現在のajax画面.
 
     $('#ajax_edit').on('submit', function(event) {
       event.preventDefault(); // 本来のPOSTを打ち消すおまじない
