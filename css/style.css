@@ -190,3 +190,10 @@ td.uploaded_list {
 ul {
     margin: auto;
 }
+.WikiSyntax_Comment {
+  padding: 5px;
+  background-color: #ccc4;
+  border: double 2px;
+  width: fit-content;
+  border-radius: 5px;
+}

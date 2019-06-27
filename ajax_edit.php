@@ -99,24 +99,31 @@ if(isset($_GET['page'])):
   var intervalObj;
   var textarea_oldValue;
   $(function(){
+    $('#content_add').attr("data-ajax","edit");// 現在のajax画面.
 
     $('#ajax_edit').on('submit', function(event) {
       event.preventDefault(); // 本来のPOSTを打ち消すおまじない
       if(intervalObj!=null){
         clearInterval(intervalObj);
       }
-      $.ajax({
-        type: "POST",
-        url: $(this).attr('action'),
-        data: $(this).serializeArray(),
-        success: function(msg){
-          //alert( "Data Saved: " + msg );
-          location.reload();
-        },
-        error: function(){
-          alert( "Data Could not Save!: ");
-        }
-      });
+      $('input[type="submit"]', this).prop("disabled","true");// 送信ボタン無効化
+      $('#ajax_edit__textarea').prop("readonly","true");// 編集枠無効化
+      checkBeforeSavingPage($('#ajax_edit__textarea').val()).then(
+        result => {
+          $('#ajax_edit__textarea').val(result);
+          $.ajax({
+            type: "POST",
+            url: $(this).attr('action'),
+            data: $(this).serializeArray(),
+            success: function(msg){
+              //alert( "Data Saved: " + msg );
+              location.reload();
+            },
+            error: function(){
+              alert( "Data Could not Save!: ");
+            }
+          });
+        });
     });
     intervalObj=setInterval(function(){
       var textarea_value=$("#ajax_edit__textarea").val();
