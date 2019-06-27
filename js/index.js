@@ -103,11 +103,11 @@ $(function() {
 
   $(window).on('popstate', function(e) {
     if (isCanBeHistory) {
-      ajaxLoad("#content_add", "ajax_load.php?page=" + encodeURIComponent(history.state), () => $("#content_add").trigger('rewrite'););
+      ajaxLoad("#content_add", "ajax_load.php?page=" + encodeURIComponent(history.state), () => $("#content_add").trigger('rewrite'));
     }
   });
 
-  ajaxLoad("#content_add", "ajax_load.php?page=" + encodeURIComponent(page), () => $("#content_add").trigger('rewrite'););
+  ajaxLoad("#content_add", "ajax_load.php?page=" + encodeURIComponent(page), () => $("#content_add").trigger('rewrite'));
   ajaxLoad("#header", "index_" + "header.php");
   ajaxLoad("#footer", "index_" + "footer.php");
   ajaxLoad("#login_history", "api/api_getLoginHistory.php");
