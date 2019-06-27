@@ -75,12 +75,12 @@ function checkComment(rawText, ncmb) { // コメントフォームの差し替�
       }
       // 構文置換
       Object.keys(commentLists).forEach(function(key) {
-        let html = '<div style="background-color:#ccc;">' +
-          '<form class="CommentForm" data-objid="' + key + '" style="margin:0px;"><p>' +
+        let html = '<div class="WikiSyntax_Comment">' +
+          '<form class="CommentForm" data-objid="' + key + '">' +
           '<input type="text" name="content" size="25" value="" placeholder="コメント本文" />' +
           '<input type="text" name="contributor" size="10" value="" placeholder="名前" />' +
           '<input type="submit" value="投稿" />' +
-          '</p></form>' +
+          '</form>' +
           '<ul>' +
           // 取得したコメントデータをhtml化する.
           commentLists[key].map(v => `<li>${v.contributor}: ${v.content}</li>`).reduce((c0, c1) => c0 + c1, '') + /*1件も無ければここが空になる*/
