@@ -111,8 +111,27 @@ function replaceSyntax(str) {
   let regexps = [];
   let afterWords = [];
   let result = str;
-  regexps.push(/&image\(([a-zA-Z_0-9.]+)\)/g);
-  afterWords.push('<img src="up/$1" />');
+  // &image()
+  regexps.push(/&image\((\w+\.\w+)\)/g);
+  afterWords.push('<img src="up/$1" class="tag" width="200px" />');
+  regexps.push(/&image\((\w+\.\w+),([0-9]*),([0-9]*)\)/g);
+  afterWords.push('<img src="up/$1" class="tag" width="$2px" height="$3px" />');
+  regexps.push(/&img\((https?:\/\/.+)\)/g);
+  afterWords.push('<img src="$1" />');
+  // &size(){}, &color(){}
+  regexps.push(/&size\((\d+)\)\{(.*)\}/g);
+  afterWords.push('<span style="font-size:$1px">$2</span>');
+  regexps.push(/&color\((#[0-9A-F]{6})\)\{(.*)\}/g);
+  afterWords.push('<span style="color:$1">$2</span>');
+  // ブロック
+  regexps.push(/#hr\s/g);
+  afterWords.push('<hr>');
+  // リンク
+  regexps.push(/\[\[(.+)::(.+)]]/g);
+  afterWords.push('<a value="$2" href="$2" class="ajaxLoad">$1</a>');
+  regexps.push(/\[\[(.+)]]/g);
+  afterWords.push('<a value="$1" href="$1" class="ajaxLoad">$1</a>');
+
   for (let i = 0; i < regexps.length; i++) {
     result = result.replace(regexps[i], afterWords[i]);
   }
