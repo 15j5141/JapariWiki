@@ -83,7 +83,7 @@ function checkComment(rawText, ncmb) { // コメントフォームの差し替�
           '</form>' +
           '<ul>' +
           // 取得したコメントデータをhtml化する.
-          commentLists[key].map(v => `<li>${v.contributor}: ${v.content}</li>`).reduce((c0, c1) => c0 + c1, '') + /*1件も無ければここが空になる*/
+          commentLists[key].map(v => `<li>${replaceSyntax(v.contributor)}: ${replaceSyntax(v.content)}</li>`).reduce((c0, c1) => c0 + c1, '') + /*1件も無ければここが空になる*/
           '</ul>' + '</div>';
         resultText = resultText.replace('#comment(' + key + ')', html);
       });
@@ -103,6 +103,18 @@ function rndStr(length) {
   while (i < length) {
     result += moji[Math.floor(Math.random() * moji.length)];
     i++;
+  }
+  return result;
+}
+
+function replaceSyntax(str) {
+  let regexps = [];
+  let afterWords = [];
+  let result = str;
+  regexps.push(/&image\((\w+)\)/g);
+  afterWords.push('<img src="up/$1" />');
+  for (let i = 0; i < regexps.length; i++) {
+    result = result.replace(regexps[i], afterWords[i]);
   }
   return result;
 }
