@@ -113,11 +113,11 @@ function replaceSyntax(str) {
   let result = str;
   // &image()
   regexps.push(/&image\((\w+\.\w+)\)/g);
-  afterWords.push('<img src="up/$1" class="tag" width="200px" />');
+  afterWords.push('<img src="up/$1" class="tag" style="width:200px;" />');
   regexps.push(/&image\((\w+\.\w+),([0-9]*),([0-9]*)\)/g);
-  afterWords.push('<img src="up/$1" class="tag" width="$2px" height="$3px" />');
+  afterWords.push('<img src="up/$1" class="tag" style="width:$2px;height:$3px;" />');
   regexps.push(/&img\((https?:\/\/.+)\)/g);
-  afterWords.push('<img src="$1" />');
+  afterWords.push('<img src="$1" class="tag" style="width:200px;" />');
   // &size(){}, &color(){}
   regexps.push(/&size\((\d+)\)\{(.*)\}/g);
   afterWords.push('<span style="font-size:$1px">$2</span>');
