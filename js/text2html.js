@@ -111,7 +111,7 @@ function replaceSyntax(str) {
   let regexps = [];
   let afterWords = [];
   let result = str;
-  regexps.push(/&image\((\w+)\)/g);
+  regexps.push(/&image\(([a-zA-Z_0-9.]+)\)/g);
   afterWords.push('<img src="up/$1" />');
   for (let i = 0; i < regexps.length; i++) {
     result = result.replace(regexps[i], afterWords[i]);
