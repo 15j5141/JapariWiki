@@ -122,6 +122,7 @@ function loadTextFromString($input){
       $line= preg_replace("/''(.+)''/U", '<strong>$1</strong>', $line);
       if(strpos($line, "#")===0){
         $keyWord = "#";
+        $result .= $line;
       }else{
         $line= preg_replace('/$\\n/', '<br />', $line);
         $result .= $line;
