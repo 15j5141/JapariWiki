@@ -16,7 +16,12 @@ function sqlbind($sql, $types, ...$params){
   if ($stmt = $mysqli->prepare($sql)) {
 $a=array($params[0], &$params[1]);
 //var_dump($a);
-    if( call_user_func_array(array($stmt, 'bind_param'), $params) ){
+    // PHP5.4から正しく参照渡ししないとエラーする為。
+    $params_=array($types);
+    for($i=1;$i<count($params);$i++){
+      $params_[] = &$params[$i];
+    }
+    if( call_user_func_array(array($stmt, 'bind_param'), $params_) ){
       $stmt->execute();
       $result=$stmt->get_result();
       if($result!==false){
