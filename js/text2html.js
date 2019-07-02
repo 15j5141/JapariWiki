@@ -108,32 +108,22 @@ function rndStr(length) {
 }
 
 function replaceSyntax(str) {
-  let regexps = [];
-  let afterWords = [];
+  let syntaxs = [];
   let result = str;
   // &image()
-  regexps.push(/&image\((\w+\.\w+)\)/g);
-  afterWords.push('<img src="up/$1" class="tag" style="width:200px;" />');
-  regexps.push(/&image\((\w+\.\w+),([0-9]*),([0-9]*)\)/g);
-  afterWords.push('<img src="up/$1" class="tag" style="width:$2px;height:$3px;" />');
-  regexps.push(/&img\((https?:\/\/.+)\)/g);
-  afterWords.push('<img src="$1" class="tag" style="width:200px;" />');
+  syntaxs.push([/&image\((\w+\.\w+)\)/g, '<img src="up/$1" class="tag" style="width:200px;" />']);
+  syntaxs.push([/&image\((\w+\.\w+),([0-9]*),([0-9]*)\)/g, '<img src="up/$1" class="tag" style="width:$2px;height:$3px;" />']);
+  syntaxs.push([/&img\((https?:\/\/.+)\)/g, '<img src="$1" class="tag" style="width:200px;" />']);
   // &size(){}, &color(){}
-  regexps.push(/&size\((\d+)\)\{(.*)\}/g);
-  afterWords.push('<span style="font-size:$1px">$2</span>');
-  regexps.push(/&color\((#[0-9A-F]{6})\)\{(.*)\}/g);
-  afterWords.push('<span style="color:$1">$2</span>');
+  syntaxs.push([/&size\((\d+)\)\{(.*)\}/g, '<span style="font-size:$1px">$2</span>']);
+  syntaxs.push([/&color\((#[0-9A-F]{6})\)\{(.*)\}/g, '<span style="color:$1">$2</span>']);
   // ブロック
-  regexps.push(/#hr\s/g);
-  afterWords.push('<hr>');
+  syntaxs.push([/#hr\s/g, '<hr>']);
   // リンク
-  regexps.push(/\[\[(.+)::(.+)]]/g);
-  afterWords.push('<a value="$2" href="$2" class="ajaxLoad">$1</a>');
-  regexps.push(/\[\[(.+)]]/g);
-  afterWords.push('<a value="$1" href="$1" class="ajaxLoad">$1</a>');
-
-  for (let i = 0; i < regexps.length; i++) {
-    result = result.replace(regexps[i], afterWords[i]);
+  syntaxs.push([/\[\[(.+)::(.+)]]/g, '<a value="$2" href="$2" class="ajaxLoad">$1</a>']);
+  syntaxs.push([/\[\[(.+)]]/g, '<a value="$1" href="$1" class="ajaxLoad">$1</a>']);
+  for (let i = 0; i < syntaxs.length; i++) {
+    result = result.replace(syntaxs[i][0], syntaxs[i][1]);
   }
   return result;
 }
