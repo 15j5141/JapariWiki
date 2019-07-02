@@ -58,11 +58,11 @@ $(document).on('submit', '.CommentForm', function(e) {
   return false;
 });
 $(document).on('rewrite', '#content_add', function(event) {
-  console.log('event');
+  console.log('wiki page is loaded.');
   // ページが読み込み終わったらjsで構文チェックを行う.
   koubunCheck($('#content_add').html()).then(function(result) {
-    console.log('event2');
-    $('#content_add').html(result);
+    console.log('checked wiki syntax.');
+    $('#content_add').html(replaceSyntax(result));
   })
 });
 $(function() {
