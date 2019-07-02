@@ -123,8 +123,8 @@ function replaceSyntax(str) {
   syntaxs.push([/\[\[(.+)::(.+)]]/g, '<a value="$2" href="$2" class="ajaxLoad">$1</a>']);
   syntaxs.push([/\[\[(.+)]]/g, '<a value="$1" href="$1" class="ajaxLoad">$1</a>']);
   // その他
-  syntaxs.push([/\s+\/\/.*$/gm, '']); // 「//」以降を消す.
-  syntaxs.push([/\s+#.*$/gm, '']); // 「#」以降を消す.動作が怪しいので廃止.
+  syntaxs.push([/^\/\/.*$/gm, '']); // 「//」以降を消す.
+  syntaxs.push([/^#.*$/gm, '']); // 「#」以降を消す.動作が怪しいので廃止.
   for (let i = 0; i < syntaxs.length; i++) {
     result = result.replace(syntaxs[i][0], syntaxs[i][1]);
   }
