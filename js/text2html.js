@@ -118,13 +118,13 @@ function replaceSyntax(str) {
   syntaxs.push([/&size\((\d+)\)\{(.*)\}/g, '<span style="font-size:$1px">$2</span>']);
   syntaxs.push([/&color\((#[0-9A-F]{6})\)\{(.*)\}/g, '<span style="color:$1">$2</span>']);
   // ブロック
-  syntaxs.push([/#hr\s/g, '<hr>']);
+  syntaxs.push([/#hr\s*/g, '<hr>']);
   // リンク
   syntaxs.push([/\[\[(.+)::(.+)]]/g, '<a value="$2" href="$2" class="ajaxLoad">$1</a>']);
   syntaxs.push([/\[\[(.+)]]/g, '<a value="$1" href="$1" class="ajaxLoad">$1</a>']);
   // その他
-  syntaxs.push([/\/\/.*$/gm, '']); // 「//」以降を消す.
-  syntaxs.push([/^#.*$/gm, '']); // 「#」以降を消す.動作が怪しければ廃止.
+  syntaxs.push([/\s+\/\/.*$/gm, '']); // 「//」以降を消す.
+  syntaxs.push([/\s+#.*$/gm, '']); // 「#」以降を消す.動作が怪しいので廃止.
   for (let i = 0; i < syntaxs.length; i++) {
     result = result.replace(syntaxs[i][0], syntaxs[i][1]);
   }
