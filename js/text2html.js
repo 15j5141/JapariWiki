@@ -126,7 +126,8 @@ function replaceSyntax(str) {
   syntaxs.push([/^\/\/.*$/gm, '']); // 「//」以降をコメントアウト.
   syntaxs.push([/^#.*$/gm, '']); // 「#」以降をコメントアウト.動作が怪しいので廃止.
   //syntaxs.push([/\/\*(.|\s)*?\*\//g, '']); // 「/**/」内をコメントアウト. 「.」は改行には一致しない.
-  syntaxs.push([/^(\s*(\/\*\/?([^\/]|[^*]\/|\r|\n)*\*\/)*(\/\/.*\r?\n)*)*/g, '']); // 「/**/」内をコメントアウト.詳細は不明...
+  syntaxs.push([/\s*(\/\*\/?([^\/]|[^*]\/|\r|\n)*\*\/)*/g, '']); // 「/**/」内をコメントアウト.詳細は不明...
+  syntaxs.push([/(\/\/.*\r?\n)*/g, '']);
   for (let i = 0; i < syntaxs.length; i++) {
     result = result.replace(syntaxs[i][0], syntaxs[i][1]);
   }
