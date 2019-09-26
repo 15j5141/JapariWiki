@@ -113,6 +113,9 @@ $(function() {
     });
   }
 
+  /**
+   * ページ上部へスクロールする.
+   */
   function Scroll2Top() {
     $('html,body').animate({
       scrollTop: 0

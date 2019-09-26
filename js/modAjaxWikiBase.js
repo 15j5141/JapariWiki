@@ -1,9 +1,12 @@
+// NCMB用の設定.
 var appKey = "73214ee5293b310aba334aaf6b58cb41cb89873a1eb88ab505fa7d48dcc2b911";
 var clientKey = "79d3a32839ef780c0fe16236d8efc7bdd338312ec1d969945346a181ffc9442f";
 var ncmb = new NCMB(appKey, clientKey);
 var user = new ncmb.User();
 username = '';
 password = '';
+
+// NCMBログイン状態を取得.
 var currentUser = ncmb.User.getCurrentUser();
 if (currentUser) {
   console.log("ログイン中のユーザー: " + currentUser.get("userName"));
@@ -11,11 +14,21 @@ if (currentUser) {
   //ncmb.User.logout();
   console.log("未ログインまたは取得に失敗");
 }
+
+/**
+ * 構文チェックを行う.
+ * @param {string} txt 
+ */
 async function koubunCheck(txt) {
   let result = await checkComment(txt, ncmb);
   console.log('koubunCheck: OK');
   return result;
 }
+
+/**
+ * 未使用
+ * ログイン成功時処理
+ */
 async function OnLogin2() {
   let result = await checkComment(txt, ncmb);
   $('body').append(result);
@@ -26,6 +39,10 @@ async function OnLogin2() {
   return 0;
 }
 
+/**
+ * 未使用
+ * ログイン成功時処理.
+ */
 function OnLogin() {
   return new Promise((resolve, reject) => {
     checkComment(txt, ncmb).then(function(result) {
@@ -41,6 +58,7 @@ function OnLogin() {
   });
 }
 
+// コメントフォームの投稿ボタンが押された時.
 $(document).on('submit', '.CommentForm', function(e) {
   e.preventDefault(); // submit破棄
   let comObjId = $(this).attr('data-objid'); // コメントID
@@ -57,6 +75,8 @@ $(document).on('submit', '.CommentForm', function(e) {
   $('input[type=submit]', this).val('要リロード');
   return false;
 });
+
+// ページが読み込み終わった時.
 $(document).on('rewrite', '#content_add', function(event) {
   console.log('wiki page is loaded.');
   // ページが読み込み終わったらjsで構文チェックを行う.
@@ -65,6 +85,7 @@ $(document).on('rewrite', '#content_add', function(event) {
     $('#content_add').html(replaceSyntax(result));
   })
 });
+
 $(function() {
   txt = "fdgwhsdijfpv\n#comment()\nnobsgjprgnb";
   /*checkBeforeSavingPage(txt, ncmb).then(function(result){

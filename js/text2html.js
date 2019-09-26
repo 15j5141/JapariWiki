@@ -1,5 +1,10 @@
 // require ncmb.min.js
-function checkBeforeSavingPage(rawText) { // 編集後の保存前の確認.
+
+/**
+ * 編集後の保存前の処理. コメントID割り当て等.
+ * @param {string} rawText 
+ */
+function checkBeforeSavingPage(rawText) {
   return new Promise(function(resolve, reject) {
     var resultText = rawText;
     // 新規コメント文法検出.(1個だけ)
@@ -12,7 +17,12 @@ function checkBeforeSavingPage(rawText) { // 編集後の保存前の確認.
     });
   });
 }
-// 新しい#comment(null)に適当な米idを割り当てる.Promiseじゃなくていい
+
+/**
+ * 新しい#comment(null)に適当な米idを割り当てる.
+ * Promiseじゃなくていい.
+ * @param {string} rawText 
+ */
 function checkBSP_NewCommentForm(rawText) {
   return new Promise(function(resolve, reject) {
     var resultText = rawText;
@@ -26,10 +36,15 @@ function checkBSP_NewCommentForm(rawText) {
   });
 }
 
-function checkAfterLodingPage(rawText, ncmb) { // 読込後の構文.
+/**
+ * ページ読込後の処理. 構文確認等.
+ * @param {*} rawText 
+ * @param {*} ncmb 
+ */
+function checkAfterLodingPage(rawText, ncmb) {
   return new Promise(function(resolve, reject) {
     let result = rawText;
-    checkALP_Comment(result);
+    checkALP_Comment(result); // 実質未使用.
     checkComment(result, ncmb).then(function(result) {
       console.log('ok');
     }).then(function(result) {
@@ -38,13 +53,22 @@ function checkAfterLodingPage(rawText, ncmb) { // 読込後の構文.
   });
 }
 
+/**
+ * 実質未使用
+ * AfterLodingPageでのコメント処理.
+ * @param {*} text 
+ */
 function checkALP_Comment(text) {
   let regexp = /#comment\(([a-zA-Z0-9]{6,10})\)/g;
   return text;
 }
 
-
-function checkComment(rawText, ncmb) { // コメントフォームの差し替え
+/**
+ * コメントフォームの差し替え.
+ * @param {*} rawText 
+ * @param {*} ncmb 
+ */
+function checkComment(rawText, ncmb) {
   return new Promise(function(resolve, reject) {
     // 初期化
     var resultText = rawText;
@@ -95,7 +119,11 @@ function checkComment(rawText, ncmb) { // コメントフォームの差し替�
     });
   });
 }
-// lengthの長さのランダムな文字列を生成
+
+/**
+ * lengthの長さのランダムな文字列を生成.
+ * @param {number} length 
+ */
 function rndStr(length) {
   var moji = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
   var result = '';
@@ -107,6 +135,10 @@ function rndStr(length) {
   return result;
 }
 
+/**
+ * 置換方式の構文チェック.
+ * @param {string} str 
+ */
 function replaceSyntax(str) {
   let syntaxs = [];
   let result = str;
@@ -133,8 +165,16 @@ function replaceSyntax(str) {
   }
   return result;
 }
+
+/**
+ * NCMBでのコメント関係の処理.
+ */
 class NCMBComment {
-  // コメント受信
+  /**
+   * コメント受信.
+   * @param {Object} commentClass 
+   * @param {string} id 
+   */
   getComment(commentClass, id) {
     return new Promise((resolve, reject) => {
       // Commentデータストアに接続.
@@ -155,6 +195,13 @@ class NCMBComment {
     });
   }
 
+  /**
+   * 新規コメントを投稿.
+   * @param {*} CommentClass コメントクラス
+   * @param {*} comObj コメントオブジェクトID
+   * @param {*} content 内容
+   * @param {*} contributor 投稿者
+   */
   setComment(CommentClass, comObj, content, contributor) {
     return new Promise((resolve, reject) => {
       //var Comment = ncmb.DataStore("Comment");
