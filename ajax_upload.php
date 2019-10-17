@@ -19,6 +19,8 @@ try {
     array( 'gif' => 'image/gif',
            'jpg' => 'image/jpeg',
            'bmp' => 'image/x-ms-bmp',
+           'webp' => 'image/webp',
+           'apng' => 'image/vnd.mozilla.apng',
            'png' => 'image/png', ),
     true )
   ) { throw new RuntimeException('ファイル形式が画像でないかサイズオーバーです'); }
