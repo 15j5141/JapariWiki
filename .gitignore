@@ -21,3 +21,9 @@ img/*
 .well-known/acme-challenge/*
 .well-known_/acme-challenge/*
 up/*
+
+# node
+node_modules
+package-lock.json
+package.json
+.eslintrc.json
