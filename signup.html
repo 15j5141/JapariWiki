@@ -1,4 +1,4 @@
-<?php
+<!-- <?php
 
 require_once(__DIR__.'/lib/module_dataBase.php');
 require_once(__DIR__.'/../config.php');
@@ -56,9 +56,11 @@ function sql_register($user_id, $user_pass){
   return $verify;
 }
 
-?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+?> -->
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
+
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -69,49 +71,50 @@ function sql_register($user_id, $user_pass){
 </head>
 
 <body>
-<script>
-  $(function() {
-    $('#test').on('click', function() {
-    });
-    $('#test').append('<br />');
+  <script>
+    $(function() {
+      $('#test').on('click', function() {
+      });
+      $('#test').append('<br />');
 
-    $('#form_id').submit(function(){
-      if($('input[name=user_id]').val()=="" || $("input[name='user_pass']").val()==""){
-        $('#test').append('<br />IDorPASS is not!');
-        return false;
-      }
-      var a =CryptoJS.MD5( $("input[name='user_pass']").val() );
-      $("input[name='user_pass']").val('' + a);
+      $('#form_id').submit(function() {
+        if ($('input[name=user_id]').val() == "" || $("input[name='user_pass']").val() == "") {
+          $('#test').append('<br />IDorPASS is not!');
+          return false;
+        }
+        var a = CryptoJS.MD5($("input[name='user_pass']").val());
+        $("input[name='user_pass']").val('' + a);
+      });
     });
-  });
-</script>
-<div class='body'>
-  <?= $JWConfig['isWarnNotHTTPS']&&!$JWConfig["isHTTPS"]? 'Wiki警告：HTTPSの利用を推奨します。（当警告はconfig.phpより非表示にできます。）': '' ?>
-  <form id="form_id" action="" method="POST">
-    <fieldset>
-      <legend align='center'>
-        <img src='img/site_loginTitleLogo.png' id='TitleLogo'>
-      </legend>
-      <div>
-        <p>
-          ID：<br />
-          <input type="text" id="id" name="user_id" size="40">
-        </p>
-        <p>
-          PASS:<br />
-          <input type="password" id="pass" name="user_pass" size="40">
-        </p>
-        <p>
-          <input type="submit" value="ログイン">
-        </p>
-      </div>
-      <div>
-        新規登録は登録したいID,PASSを入力して送信をクリック後、
-        表示されるコードを当wiki管理者へお知らせください。
-      </div>
-    </fieldset>
-  </form>
-</div>
+  </script>
+  <div class='body'>
+    <?= $JWConfig['isWarnNotHTTPS']&&!$JWConfig["isHTTPS"]? 'Wiki警告：HTTPSの利用を推奨します。（当警告はconfig.phpより非表示にできます。）': '' ?>
+    <form id="form_id" action="" method="POST">
+      <fieldset>
+        <legend align='center'>
+          <img src='img/site_loginTitleLogo.png' id='TitleLogo'>
+        </legend>
+        <div>
+          <p>
+            ID：<br />
+            <input type="text" id="id" name="user_id" size="40">
+          </p>
+          <p>
+            PASS:<br />
+            <input type="password" id="pass" name="user_pass" size="40">
+          </p>
+          <p>
+            <input type="submit" value="ログイン">
+          </p>
+        </div>
+        <div>
+          新規登録は登録したいID,PASSを入力して送信をクリック後、
+          表示されるコードを当wiki管理者へお知らせください。
+        </div>
+      </fieldset>
+    </form>
+  </div>
 
 </body>
+
 </html>

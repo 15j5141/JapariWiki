@@ -1,4 +1,4 @@
-<?php
+<!-- <?php
 /* php-init */
 header('Content-Type: text/html; charset=UTF-8');
 require_once(__DIR__.'/../db.php');
@@ -31,7 +31,7 @@ if ($mysqli->connect_error) {
   $mysqli->close();
 }
 $result .= '...exit.';
-?>
+?> -->
 
 <!-- html-css -->
 
@@ -41,7 +41,9 @@ $result .= '...exit.';
 
 <!-- html-body -->
 <html>
+
 <body>
   <?= $result; ?>
 </body>
+
 </html>

@@ -1,4 +1,4 @@
-<?php
+<!-- <?php
 /* php-init*/
 
 //ini_set( 'display_errors', 1 );
@@ -21,15 +21,16 @@ if(isset($_GET['page'])){
 //$page = isset($_GET['page']) ? urldecode($_GET['page']) : '';
 $page = isset($_SESSION['page']) ? $_SESSION['page'] : 'FrontPage';
 //$page = $page==='' ?  : '';
-?>
+?> -->
 
 <!-- html-body -->
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
+
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<link rel="stylesheet" type="text/css" href="css/style.css?<?= mt_rand(); ?>" />
-	<title><?= $JWConfig["siteTitle"] ?></title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <link rel="stylesheet" type="text/css" href="css/style.css?<?= mt_rand(); ?>" />
+  <title><?= $JWConfig["siteTitle"] ?></title>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script type="text/javascript" src="lib/ncmb.min.js" charset="utf-8">
   </script>
@@ -38,7 +39,7 @@ $page = isset($_SESSION['page']) ? $_SESSION['page'] : 'FrontPage';
   <script type="text/javascript" src="js/index_status.js"></script>
   <script type="text/javascript">
 
-    $(function(){
+    $(function() {
       //var
       page = "<?php echo $page; ?>";
     });
@@ -71,9 +72,9 @@ $page = isset($_SESSION['page']) ? $_SESSION['page'] : 'FrontPage';
       <div id="site_history">
         <?php echo loadText("./text/site_Notice.txt"); ?>
       </div>
-			<a href='' id="ajaxLoad_kanban">
-			  kanban(test)
-			</a><br />
+      <a href='' id="ajaxLoad_kanban">
+        kanban(test)
+      </a><br />
       ログイン履歴<br />
       <div id="login_history">
         Loading Now...<br />
@@ -90,4 +91,5 @@ $page = isset($_SESSION['page']) ? $_SESSION['page'] : 'FrontPage';
   </div>
 
 </body>
+
 </html>

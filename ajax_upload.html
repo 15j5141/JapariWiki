@@ -1,4 +1,4 @@
-<?php
+<!-- <?php
 
 header('Content-Type: text/html; charset=UTF-8');
 require_once(__DIR__.'/lib/module_dataBase.php');
@@ -41,41 +41,41 @@ try {
 } catch (RuntimeException $e) { echo $e->getMessage(); }
   echo $uploadfile;
 else:
-?>
+?> -->
 
 <!-- データのエンコード方式である enctype は、必ず以下のようにしなければなりません -->
- <form id="form_upload" enctype="multipart/form-data" action="ajax_upload.php" method="POST">
-<!-- MAX_FILE_SIZE は、必ず "file" input フィールドより前になければなりません -->
- <input type="hidden" name="MAX_FILE_SIZE" value="10240000" />
-<!-- input 要素の name 属性の値が、$_FILES 配列のキーになります -->
- アップロード(Max 10MB): <input name="userfile" type="file" />
- <input type="submit" value="ファイルを送信" /> </form>
+<form id="form_upload" enctype="multipart/form-data" action="ajax_upload.php" method="POST">
+  <!-- MAX_FILE_SIZE は、必ず "file" input フィールドより前になければなりません -->
+  <input type="hidden" name="MAX_FILE_SIZE" value="10240000" />
+  <!-- input 要素の name 属性の値が、$_FILES 配列のキーになります -->
+  アップロード(Max 10MB): <input name="userfile" type="file" />
+  <input type="submit" value="ファイルを送信" /> </form>
 
 
 <script type="text/javascript">
-$(function(){
+  $(function() {
 
-$('#form_upload').on('submit', function(event) {
-  event.preventDefault(); // 本来のPOSTを打ち消すおまじない
-  var formData = new FormData( $('#form_upload').get(0) );
-  $.ajax({
-    type: "POST",
-    url: $(this).attr('action'),
-    data: formData,
-    processData: false,
-    // contentTypeもfalseに指定
-    contentType: false,
-    success: function(html){
-      $("#modal-content").append(html);
-    },
-    error: function(){
-      alert( "Data Could not Save!: ");
-    }
+    $('#form_upload').on('submit', function(event) {
+      event.preventDefault(); // 本来のPOSTを打ち消すおまじない
+      var formData = new FormData($('#form_upload').get(0));
+      $.ajax({
+        type: "POST",
+        url: $(this).attr('action'),
+        data: formData,
+        processData: false,
+        // contentTypeもfalseに指定
+        contentType: false,
+        success: function(html) {
+          $("#modal-content").append(html);
+        },
+        error: function() {
+          alert("Data Could not Save!: ");
+        }
+      });
+    });
   });
-});
-});
 </script>
-
+<!-- 
 <?php
 echo sqlexec_($_SESSION['id']);
 
@@ -102,4 +102,4 @@ function sqlexec_($user_id){
   return $verify;
 }
 
-?>
+?> -->
