@@ -1,10 +1,4 @@
 <!--
-  <?php
-
-//ini_set( 'display_errors', 1 );
-//ini_set('log_errors', 1);
-//ini_set('error_log', 'php_err.txt');
-
 require_once(__DIR__.'/lib/module_dataBase.php');
 require_once(__DIR__.'/../config.php');
 if($JWConfig["isHTTPS"]&&!isset($_SERVER['HTTPS'])){
@@ -12,41 +6,6 @@ if($JWConfig["isHTTPS"]&&!isset($_SERVER['HTTPS'])){
   header( "Location: ". $JWConfig["rootURL"]. "login.php" ) ;
   exit;
 }
-
-if(isset($_POST["user_id"])){
-  $user_id=$_POST["user_id"];
-}else{
-  $user_id="null";
-}
-if(isset($_POST["user_pass"])){
-  $user_pass=$_POST["user_pass"];
-}else{
-  $user_pass="null";
-}
-if($user_id!='null' && $user_pass !='null'){
-
-  $passHash = password_hash($user_pass, PASSWORD_DEFAULT);
-
-  if(sqlexec_()===true){
-    //session_regenerate_id(true);
-    session_start();
-    $_SESSION['id'] = $user_id;
-    $loginResult= 'success';
-
-    // リダイレクト(移動)
-    if( parse_url($_SERVER['REQUEST_URI'], PHP_URL_QUERY )!=''){
-      header("Location: index.php?". parse_url($_SERVER['REQUEST_URI'], PHP_URL_QUERY ));
-    }else{
-      header( "Location: index.php" );
-    }
-
-  }else{
-    $loginResult= 'failure';
-    echo 'アカウント作成希望者は以下を管理者へお知らせください。<br />';
-    echo '暗号化済みID, PASS：' . $user_id . ':' . $passHash . '<br />';
-    //echo '' . $user_id . '<br />';
-    //echo '' . $user_pass . '<br />';
-  }
 
   // ログイン履歴を適当に残す by 2018/02/06
   $fileData= "";
@@ -58,33 +17,6 @@ if($user_id!='null' && $user_pass !='null'){
   $fileData .= $today . ";". $loginResult. ';'.  $user_id . "\n";
   file_put_contents($fileName, $fileData);
 
-  if($loginResult==='success'){
-    // 終了
-    exit;
-  }
-}
-
-function sqlexec_(){
-  global $user_id;
-  global $user_pass;
-
-  $sql = "SELECT * FROM app_account WHERE user_id = '" . $user_id . "'";
-  $result=sqlexec($sql);
-  $verify = false;
-
-  if(($result->num_rows)=== 1){ // 1件なら
-
-    while($row=$result->fetch_assoc()){
-    // 連想配列を取得
-      if($row["user_id"] == $user_id){//ID一致なら
-        $verify = password_verify($user_pass, $row["user_pass"]);
-      }else{
-        $verify = false;
-      }
-    }
-    //$result->close();
-  }
-  return $verify;
 }
 
 ?>
@@ -96,32 +28,59 @@ function sqlexec_(){
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title><?= $JWConfig["siteTitle"] ?></title>
+  <title>
+    <!-- $JWConfig["siteTitle"] -->
+  </title>
   <script type="text/javascript" src="lib/md5.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  <?php echo '<link rel="stylesheet" type="text/css" href="css/login.css?' . mt_rand() .  '" />'; ?>
+  <script src="lib/ncmb.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="css/login.css" />
 </head>
 
 <body>
   <script>
-    $(function() {
-      $('#test').on('click', function() {
-      });
-      $('#test').append('<br />');
 
-      $('#form_id').submit(function() {
-        if ($('input[name=user_id]').val() == "" || $("input[name='user_pass']").val() == "") {
-          $('#test').append('<br />IDorPASS is not!');
+    // NCMB用の設定.
+    const appKey = "73214ee5293b310aba334aaf6b58cb41cb89873a1eb88ab505fa7d48dcc2b911";
+    const clientKey = "79d3a32839ef780c0fe16236d8efc7bdd338312ec1d969945346a181ffc9442f";
+    const ncmb = new NCMB(appKey, clientKey);
+
+    $(function () {
+      // ログインボタン.
+      $('#form_id').submit(function () {
+        const user_id = $('input[name=user_id]').val();
+        const user_pass = $('input[name=user_pass]').val();
+        // 空白チェック.
+        if (user_id === '' || user_pass === '') {
+          $('#form_id').append('<br />ID or PASS is empty!');
           return false;
         }
-        var a = CryptoJS.MD5($("input[name='user_pass']").val());
-        $("input[name='user_pass']").val('' + a);
+        // 管理者が読めないようにハッシュ化.
+        const crypted = CryptoJS.MD5(user_pass);
+        // $("input[name='user_pass']").val(crypted);
+
+        // ログイン用インスタンス作成.
+        const user = new ncmb.User({
+          userName: user_id, password: user_pass
+        });
+
+        // 非同期でログイン処理.
+        ncmb.User.login(user)
+          .then(function (data) {
+            console.log(data);
+            location.href = 'index.html?' + location.search;
+          })
+          .catch(function (err) { // エラー.
+            console.log(err);
+          });
+
+        return false;
       });
     });
   </script>
   <div class='body'>
-    <?= $JWConfig['isWarnNotHTTPS']&&!$JWConfig["isHTTPS"]? 'Wiki警告：HTTPSの利用を推奨します。（当警告はconfig.phpより非表示にできます。）': '' ?>
-    <form id="form_id" action="" method="POST">
+    <!-- $JWConfig['isWarnNotHTTPS']&&!$JWConfig["isHTTPS"]? 'Wiki警告：HTTPSの利用を推奨します。（当警告はconfig.phpより非表示にできます。）': '' -->
+    <form id="form_id">
       <fieldset>
         <legend align='center'>
           <img src='img/site_loginTitleLogo.png' id='TitleLogo'>
@@ -139,14 +98,12 @@ function sqlexec_(){
             <input type="submit" value="ログイン">
           </p>
         </div>
-        <div>
-          新規登録は登録したいID,PASSを入力して送信をクリック後、
-          表示されるコードを当wiki管理者へお知らせください。
-        </div>
       </fieldset>
     </form>
   </div>
-
+  <!-- <script type="module">
+    import * as status from "japariwiki/js/index_status.js";
+  </script> -->
 </body>
 
 </html>
