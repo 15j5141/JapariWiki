@@ -1,15 +1,10 @@
 <!-- <?php
 /* php-init*/
 
-//ini_set( 'display_errors', 1 );
 require_once(__DIR__.'/lib/module_convertHTML.php');
 require_once(__DIR__.'/lib/module_login.php');
 require_once(__DIR__.'/../config.php');
-if($JWConfig["isHTTPS"]&&!isset($_SERVER['HTTPS'])){
-  // configでhttpsにしてるのにhttpでアクセスされたらhttps付きへリダイレクト
-  header( "Location: ". $JWConfig["rootURL"]. "index.php" ) ;
-  exit;
-}
+
 ?>
 <?php
 /* php-run */
@@ -29,8 +24,10 @@ $page = isset($_SESSION['page']) ? $_SESSION['page'] : 'FrontPage';
 
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-  <link rel="stylesheet" type="text/css" href="css/style.css?<?= mt_rand(); ?>" />
-  <title><?= $JWConfig["siteTitle"] ?></title>
+  <link rel="stylesheet" type="text/css" href="css/style.css" />
+  <title>
+    <!-- $JWConfig["siteTitle"] -->
+  </title>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script type="text/javascript" src="lib/ncmb.min.js" charset="utf-8">
   </script>
@@ -39,13 +36,13 @@ $page = isset($_SESSION['page']) ? $_SESSION['page'] : 'FrontPage';
   <script type="text/javascript" src="js/index_status.js"></script>
   <script type="text/javascript">
 
-    $(function() {
+    $(function () {
       //var
       page = "<?php echo $page; ?>";
     });
 
   </script>
-  <script src="js/index.js?<?= mt_rand(); ?>"></script>
+  <script src="js/index.js?"></script>
 </head>
 
 <body>
@@ -66,29 +63,47 @@ $page = isset($_SESSION['page']) ? $_SESSION['page'] : 'FrontPage';
   <div id="side">
     <div id="side_menu">
       <p class="bar">メニュー</p>
-      <?php echo 'アカウント名：' . $_SESSION['id'] . '<br />'; ?>
+      アカウント名：
+      <!-- $_SESSION['id'] --><br>
       <a href='logout.php'>ログアウト</a><br />
       お知らせ<br />
       <div id="site_history">
-        <?php echo loadText("./text/site_Notice.txt"); ?>
+        <div class="ajax_load" data-path="text/site_Notice.txt"></div>
       </div>
-      <a href='' id="ajaxLoad_kanban">
+      <!-- <a href='' id="ajaxLoad_kanban">
         kanban(test)
-      </a><br />
+      </a><br /> -->
       ログイン履歴<br />
       <div id="login_history">
         Loading Now...<br />
       </div>
-      <?php echo loadText("text/site_menu.txt"); ?>
+      <div class="ajax_load" data-path="text/site_menu.txt"></div>
+
     </div>
     <div id="side_history">
       History<br />
-      <?php echo loadText("./text/site_History.txt"); ?>
+      <div class="ajax_load" data-path="text/site_History.txt"></div>
     </div>
   </div>
   <div id="footer">
     Loading Now...<br />
   </div>
+  <script>
+    // サイト内の'.ajax_load'パーツを非同期に読み込み.
+    $(function () {
+      const ajax_loads = $('.ajax_load');
+
+      for (let i = 0; i < ajax_loads.length; i++) {
+        // jQueryオブジェクトを取得.
+        const jq = ajax_loads.eq(i);
+        console.log(jq);
+        ajaxLoad(null, jq.data('path'), function (data) {
+          jq.html(data);
+        });
+      }
+
+    });
+  </script>
 
 </body>
 

@@ -94,8 +94,6 @@ $(function() {
   });
 
   ajaxLoad("#content_add", "ajax_load.php?page=" + encodeURIComponent(page), () => $("#content_add").trigger('rewrite'));
-  ajaxLoad("#header", "index_" + "header.php");
-  ajaxLoad("#footer", "index_" + "footer.php");
   ajaxLoad("#header", "index_" + "header.html");
   ajaxLoad("#footer", "index_" + "footer.html");
   ajaxLoad("#login_history", "api/api_getLoginHistory.php");
@@ -103,31 +101,31 @@ $(function() {
     history.replaceState('' + page, null, null);
   }
 
-  // FixMe ajaxエラー時処理を加える
-  function ajaxLoad(Content, Url, callbackSuccess) {
-    $.ajax({
-      url: "" + Url,
-      cache: false,
-      success: function(html) {
-        $(Content).html(html);
-        if (typeof callbackSuccess === 'function') callbackSuccess();
-      }
-    });
-  }
-
-  /**
-   * ページ上部へスクロールする.
-   */
-  function Scroll2Top() {
-    $('html,body').animate({
-      scrollTop: 0
-    }, 100, 'swing');
-  }
-
-  $(document).on('click', '#ajaxLoad_kanban', function(event) {
+  $(document).on('click', '#ajaxLoad_kanban', function (event) {
     event.preventDefault();
     ajaxLoad("#content_add", "ajax_kanban.php");
     return false;
   });
 
 });
+
+// FixMe ajaxエラー時処理を加える
+function ajaxLoad(Content, Url, callbackSuccess) {
+  $.ajax({
+    url: "" + Url,
+    cache: false,
+    success: function (html) {
+      $(Content).html(html);
+      if (typeof callbackSuccess === 'function') callbackSuccess(html);
+    }
+  });
+}
+
+/**
+ * ページ上部へスクロールする.
+ */
+function Scroll2Top() {
+  $('html,body').animate({
+    scrollTop: 0
+  }, 100, 'swing');
+}
