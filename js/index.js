@@ -1,10 +1,10 @@
 var doneAjax = 1;
 var isCanBeHistory = history && history.pushState && history.state !== undefined;
 
-$(function() {
+$(function () {
 
   // <a class="ajaxLoad">をクリックしたら. Wiki内ページリンクを踏んだら.
-  $(document).on('click', 'a.ajaxLoad', function(event) {
+  $(document).on('click', 'a.ajaxLoad', function (event) {
     event.preventDefault(); // 標準ページ移動を無効化.
     /* 連打対策 */
     if (doneAjax == 1) {
@@ -17,15 +17,15 @@ $(function() {
         url: "ajax_load.php?page=" + encodeURIComponent(page),
         cache: false,
         // 成功時処理.
-        success: function(data, status, xhr) {
+        success: function (data, status, xhr) {
           Scroll2Top(); // ページ上までスクロール.
-          $("#content_add").fadeOut('fast', function() { // 一度ページを非表示に.
+          $("#content_add").fadeOut('fast', function () { // 一度ページを非表示に.
             if (xhr.status === 201) {
               // ページが存在しなければ新規作成.
               $.ajax({
                 url: "ajax_edit.php?page=" + encodeURIComponent(page),
                 cache: false,
-                success: function(html) {
+                success: function (html) {
                   $("#content_add").html(html);
                   $("#content_add").append(xhr.location);
                 }
@@ -40,7 +40,7 @@ $(function() {
           });
         },
         // エラー時処理.
-        error: function() {
+        error: function () {
           $("#content_add").html('Ajax通信エラーです。');
           $("#content_add").fadeIn('1'); // ページを表示する.
           doneAjax = 1;
@@ -52,14 +52,14 @@ $(function() {
   });
 
   // 「編集」ボタンを押したら.
-  $(document).on('click', '#ajaxLoad_edit', function(event) {
+  $(document).on('click', '#ajaxLoad_edit', function (event) {
     event.preventDefault();
     ajaxLoad("#content_add", "ajax_edit.php?page=" + encodeURIComponent(page));
     return false;
   });
 
   // 「アップロード」ボタンを押したら.
-  $(document).on('click', '#ajaxLoad_upload', function(event) {
+  $(document).on('click', '#ajaxLoad_upload', function (event) {
     event.preventDefault();
     // キーボード操作などにより、オーバーレイが多重起動するのを防止する
     $(this).blur(); //ボタンからフォーカスを外す
@@ -76,10 +76,10 @@ $(function() {
     return false;
   });
 
-  $(document).on('click', '#modal-overlay', function(event) {
+  $(document).on('click', '#modal-overlay', function (event) {
     // [#modal-overlay]と[#modal-close]をフェードアウトする
     if ($(event.target).is("#modal-overlay")) {
-      $("#modal-close,#modal-overlay").fadeOut("slow", function() {
+      $("#modal-close,#modal-overlay").fadeOut("slow", function () {
         // フェードアウト後、[#modal-overlay]をHTML(DOM)上から削除
         $("#modal-overlay").remove();
       });
@@ -87,7 +87,7 @@ $(function() {
   });
 
   // ページバック処理時にページ遷移を発動.
-  $(window).on('popstate', function(e) {
+  $(window).on('popstate', function (e) {
     if (isCanBeHistory) {
       ajaxLoad("#content_add", "ajax_load.php?page=" + encodeURIComponent(history.state), () => $("#content_add").trigger('rewrite'));
     }
