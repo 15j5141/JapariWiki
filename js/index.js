@@ -96,6 +96,8 @@ $(function() {
   ajaxLoad("#content_add", "ajax_load.php?page=" + encodeURIComponent(page), () => $("#content_add").trigger('rewrite'));
   ajaxLoad("#header", "index_" + "header.php");
   ajaxLoad("#footer", "index_" + "footer.php");
+  ajaxLoad("#header", "index_" + "header.html");
+  ajaxLoad("#footer", "index_" + "footer.html");
   ajaxLoad("#login_history", "api/api_getLoginHistory.php");
   if (history.state == null) { // 履歴情報がなければ(Wikiを開いた時)現ページ名で上書き.
     history.replaceState('' + page, null, null);
