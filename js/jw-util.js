@@ -1,4 +1,8 @@
-class Util {
+/**
+ * ツール群.
+ * @class
+ */
+class JWUtil {
     /**
      * @returns {Object}
      */
@@ -32,4 +36,4 @@ class Util {
         return Util.URLQuery[key];
     }
 }
-export default Util;
+export default JWUtil;
