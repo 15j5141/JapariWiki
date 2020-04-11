@@ -23,6 +23,7 @@ up/*
 
 # node
 node_modules
+package-lock.json
 
 # editor
 .vscode
