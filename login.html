@@ -45,6 +45,49 @@ if($JWConfig["isHTTPS"]&&!isset($_SERVER['HTTPS'])){
     const clientKey = "79d3a32839ef780c0fe16236d8efc7bdd338312ec1d969945346a181ffc9442f";
     const ncmb = new NCMB(appKey, clientKey);
 
+    const ViewSystem = {
+      _doms: [
+        {
+          name: 'pass',
+          query: "input[name='user_pass']",
+          type: 'html',
+          value: ''
+        }
+      ],
+      init: function () {
+        this._doms = [];
+        const objs = $('.view-auto');
+        for (let i = 0; i < objs.length; i++) {
+          this._doms.push({
+            query: objs[i].query,
+            value: objs[i].val
+          });
+        }
+        $('.view-auto').length;
+      },
+      set: function (name, value) {
+        const dom = this.findDom(name);
+        dom.value = value;
+        switch (dom.type) {
+          case 'val':
+            $(dom.query).val(val);
+            break;
+          case 'html':
+            $(dom.query).html(val);
+            break;
+        }
+      },
+      get: function (name) {
+        const dom = this.findDom(name);
+        return dom.value;
+      },
+      findDom: function (name) {
+        return this._doms.find(function (d) {
+          return r.name === name;
+        });
+      }
+    };
+
     $(function () {
       // ログインボタン.
       $('#form_id').submit(function () {

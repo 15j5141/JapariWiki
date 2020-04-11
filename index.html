@@ -33,12 +33,30 @@ $page = isset($_SESSION['page']) ? $_SESSION['page'] : 'FrontPage';
   </script>
   <script type="text/javascript" src="js/text2html.js"></script>
   <script type="text/javascript" src="js/modAjaxWikiBase.js"></script>
-  <script type="text/javascript" src="js/index_status.js"></script>
+  <script type="module">
+    import JW from "/js/index_status.js";
+    console.log(JW);
+
+    JW.status.load();
+    const wiki = JW.status.apps.wiki;
+    window.page = wiki.page;
+    console.log(page);
+    JW.status.save();
+
+    $.ajax({
+      url: 'app/' + JW.status.app + '.html',
+      dataType: 'html'
+    }).done(data => {
+      // console.log(data);
+      $('#content_add').html(data);
+    });
+
+  </script>
   <script type="text/javascript">
 
-    $(function () {
+    $(function() {
       //var
-      page = "<?php echo $page; ?>";
+      console.log(page);
     });
 
   </script>
@@ -65,7 +83,7 @@ $page = isset($_SESSION['page']) ? $_SESSION['page'] : 'FrontPage';
       <p class="bar">メニュー</p>
       アカウント名：
       <!-- $_SESSION['id'] --><br>
-      <a href='logout.php'>ログアウト</a><br />
+      <a href="logout.html">ログアウト</a><br />
       お知らせ<br />
       <div id="site_history">
         <div class="ajax_load" data-path="text/site_Notice.txt"></div>
@@ -89,18 +107,19 @@ $page = isset($_SESSION['page']) ? $_SESSION['page'] : 'FrontPage';
     Loading Now...<br />
   </div>
   <script>
-    // サイト内の'.ajax_load'パーツを非同期に読み込み.
-    $(function () {
+    $(function() {
+      // サイト内の'.ajax_load'パーツを非同期に読み込み.
       const ajax_loads = $('.ajax_load');
-
       for (let i = 0; i < ajax_loads.length; i++) {
         // jQueryオブジェクトを取得.
         const jq = ajax_loads.eq(i);
-        console.log(jq);
-        ajaxLoad(null, jq.data('path'), function (data) {
+        // console.log(jq);
+        ajaxLoad(null, jq.data('path'), function(data) {
           jq.html(data);
         });
       }
+
+      
 
     });
   </script>

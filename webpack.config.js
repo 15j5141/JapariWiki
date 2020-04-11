@@ -4,23 +4,23 @@ module.exports = {
 	mode: process.env.NODE_ENV || 'development',
 	entry: {
 		entry: './entry.js',
-		entry2: './entry2.js'
+		wiki: './app/wiki.js'
 	},
 	output: {
 		path: __dirname + '/dist',
-		filename: 'js/[name].js'
+		filename: 'app/[name].js'
 	},
 	plugins: [
 		new HtmlWebpackPlugin({
 			// inject: false,
 			chunks: ['entry'],
-			filename: 'index.html'
+			filename: 'app/index.html'
 		}),
 		new HtmlWebpackPlugin({
 			// inject: false,
-			chunks: ['entry2'],
-			template:'temp.html',
-			filename: 'app/sub.html'
+			chunks: ['wiki'],
+			template: 'app/wiki.html',
+			filename: 'app/wiki.html'
 		})
 	],
 	externals: [

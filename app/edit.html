@@ -1,0 +1,119 @@
+<!-- html/css -->
+<style>
+    #ajax_edit__body {
+        height: 100vh;
+    }
+
+    #ajax_edit {
+        height: 100%;
+        width: 100%;
+    }
+
+    #ajax_edit__preview {
+        box-sizing: border-box;
+        height: 80%;
+        width: 48%;
+        display: inline-block;
+        zoom: 0.8;
+        overflow: scroll;
+    }
+
+    #ajax_edit__textarea {
+        box-sizing: border-box;
+        height: 80%;
+        width: 48%;
+        display: inline-block;
+        resize: none;
+    }
+</style>
+
+
+<!-- html/body -->
+<div id="ajax_edit__body">
+    <form id="ajax_edit" method="post">
+        ページ名：<input type="text" name="page" size="40" id="ajax_edit__form__page-name" maxlength="20" value=""><br/>
+        <textarea name="fileData" id="ajax_edit__textarea"><?php echo $fileData;  ?></textarea>
+        <div id="ajax_edit__preview">
+            読み込み中...
+        </div>
+        <br/>
+        <input type="submit" value="送信"><input type="reset" value="リセット">
+    </form>
+</div>
+
+<!-- html/js -->
+<script type="text/javascript" src="js/ajax_edit.js"></script>
+<script type="text/javascript">
+    let intervalObj;
+    let textarea_oldValue;
+
+    //
+    let ajax_edit_view = {
+        form: {
+            _page_name: '',
+            get page_name(){
+                this._page_name = $('#ajax_edit__form__page-name').val();
+                return this._page_name;
+            },
+            /** @param {string} param ページ名 */
+            set page_name(param){
+                this._page_name = param;
+                $('#ajax_edit__form__page-name').val('' + param);
+            }
+        },
+        init: function(){
+            // ページ名表示.
+            this.form.page_name = JapariWiki.status.wiki.page;
+        }
+    };
+
+    $(function(){
+        $('#content_add').attr("data-ajax", "edit");// 現在のajax画面.
+
+        $('#ajax_edit__form__page-name')
+
+        $('#ajax_edit').on('submit', function(event){
+            event.preventDefault(); // 本来のPOSTを打ち消すおまじない
+            if (intervalObj != null) {
+                clearInterval(intervalObj);
+            }
+            $('input[type="submit"]', this).prop("disabled", "true");// 送信ボタン無効化
+            $('#ajax_edit__textarea').prop("readonly", "true");// 編集枠無効化
+            checkBeforeSavingPage($('#ajax_edit__textarea').val()).then(
+                result => {
+                    $('#ajax_edit__textarea').val(result);
+                    $.ajax({
+                        type: "POST",
+                        url: $(this).attr('action'),
+                        data: $(this).serializeArray(),
+                        success: function(msg){
+                            //alert( "Data Saved: " + msg );
+                            location.reload();
+                        },
+                        error: function(){
+                            alert("Data Could not Save!: ");
+                        }
+                    });
+                });
+        });
+        // プレビュー表示用.
+        intervalObj = setInterval(function(){
+            var textarea_value = $("#ajax_edit__textarea").val();
+            // 変化があったらpreviewを更新
+            if (textarea_oldValue != textarea_value) {
+                $.ajax({
+                    type: "POST",
+                    url: "./ajax_load.php",
+                    data: {'text': textarea_value},
+                    success: function(data){
+                        $("#ajax_edit__preview").html(data);
+                    },
+                    error: function(){
+                        $("#ajax_edit__preview").html("ajax通信エラー");
+                    }
+                });
+                textarea_oldValue = textarea_value;
+            }
+        }, 1000);
+    });
+</script>

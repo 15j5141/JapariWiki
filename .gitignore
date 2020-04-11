@@ -23,7 +23,6 @@ up/*
 
 # node
 node_modules
-#.eslintrc.json
 
 # editor
 .vscode

@@ -1,8 +1,15 @@
+import JWStatus from "./jw-status.js";
+import Page from "./class-page.js";
+import Cloud from "./class-cloud.js";
+import Renderer from "./class-renderer.js";
 
 let doneAjax = true;
 const isCanBeHistory = history && history.pushState && history.state !== undefined;
 
 $(function() {
+  const status = new JWStatus();
+  let page = status.getPageName();
+  let cloud = new Cloud();
 
   // <a class="ajaxLoad">をクリックしたら. Wiki内ページリンクを踏んだら.
   $(document).on('click', 'a.ajaxLoad', function(event) {
@@ -11,37 +18,29 @@ $(function() {
     if (doneAjax) {
       doneAjax = false;
 
-      $('#content_add').attr("data-ajax", "load"); // 現在のajax画面はload.
-      page = $(this).attr('value'); // <a value=xxx>を取得.
+      // $('#content_add').attr("data-ajax", "load"); // 現在のajax画面はload.
+      const pageName = $(this).data('page'); // <a data-page=xxx>を取得.
       $("#content_add").html('読み込み中・・・。'); // 読み込み中であることを明示.
-      $.ajax({
-        url: "ajax_load.php?page=" + encodeURIComponent(page),
-        cache: false,
-        // 成功時処理.
-        success: function (data, status, xhr) {
+
+      // ページを取得.
+      cloud.getPage(pageName)
+        .then(data => {
           Scroll2Top(); // ページ上までスクロール.
-          $("#content_add").fadeOut('fast', function () { // 一度ページを非表示に.
-            if (xhr.status === 201) {
-              // ページが存在しなければ新規作成.
-              $.ajax({
-                url: "ajax_edit.php?page=" + encodeURIComponent(page),
-                cache: false,
-                success: function (html) {
-                  $("#content_add").html(html);
-                  $("#content_add").append(xhr.location);
-                }
-              });
-            } else {
-              // 書き換え.
-              $("#content_add").html(data);
-              $('#content_add').trigger('rewrite'); // 発火させる
-            }
+          $("#content_add").fadeOut('fast', function() { // 一度ページを非表示に.
+            // ページを書き換え.
+            $("#content_add").html(data);
+            $('#content_add').trigger('rewrite'); // 発火させる
             $("#content_add").fadeIn('1'); // ページを表示する.
             doneAjax = true;
           });
-        },
-        // エラー時処理.
-        error: function () {
+
+        }).catch(err => {
+          // ページが存在しなければ新規作成.
+          if (err) { 
+            console.log();
+          }
+          // それ以外のエラー.
+          console.log(err);
           $("#content_add").html('Ajax通信エラーです。');
           $("#content_add").fadeIn('1'); // ページを表示する.
           doneAjax = true;
