@@ -4,7 +4,11 @@
         "es6": true,
         "jquery": true
     },
-    "extends": "eslint:recommended",
+    "extends": [
+        "plugin:compat/recommended",
+        "google",
+        "plugin:prettier/recommended"
+    ],
     "globals": {
         "Atomics": "readonly",
         "SharedArrayBuffer": "readonly"
@@ -14,8 +18,16 @@
         "sourceType": "module"
     },
     "rules": {
+        "semi": "error",
+        "compat/compat": "error"
     },
     "plugins": [
+        "compat",
         "jquery"
-    ]
+    ],
+    "settings": {
+        "polyfills":[
+            "Promise"
+        ]
+    }
 }
