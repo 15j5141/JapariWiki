@@ -2,6 +2,8 @@ import JWStatus from './jw-status.js';
 // import JWPage from './class-page.js';
 import Cloud from './class-cloud_ncmb.js';
 import Renderer from './class-renderer.js';
+import PageRenderer from './class-page_renderer.js';
+import AjaxRenderer from './class-ajax_renderer.js';
 
 /** リンク連打対策用. */
 let doneAjax = true;
@@ -13,6 +15,19 @@ const status = new JWStatus();
 /** クラウド管理変数. */
 const cloud = new Cloud();
 
+// 描画部品初期化.
+const rendererApplication = new PageRenderer(
+  '#content_add',
+  status.getPageURI()
+);
+const rendererSideMenu = new PageRenderer('#side-menu', '/site_/SideMenu');
+const rendererHeader = new AjaxRenderer('#header', 'index_header.html');
+const rendererFooter = new AjaxRenderer('#footer', 'index_footer.html');
+const rendererHistory = new AjaxRenderer(
+  '#side-edited_history',
+  'text/site_menu.txt'
+);
+
 $(function() {
   // <a class="ajaxLoad">をクリックしたら. Wiki内ページリンクを踏んだら.
   $(document).on('click', 'a.ajaxLoad', function(event) {
@@ -23,47 +38,28 @@ $(function() {
 
       // $('#content_add').attr("data-ajax", "load"); // 現在のajax画面はload.
       const pageName = $(this).data('page'); // <a data-page=xxx>を取得.
-      $('#content_add').html('読み込み中・・・。'); // 読み込み中であることを明示.
+      // 読み込み中であることを明示.
+      rendererApplication.setText('読み込み中・・・。');
+      // ページ上までスクロール.
+      scroll2Top();
 
-      // ページを取得.
+      // ページを更新.
       (async () => {
-        let html;
-        try {
-          // クラウドからページデータ取得.
-          const pageData = await cloud.getPage(pageName);
-          // FixMe 構文解析に通す.
-          html = pageData.rawText;
-        } catch (err) {
-          if (err.message === 'Page:NotFound') {
-            // ページが存在しなければ新規作成.
-            console.log('Page:NotFound');
-            // FixMe 編集画面へ.
-          } else {
-            // それ以外のエラー.
-            console.log(err.message);
-          }
-          html = 'Ajax通信エラーです。';
-        }
-        scroll2Top(); // ページ上までスクロール.
-        $('#content_add').fadeOut('fast', function() {
-          // 一度ページを非表示に.
-          // ページを書き換え.
-          $('#content_add').html(html);
-          $('#content_add').trigger('rewrite'); // 発火させる
-          $('#content_add').fadeIn('1'); // ページを表示する.
-          doneAjax = true;
-        });
+        await rendererApplication.update(pageName);
+        status.setPageURI(pageName);
+        status.save();
+        doneAjax = true;
+        // 遷移を履歴に追加.
+        history.pushState('' + pageName, null, null);
       })();
     } /* if */
-    // 遷移を履歴に追加.
-    history.pushState('' + pageName, null, null);
     return false; // <a>を無効化.
   });
 
   // 「編集」ボタンを押したら.
   $(document).on('click', '#ajaxLoad_edit', function(event) {
     event.preventDefault();
-    ajaxLoad('#content_add', 'ajax_edit.php?page=' + encodeURIComponent(page));
+    // FixMe ajaxLoad('#content_add', 'ajax_edit.php?page=' + encodeURIComponent(page));
     return false;
   });
 
@@ -78,7 +74,7 @@ $(function() {
     // オーバーレイ用のHTMLコードを、[body]内の最後に生成する
     $('body').append('<div id="modal-overlay"></div>');
     $('#modal-overlay').append('<div id="modal-content"></div>');
-    ajaxLoad('#modal-content', 'ajax_upload.php');
+    // FixMe ajaxLoad('#modal-content', 'ajax_upload.php');
     // [$modal-overlay]をフェードインさせる
     $('#modal-overlay').fadeIn('slow');
 
@@ -98,72 +94,25 @@ $(function() {
   // ページバック処理時にページ遷移を発動.
   $(window).on('popstate', function(e) {
     if (isCanBeHistory) {
-      ajaxLoad(
-        '#content_add',
-        'ajax_load.php?page=' + encodeURIComponent(history.state),
-        () => $('#content_add').trigger('rewrite')
-      );
+      rendererApplication.update(history.state);
     }
   });
 
   // Wiki 内部品を非同期読み込み.
-  updateRenderer('#content_add', status.getPageURI(), () => {
-    $('#content_add').trigger('rewrite');
+  rendererApplication.update().then(() => {
+    console.log('redraw');
   });
-  updateRenderer('#div-side_menu', '/site_/SideMenu');
-  ajaxLoad('#header', 'index_' + 'header.html');
-  ajaxLoad('#footer', 'index_' + 'footer.html');
-  // ajaxLoad('#login_history', 'api/api_getLoginHistory.php');
+  rendererSideMenu.update();
+  rendererHeader.update();
+  rendererFooter.update();
+  rendererHistory.update();
+  // FixMe ajaxLoad('#login_history', 'api/api_getLoginHistory.php');
+
   if (history.state == null) {
     // 履歴情報がなければ(Wikiを開いた時)現ページ名で上書き.
     history.replaceState('' + status.getPageURI(), null, null);
   }
-
-  // サイト内の'.ajax_load'パーツを非同期に読み込み.
-  const ajaxLoads = $('.ajax_load');
-  for (let i = 0; i < ajaxLoads.length; i++) {
-    // jQueryオブジェクトを取得.
-    const jq = ajaxLoads.eq(i);
-    // console.log(jq);
-    ajaxLoad(null, jq.data('path'), function(data) {
-      jq.html(data);
-    });
-  }
 });
-
-/**
- *
- * @param {string} selecter
- * @param {string} pageURI
- * @param {Function} callbackSuccess
- */
-async function updateRenderer(selecter, pageURI, callbackSuccess) {
-  const page = await cloud.getPage(pageURI);
-  console.log(selecter, pageURI, page.rawText);
-
-  $(selecter).html(page.rawText);
-  if (typeof callbackSuccess === 'function') {
-    callbackSuccess(page.rawText);
-  }
-}
-
-/**
- * FixMe
- * ajaxエラー時処理を加える
- * @param {*} Content
- * @param {*} Url
- * @param {*} callbackSuccess
- */
-function ajaxLoad(Content, Url, callbackSuccess) {
-  $.ajax({
-    url: '' + Url,
-    cache: false,
-    success: function(html) {
-      $(Content).html(html);
-      if (typeof callbackSuccess === 'function') callbackSuccess(html);
-    },
-  });
-}
 
 /**
  * ページ上部へスクロールする.

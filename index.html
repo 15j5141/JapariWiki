@@ -58,7 +58,7 @@ $page = isset($_SESSION['page']) ? $_SESSION['page'] : 'FrontPage';
       <a href="logout.html">ログアウト</a><br />
       お知らせ<br />
       <div id="site_history">
-        <div class="ajax_load" data-path="text/site_Notice.txt"></div>
+        <div id="side-site_notice"></div>
       </div>
       <!-- <a href='' id="ajaxLoad_kanban">
         kanban(test)
@@ -67,13 +67,12 @@ $page = isset($_SESSION['page']) ? $_SESSION['page'] : 'FrontPage';
       <div id="login_history">
         Loading Now...<br />
       </div>
-      <div id="div-side_menu"></div>
-      <div class="ajax_load" data-path="text/site_menu.txt"></div>
+      <div id="side-menu"></div>
 
     </div>
     <div id="side_history">
       History<br />
-      <div class="ajax_load" data-path="text/site_History.txt"></div>
+      <div id="side-edited_history"></div>
     </div>
   </div>
   <div id="footer">
