@@ -17,31 +17,28 @@ class CloudBase {
   /**
    * ページデータを上書き保存する.
    * @abstract
-   * @param {string} pageURI
    * @param {JWPage} pageData
    * @return {Promise<void>}
    */
-  putPage(pageURI, pageData) {
+  putPage(pageData) {
     throw new Error('Not Implemented');
   }
   /**
    * ページデータを削除する.
    * @abstract
-   * @param {string} pageName
    * @param {JWPage} pageData
    * @return {Promise}
    */
-  deletePage(pageName, pageData) {
+  deletePage(pageData) {
     throw new Error('Not Implemented');
   }
   /**
    * ページデータを新規保存する.
    * @abstract
-   * @param {string} pageName
    * @param {JWPage} pageData
    * @return {Promise}
    */
-  postPage(pageName, pageData) {
+  postPage(pageData) {
     throw new Error('Not Implemented');
   }
   /**

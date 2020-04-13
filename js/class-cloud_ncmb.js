@@ -32,16 +32,82 @@ class CloudNCMB extends CloudBase {
     }
   }
   /** @override */
-  putPage(pageURI, pageData) {
-    throw new Error('Not Implemented');
+  async getPage(pageURI) {
+    const ncPage = this.ncmb.DataStore('Page');
+    // 受信.
+    return await ncPage
+      .equalTo('path', pageURI)
+      .fetch()
+      .then(function(result) {
+        if (!result.text) {
+          throw new Error('Page:NotFound');
+        }
+        return new JWPage(pageURI, result.text);
+      })
+      .catch(function(err) {
+        throw err;
+      });
+  }
+  /**
+   * @override
+   * @param {JWPage} pageData
+   */
+  async putPage(pageData) {
+    if (pageData.pageURI == null) {
+      throw new Error('err');
+    }
+    // NCMB 用クラス生成.
+    const ncPage = this.ncmb.DataStore('Page');
+    // 検索.
+    const page = await ncPage.equalTo('path', pageData.pageURI).fetch();
+    if (page.text) {
+      page
+        .set('author', pageData.authorObject.id)
+        .set('path', pageData.pageURI)
+        .set('text', pageData.rawText)
+        .update()
+        .then(result => {
+          return result;
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    } else {
+      this.postPage(pageData);
+    }
   }
   /** @override */
-  deletePage(pageName, pageData) {
-    throw new Error('Not Implemented');
+  async deletePage(pageData) {
+    const ncPage = this.ncmb.DataStore('Page');
+    // 受信.
+    return await ncPage
+      .equalTo('path', pageData.pageURI)
+      .fetch()
+      .delete()
+      .catch(function(err) {
+        throw err;
+      });
   }
   /** @override */
-  postPage(pageName, pageData) {
-    throw new Error('Not Implemented');
+  async postPage(pageData) {
+    // NCMB 用クラス生成.
+    const page = new (this.ncmb.DataStore('Page'))();
+    const acl = new this.ncmb.Acl();
+    // ゲストは見えないようにする.
+    // acl.setRoleReadAccess('normal', true).setPublicReadAccess(false);
+    // 保存.
+    return page
+      .set('acl', acl) // 権限設定.
+      .set('author', pageData.authorObject.id)
+      .set('path', pageData.pageURI)
+      .set('text', pageData.rawText)
+      .save()
+      .then(result => {
+        return result;
+      })
+      .catch(err => {
+        console.log(err);
+      });
   }
   /** @override */
   isLogin() {

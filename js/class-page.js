@@ -9,9 +9,10 @@ class JWPage {
    */
   constructor(pageURI, rawText, authorObject) {
     this.pageURI = pageURI || 'notitle';
-    this.rawText = rawText || '';
+    this.rawText = rawText;
     this.authorObject = {
-      ...{ authorId: {}, editable: {} },
+      id: 'id',
+      editable: {},
       ...authorObject,
     };
   }
