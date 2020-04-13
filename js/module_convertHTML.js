@@ -1,20 +1,20 @@
 /**
  * file kara yomitoru tabun.
  * @param {string} fileName
- * @returns {string}
+ * @return {string}
  */
 export function loadText(fileName) {
-    let loadData = file_get_contents(fileName);
-    if (loadData === false) {
-        return filename + ' is not exist.';
-    }
-    return text2html(loadData);
+  const loadData = file_get_contents(fileName);
+  if (loadData === false) {
+    return filename + ' is not exist.';
+  }
+  return text2html(loadData);
 }
 /**
- * 
- * @param {string} text 
- * @returns {string} 
+ *
+ * @param {string} text
+ * @return {string}
  */
-export function text2html(text){
-    return text;
+export function text2html(text) {
+  return text;
 }
