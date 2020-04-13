@@ -24,6 +24,7 @@ up/*
 # node
 node_modules
 package-lock.json
+dist/*
 
 # editor
 .vscode

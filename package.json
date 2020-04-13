@@ -21,6 +21,10 @@
     "url": "https://github.com/15j5141/JapariWiki/issues"
   },
   "homepage": "https://github.com/15j5141/JapariWiki#readme",
+  "browserslist": [
+    "last 2 Chrome versions",
+    "not ie <= 11"
+  ],
   "devDependencies": {
     "@babel/core": "^7.7.5",
     "@babel/polyfill": "^7.7.0",

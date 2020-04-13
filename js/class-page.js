@@ -22,6 +22,7 @@ class JWPage {
    * @return {boolean}
    */
   static isAbsoluteURI(uri) {
+    // uri.startsWith('/')
     return uri.indexOf('/') === 0;
   }
 }
