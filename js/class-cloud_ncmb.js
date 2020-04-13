@@ -31,7 +31,10 @@ class CloudNCMB extends CloudBase {
       console.log('未ログインまたは取得に失敗');
     }
   }
-  /** @override */
+  /**
+   * @override
+   * @return {Promise<JWPage>}
+   */
   async getPage(pageURI) {
     const ncPage = this.ncmb.DataStore('Page');
     // 受信.

@@ -9,7 +9,7 @@ class CloudBase {
    * ページデータを取得する.
    * @abstract
    * @param {string} pageURI
-   * @return {Promise}
+   * @return {Promise<JWPage>}
    */
   getPage(pageURI) {
     throw new Error('Not Implemented');

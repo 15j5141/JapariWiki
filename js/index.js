@@ -1,17 +1,19 @@
 import JWStatus from './jw-status.js';
-import Page from './class-page.js';
-import Cloud from './class-cloud.js';
+// import JWPage from './class-page.js';
+import Cloud from './class-cloud_ncmb.js';
 import Renderer from './class-renderer.js';
 
+/** リンク連打対策用. */
 let doneAjax = true;
+/** History API 使用の可否. */
 const isCanBeHistory =
   history && history.pushState && history.state !== undefined;
+/** Wiki 状態管理変数. */
+const status = new JWStatus();
+/** クラウド管理変数. */
+const cloud = new Cloud();
 
 $(function() {
-  const status = new JWStatus();
-  const page = status.getPageName();
-  const cloud = new Cloud();
-
   // <a class="ajaxLoad">をクリックしたら. Wiki内ページリンクを踏んだら.
   $(document).on('click', 'a.ajaxLoad', function(event) {
     event.preventDefault(); // 標準ページ移動を無効化.
@@ -24,32 +26,37 @@ $(function() {
       $('#content_add').html('読み込み中・・・。'); // 読み込み中であることを明示.
 
       // ページを取得.
-      cloud
-        .getPage(pageName)
-        .then(data => {
-          scroll2Top(); // ページ上までスクロール.
-          $('#content_add').fadeOut('fast', function() {
-            // 一度ページを非表示に.
-            // ページを書き換え.
-            $('#content_add').html(data);
-            $('#content_add').trigger('rewrite'); // 発火させる
-            $('#content_add').fadeIn('1'); // ページを表示する.
-            doneAjax = true;
-          });
-        })
-        .catch(err => {
-          // ページが存在しなければ新規作成.
-          if (err) {
-            console.log();
+      (async () => {
+        let html;
+        try {
+          // クラウドからページデータ取得.
+          const pageData = await cloud.getPage(pageName);
+          // FixMe 構文解析に通す.
+          html = pageData.rawText;
+        } catch (err) {
+          if (err.message === 'Page:NotFound') {
+            // ページが存在しなければ新規作成.
+            console.log('Page:NotFound');
+            // FixMe 編集画面へ.
+          } else {
+            // それ以外のエラー.
+            console.log(err.message);
           }
-          // それ以外のエラー.
-          console.log(err);
-          $('#content_add').html('Ajax通信エラーです。');
+          html = 'Ajax通信エラーです。';
+        }
+        scroll2Top(); // ページ上までスクロール.
+        $('#content_add').fadeOut('fast', function() {
+          // 一度ページを非表示に.
+          // ページを書き換え.
+          $('#content_add').html(html);
+          $('#content_add').trigger('rewrite'); // 発火させる
           $('#content_add').fadeIn('1'); // ページを表示する.
           doneAjax = true;
         });
+      })();
     } /* if */
-    history.pushState('' + page, null, null); // 遷移を履歴に追加.
+    // 遷移を履歴に追加.
+    history.pushState('' + pageName, null, null);
     return false; // <a>を無効化.
   });
 
@@ -99,25 +106,46 @@ $(function() {
     }
   });
 
-  ajaxLoad(
-    '#content_add',
-    'ajax_load.php?page=' + encodeURIComponent(page),
-    () => $('#content_add').trigger('rewrite')
-  );
+  // Wiki 内部品を非同期読み込み.
+  updateRenderer('#content_add', status.getPageURI(), () => {
+    $('#content_add').trigger('rewrite');
+  });
+  updateRenderer('#div-side_menu', '/site_/SideMenu');
   ajaxLoad('#header', 'index_' + 'header.html');
   ajaxLoad('#footer', 'index_' + 'footer.html');
-  ajaxLoad('#login_history', 'api/api_getLoginHistory.php');
+  // ajaxLoad('#login_history', 'api/api_getLoginHistory.php');
   if (history.state == null) {
     // 履歴情報がなければ(Wikiを開いた時)現ページ名で上書き.
-    history.replaceState('' + page, null, null);
+    history.replaceState('' + status.getPageURI(), null, null);
   }
 
-  $(document).on('click', '#ajaxLoad_kanban', function(event) {
-    event.preventDefault();
-    ajaxLoad('#content_add', 'ajax_kanban.php');
-    return false;
-  });
+  // サイト内の'.ajax_load'パーツを非同期に読み込み.
+  const ajaxLoads = $('.ajax_load');
+  for (let i = 0; i < ajaxLoads.length; i++) {
+    // jQueryオブジェクトを取得.
+    const jq = ajaxLoads.eq(i);
+    // console.log(jq);
+    ajaxLoad(null, jq.data('path'), function(data) {
+      jq.html(data);
+    });
+  }
 });
+
+/**
+ *
+ * @param {string} selecter
+ * @param {string} pageURI
+ * @param {Function} callbackSuccess
+ */
+async function updateRenderer(selecter, pageURI, callbackSuccess) {
+  const page = await cloud.getPage(pageURI);
+  console.log(selecter, pageURI, page.rawText);
+
+  $(selecter).html(page.rawText);
+  if (typeof callbackSuccess === 'function') {
+    callbackSuccess(page.rawText);
+  }
+}
 
 /**
  * FixMe
