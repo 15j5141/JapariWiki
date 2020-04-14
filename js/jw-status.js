@@ -31,7 +31,7 @@ class JWStatus {
 
     // セッションストレージと URL クエリの内容を結合.
     const status = {
-      pageURI: params.get('pageURI') || session.pageURI,
+      pageURI: this.resolveURI(params.get('pageURI') || session.pageURI),
       app: params.get('app') || session.app,
     };
     this._status = status;
