@@ -50,6 +50,7 @@ editorとは？
 # Application
 ## 対象
 フロートウィンドウ...レイヤーもあり.
+Rendererを内包？
 ## 権限
  admin
 ## example.

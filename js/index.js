@@ -4,6 +4,7 @@ import Cloud from './class-cloud_ncmb.js';
 import Renderer from './class-renderer.js';
 import PageRenderer from './class-page_renderer.js';
 import AjaxRenderer from './class-ajax_renderer.js';
+import WikiApp from '../app/wiki.js';
 
 /** リンク連打対策用. */
 let doneAjax = true;
@@ -16,10 +17,7 @@ const status = new JWStatus();
 const cloud = new Cloud();
 
 // 描画部品初期化.
-const rendererApplication = new PageRenderer(
-  '#content_add',
-  status.getPageURI()
-);
+const wikiApp = new WikiApp('#content_add');
 const rendererSideMenu = new PageRenderer('#side-menu', '/site_/SideMenu');
 const rendererHeader = new AjaxRenderer('#header', 'index_header.html');
 const rendererFooter = new AjaxRenderer('#footer', 'index_footer.html');
@@ -36,18 +34,17 @@ $(function() {
     if (doneAjax) {
       doneAjax = false;
 
-      // $('#content_add').attr("data-ajax", "load"); // 現在のajax画面はload.
-      const pageName = $(this).data('page'); // <a data-page=xxx>を取得.
-      // 読み込み中であることを明示.
-      rendererApplication.setText('読み込み中・・・。');
       // ページ上までスクロール.
       scroll2Top();
 
       // ページを更新.
       (async () => {
-        await rendererApplication.update(pageName);
-        status.setPageURI(pageName);
-        status.save();
+        // <a data-page="ページ名">を取得.
+        const pageName = $(this).data('page');
+        await wikiApp.move(pageName).catch(err => {
+          console.error(err);
+        });
+        // クリック制限を解除.
         doneAjax = true;
         // 遷移を履歴に追加.
         history.pushState('' + pageName, null, null);
@@ -94,12 +91,14 @@ $(function() {
   // ページバック処理時にページ遷移を発動.
   $(window).on('popstate', function(e) {
     if (isCanBeHistory) {
-      rendererApplication.update(history.state);
+      // FixMe ページだけでなくアプリの切り替えも行う.
+      // ページ移動.
+      wikiApp.move(history.state);
     }
   });
 
   // Wiki 内部品を非同期読み込み.
-  rendererApplication.update().then(() => {
+  wikiApp.move().then(() => {
     console.log('redraw');
   });
   rendererSideMenu.update();

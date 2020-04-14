@@ -1,5 +1,4 @@
 import Renderer from './class-renderer.js';
-import JWPage from './class-page.js';
 import CloudNCMB from './class-cloud_ncmb.js';
 import JWStatus from './jw-status.js';
 /** */
@@ -12,50 +11,32 @@ class PageRenderer extends Renderer {
   constructor(selector, pageURI) {
     super();
     this.selector = selector;
-    this.cloud = new CloudNCMB();
-    this.jwStatus = new JWStatus();
-    this.pageURI = pageURI;
+    this._cloud = new CloudNCMB();
+    this._jwStatus = new JWStatus();
+    this._pageURI = pageURI;
   }
   /**
    * @override
+   * @param {string} html
    * @return {Promise<string>}
    */
-  async update(pageURI) {
-    // 指定されれば URI を再セット.
-    if (pageURI) {
-      this.pageURI = pageURI;
+  async update(html = null) {
+    let html_ = html;
+    if (!html_ && this._pageURI) {
+      // html 引数未指定かつインスタンス生成時 pageURI 指定でページ自動取得.
+      html_ = (await this._cloud.getPage(this._pageURI)).rawText;
     }
-    // Wiki ステータスを再取得.
-    this.jwStatus.load();
-    // パスを解決.
-    const uri = this.jwStatus.resolveURI(this.pageURI);
+    console.log(html_);
+    // FixMe 構文解析に通す.
 
-    let html = '';
-    // 受信.
-    try {
-      // クラウドからページデータ取得.
-      const pageData = await this.cloud.getPage(uri);
-      // FixMe 構文解析に通す.
-      html = pageData.rawText;
-    } catch (err) {
-      if (err.message === 'Page:NotFound') {
-        // ページが存在しなければ新規作成.
-        console.log('Page:NotFound');
-        // FixMe 編集画面へ.
-        html = 'ページがありません。<br>新規作成<br>';
-      } else {
-        // それ以外のエラー.
-        console.log(err.message);
-        html = '通信エラーです。' + err.message;
-      }
-    }
     // 一度ページを非表示に.
     $(this.selector).fadeOut('fast', () => {
       // 描画.
-      this.setHTML(html);
-      $(this.selector).fadeIn('1'); // ページを表示する.
+      this.setHTML(html_);
+      // 非表示にしていたページを表示する.
+      $(this.selector).fadeIn('1');
     });
-    return html;
+    return html_;
   }
 }
 export default PageRenderer;
