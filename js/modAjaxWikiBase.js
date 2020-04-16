@@ -17,54 +17,6 @@ if (currentUser) {
   console.log('未ログインまたは取得に失敗');
 }
 
-/**
- * 構文チェックを行う.
- * @param {string} txt
- */
-async function koubunCheck(txt) {
-  const result = await checkComment(txt, ncmb);
-  console.log('koubunCheck: OK');
-  return result;
-}
-
-/**
- * 未使用
- * ログイン成功時処理
- */
-async function OnLogin2() {
-  const result = await checkComment(txt, ncmb);
-  $('body').append(result);
-  console.log(result);
-  const b = await checkAfterLodingPage(result, ncmb);
-  console.log('checkAfterLodingPage: success');
-  console.log('all: success');
-  return 0;
-}
-
-/**
- * 未使用
- * ログイン成功時処理.
- * @return {Promise<void>}
- */
-function OnLogin() {
-  return new Promise((resolve, reject) => {
-    checkComment(txt, ncmb)
-      .then(function(result) {
-        $('#content_add').append(result);
-        return checkAfterLodingPage(result, ncmb);
-      })
-      .then(function(result) {
-        resolve('checkAfterLodingPage: success');
-      })
-      .then(function() {
-        resolve('all: success');
-      })
-      .catch(function(err) {
-        reject(err);
-      });
-  });
-}
-
 // コメントフォームの投稿ボタンが押された時.
 $(document).on('submit', '.CommentForm', function(e) {
   e.preventDefault(); // submit破棄
@@ -83,16 +35,6 @@ $(document).on('submit', '.CommentForm', function(e) {
   $('input[type=submit]', this).prop('disabled', true); // 連続投稿対策
   $('input[type=submit]', this).val('要リロード');
   return false;
-});
-
-// ページが読み込み終わった時.
-$(document).on('rewrite', '#content_add', function(event) {
-  console.log('wiki page is loaded.');
-  // ページが読み込み終わったらjsで構文チェックを行う.
-  koubunCheck($('#content_add').html()).then(function(result) {
-    console.log('checked wiki syntax.');
-    $('#content_add').html(replaceSyntax(result));
-  });
 });
 
 $(function() {
