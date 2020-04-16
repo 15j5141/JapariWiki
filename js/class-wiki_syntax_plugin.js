@@ -141,48 +141,123 @@ class WikiSyntaxPlugin extends SyntaxPluginBase {
   static replaceSyntax(str) {
     const syntaxes = [];
     let result = str;
-    // &image()
+    // &image(xxxx.jpg)
     syntaxes.push([
       /&image\((\w+\.\w+)\)/g,
       '<img src="up/$1" class="tag" style="width:200px;" />',
     ]);
+    // &image(xxxx.jpg,200,100)
     syntaxes.push([
       /&image\((\w+\.\w+),([0-9]*),([0-9]*)\)/g,
       '<img src="up/$1" class="tag" style="width:$2px;height:$3px;" />',
     ]);
+    // &img(https://domain.com/aaa/bbb/ccc.jpg)
     syntaxes.push([
       /&img\((https?:\/\/.+)\)/g,
       '<img src="$1" class="tag" style="width:200px;" />',
     ]);
-    // &size(){}, &color(){}
+    // &size(64){message}
     syntaxes.push([
       /&size\((\d+)\)\{(.*)\}/g,
       '<span style="font-size:$1px">$2</span>',
     ]);
+    // &color(#FF0000){message}
     syntaxes.push([
       /&color\((#[0-9A-F]{6})\)\{(.*)\}/g,
       '<span style="color:$1">$2</span>',
     ]);
-    // ブロック
+    // 名前付き別タブで開く. [[message::https://domain/aaa]]
+    syntaxes.push([
+      /\[\[(.+?)::(https?:\/\/.+?)]]/g,
+      '<a value="$2" href="$2" target=" _blank">$1</a>',
+    ]);
+    // Wikiページリンク. [[表示名::ページ名]]
+    syntaxes.push([
+      /\[\[(.+?)::(.+)]]/g,
+      '<a data-page="$2" href="?pageURI=$2" class="ajaxLoad">$1</a>',
+    ]);
+    // 名前付きWikiページリンク. [[ページ名]]
+    syntaxes.push([
+      /\[\[(.+?)]]/g,
+      '<a data-page="$1" href="?pageURI=$1" class="ajaxLoad">$1</a>',
+    ]);
+    // ページ内リンク. [[#za0a0a0a]]
+    syntaxes.push([
+      /\[\[#([a-z][a-f0-9]{7})]]/g,
+      '<a class="page_pos" value="$1" href="#$1">$1</a>',
+    ]);
+    // 名前付きページ内リンク. [[message::#za0a0a0a]]
+    syntaxes.push([
+      /\[\[(.+?)::#([a-z][a-f0-9]{7})]]/g,
+      '<a class="page_pos" value="$2" href="#$2">$1</a>',
+    ]);
+    // 打消し線.
+    syntaxes.push([/%%(.+?)%%/g, '<s>$1</s>']);
+    // イタリック体.
+    syntaxes.push([/'''(.+?)'''/g, '<i>$1</i>']);
+    // 強調.
+    syntaxes.push([/''(.+?)''/g, '<strong>$1</strong>']);
+
+    // ブロック.
+    // 水平線. #hr
     syntaxes.push([/#hr\s*/g, '<hr>']);
-    // リンク
-    syntaxes.push([
-      /\[\[(.+)::(.+)]]/g,
-      '<a value="$2" href="$2" class="ajaxLoad">$1</a>',
-    ]);
-    syntaxes.push([
-      /\[\[(.+)]]/g,
-      '<a value="$1" href="$1" class="ajaxLoad">$1</a>',
-    ]);
+
     // その他
     syntaxes.push([/^\/\/.*$/gm, '']); // 「//」以降をコメントアウト.
     syntaxes.push([/^#.*$/gm, '']); // 「#」以降をコメントアウト.動作が怪しいので廃止.
     // syntaxes.push([/\/\*(.|\s)*?\*\//g, '']); // 「/**/」内をコメントアウト. 「.」は改行には一致しない.
     syntaxes.push([/\/\*\/?([^\/]|[^*]\/|\r|\n)*\*\//g, '']); // 「/**/」内をコメントアウト.詳細は不明...
     // syntaxes.push([/(\/\/.*\r?\n)*/g, '']);
+
+    // ***title [#za0b2c5d]
+    syntaxes.push([
+      /^\*\*\*(.*) \[#([a-z][a-f0-9]{7})\](.*)$\n/gm,
+      '<p class="Asta3" id="$2">$1</p>',
+    ]);
+    syntaxes.push([
+      /^\*\*(.*) \[#([a-z][a-f0-9]{7})\](.*)$\n/gm,
+      '<p class="Asta2" id="$2">$1</p>',
+    ]);
+    syntaxes.push([
+      /^\*(.*) \[#([a-z][a-f0-9]{7})\](.*)$\n/gm,
+      '<p class="Asta1" id="$2">$1</p>',
+    ]);
+    // ***title
+    syntaxes.push([/^\*\*\*(.*)$\n/gm, '<p class="asta3">$1</p>']);
+    syntaxes.push([/^\*\*(.*)$\n/gm, '<p class="asta2">$1</p>']);
+    syntaxes.push([/^\*(.*)$\n/gm, '<p class="asta1">$1</p>']);
+
+    // リスト
+    syntaxes.push([
+      /^---(.+)$\n/gm,
+      '<ul><ul><ul type="square"><li>$1</li></ul></ul></ul>',
+    ]);
+    syntaxes.push([
+      /^--(.+)$\n/gm,
+      '<ul><ul type="circle"><li>$1</li></ul></ul>',
+    ]);
+    syntaxes.push([/^-(.+)$\n/gm, '<ul type="disc"><li>$1</li></ul>']);
+
+    syntaxes.push([
+      /^\|(.*\|)[^|\n]*$\n/gm,
+      (...matches) => {
+        console.log(matches);
+        const result = matches[1].replace(/(.*?)\|/g, '<td>$1</td>');
+        return '<table><tr>' + result + '</tr></table>';
+      },
+    ]);
+
+    syntaxes.push([
+      /^#contents\(page=(.*)\)$\n/gm,
+      '<div class="page_index">目次（予定）</div>',
+    ]);
+
+    // 一斉処理
     for (let i = 0; i < syntaxes.length; i++) {
       result = result.replace(syntaxes[i][0], syntaxes[i][1]);
     }
+    // 改行コードを <br> に置換.
+    result = result.replace(/\r?\n/g, '<br>');
     return result;
   }
   /**

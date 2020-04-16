@@ -54,36 +54,6 @@ function loadTextFromString($input){
         }
         break;
       }
-      $line=preg_replace('/\[\[#([a-z][a-f0-9]{7})]]/U','<a class="page_pos" value="$1" href="#$1">$1</a>',$line);
-      $line=preg_replace('/\[\[(.+)::#([a-z][a-f0-9]{7})]]/U','<a class="page_pos" value="$2" href="#$2">$1</a>',$line);
-
-      $line=preg_replace('/\[\[(.+)::(https?:\/\/.+)]]/U','<a value="$2" href="$2" target=" _blank">$1</a>',$line,-1,$count_);
-      $line= preg_replace('/\[\[(.+)::(.+)]]/U', '<a value="$2" href="$2" class="ajaxLoad">$1</a>', $line);
-      $line= preg_replace('/\[\[(.+)]]/U', '<a value="$1" href="$1" class="ajaxLoad">$1</a>', $line);
-      //$result .= 'javascript:void(0)';
-      $line= preg_replace('/^---(.+)$\n/', '<ul><ul><ul type="square"><li>$1</li></ul></ul></ul>', $line);
-      $line= preg_replace('/^--(.+)$\n/', '<ul><ul type="circle"><li>$1</li></ul></ul>', $line);
-      $line= preg_replace('/^-(.+)$\n/', '<ul type="disc"><li>$1</li></ul>', $line);
-
-      $line= preg_replace('/^#hr$\n/', '<hr>', $line);
-      $line= preg_replace('/^#contents\(page=(.*)\)$\n/', '<div class="page_index">目次（予定）</div>', $line);
-
-      $line= preg_replace('/^\*\*\*(.*) \[#([a-z][a-f0-9]{7})](.*)$\n/', '<p class="Asta3" id="$2">$1</p>', $line);
-      $line= preg_replace('/^\*\*(.*) \[#([a-z][a-f0-9]{7})](.*)$\n/', '<p class="Asta2" id="$2">$1</p>', $line);
-      $line= preg_replace('/^\*(.*) \[#([a-z][a-f0-9]{7})](.*)$\n/', '<p class="Asta1" id="$2">$1</p>', $line);
-
-      $line= preg_replace('/^\*\*\*(.*)$\n/', '<p class="asta3">$1</p>', $line);
-      $line= preg_replace('/^\*\*(.*)$\n/', '<p class="asta2">$1</p>', $line);
-      $line= preg_replace('/^\*(.*)$\n/', '<p class="asta1">$1</p>', $line);
-
-      $line= preg_replace('/&amp;size\((\d+)\)\{(.*)\}/U', '<span style="font-size:$1px">$2</span>', $line);
-      $line= preg_replace('/&amp;color\((#[0-9A-F]{6})\)\{(.*)\}/U', '<span style="color:$1">$2</span>', $line);
-
-      $line= preg_replace('/&amp;image\(([\._a-zA-Z0-9]+)\)/U', '<img class="tag" src="up/$1" />', $line);
-      $line= preg_replace('/&amp;image\(([\._a-zA-Z0-9]+),([0-9]*),([0-9]*)\)/U', '<img src="up/$1" width="$2px" height="$3px" />', $line);
-
-      //強制imgタグ
-      $line= preg_replace('/&amp;img\((https?:\/\/.+)\)/U', '<img src="$1" />', $line);
 
       /*
           preg_match_all('/&amp;image\((.*)\)/U', $out, $line);
@@ -106,20 +76,10 @@ function loadTextFromString($input){
           return 'new';
         }, $line
       );
-      $line= preg_replace_callback('/^\|(.*)\|[^|]*$/',
-        function ($matches){
-          $matches[1].='|';
-          $matches[1]=preg_replace('/(.*)\|/U','<td>$1</td>', $matches[1]);
-          return '<table><tr>' . $matches[1] . '</tr></table>';
-        }, $line
-      );
 
       $line= preg_replace('/&amp;image_raw\((.*)\)/U', '<img class="tag" src="data:image/png;base64,$1" /><br >', $line);
       $line =str_replace('&amp;br;', '<br />', $line);
 
-      $line= preg_replace('/%%(.+)%%/U', '<s>$1</s>', $line);
-      $line= preg_replace("/'''(.+)'''/U", '<i>$1</i>', $line);
-      $line= preg_replace("/''(.+)''/U", '<strong>$1</strong>', $line);
       if(strpos($line, "#")===0){
         $keyWord = "#";
         $result .= $line;
