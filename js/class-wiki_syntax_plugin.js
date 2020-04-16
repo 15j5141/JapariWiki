@@ -203,47 +203,47 @@ class WikiSyntaxPlugin extends SyntaxPluginBase {
     syntaxes.push([/#hr\s*/g, '<hr>']);
 
     // その他
-    syntaxes.push([/^\/\/.*$/gm, '']); // 「//」以降をコメントアウト.
-    syntaxes.push([/^#.*$/gm, '']); // 「#」以降をコメントアウト.動作が怪しいので廃止.
+    syntaxes.push([/^\/\/.*$/gm, '__NewLine__']); // 「//」以降をコメントアウト.
+    syntaxes.push([/^#.*$/gm, '__NewLine__']); // 「#」以降をコメントアウト.動作が怪しいので廃止.
     // syntaxes.push([/\/\*(.|\s)*?\*\//g, '']); // 「/**/」内をコメントアウト. 「.」は改行には一致しない.
     syntaxes.push([/\/\*\/?([^\/]|[^*]\/|\r|\n)*\*\//g, '']); // 「/**/」内をコメントアウト.詳細は不明...
     // syntaxes.push([/(\/\/.*\r?\n)*/g, '']);
 
     // ***title [#za0b2c5d]
     syntaxes.push([
-      /^\*\*\*(.*) \[#([a-z][a-f0-9]{7})\](.*)$\n/gm,
-      '<p class="Asta3" id="$2">$1</p>',
+      /^\*\*\*(.*) \[#([a-z][a-f0-9]{7})\](.*)$/gm,
+      '<p class="Asta3" id="$2">$1</p>__NewLine__',
     ]);
     syntaxes.push([
-      /^\*\*(.*) \[#([a-z][a-f0-9]{7})\](.*)$\n/gm,
-      '<p class="Asta2" id="$2">$1</p>',
+      /^\*\*(.*) \[#([a-z][a-f0-9]{7})\](.*)$/gm,
+      '<p class="Asta2" id="$2">$1</p>__NewLine__',
     ]);
     syntaxes.push([
-      /^\*(.*) \[#([a-z][a-f0-9]{7})\](.*)$\n/gm,
-      '<p class="Asta1" id="$2">$1</p>',
+      /^\*(.*) \[#([a-z][a-f0-9]{7})\](.*)$/gm,
+      '<p class="Asta1" id="$2">$1</p>__NewLine__',
     ]);
     // ***title
-    syntaxes.push([/^\*\*\*(.*)$\n/gm, '<p class="asta3">$1</p>']);
-    syntaxes.push([/^\*\*(.*)$\n/gm, '<p class="asta2">$1</p>']);
-    syntaxes.push([/^\*(.*)$\n/gm, '<p class="asta1">$1</p>']);
+    syntaxes.push([/^\*\*\*(.*)$/gm, '<p class="asta3">$1</p>__NewLine__']);
+    syntaxes.push([/^\*\*(.*)$/gm, '<p class="asta2">$1</p>__NewLine__']);
+    syntaxes.push([/^\*(.*)$/gm, '<p class="asta1">$1</p>__NewLine__']);
 
     // リスト
     syntaxes.push([
-      /^---(.+)$\n/gm,
-      '<ul><ul><ul type="square"><li>$1</li></ul></ul></ul>',
+      /^---(.+)$/gm,
+      '<ul><ul><ul type="square"><li>$1</li></ul></ul></ul>__NewLine__',
     ]);
     syntaxes.push([
-      /^--(.+)$\n/gm,
-      '<ul><ul type="circle"><li>$1</li></ul></ul>',
+      /^--(.+)$/gm,
+      '<ul><ul type="circle"><li>$1</li></ul></ul>__NewLine__',
     ]);
-    syntaxes.push([/^-(.+)$\n/gm, '<ul type="disc"><li>$1</li></ul>']);
+    syntaxes.push([/^-(.+)$/gm, '<ul type="disc"><li>$1</li></ul>__NewLine__']);
 
     syntaxes.push([
-      /^\|(.*\|)[^|\n]*$\n/gm,
+      /^\|(.*\|)[^|\n]*$/gm,
       (...matches) => {
         console.log(matches);
         const result = matches[1].replace(/(.*?)\|/g, '<td>$1</td>');
-        return '<table><tr>' + result + '</tr></table>';
+        return '<table><tr>' + result + '</tr></table>__NewLine__';
       },
     ]);
 
@@ -256,6 +256,10 @@ class WikiSyntaxPlugin extends SyntaxPluginBase {
     for (let i = 0; i < syntaxes.length; i++) {
       result = result.replace(syntaxes[i][0], syntaxes[i][1]);
     }
+    // ブロック構文に余分な改行をしないように改行コード除去.
+    result = result.replace(/__NewLine__\r?\n/g, '');
+    // 何らかの理由で残った __NewLine__ を除去.
+    result = result.replace('__NewLine__', '');
     // 改行コードを <br> に置換.
     result = result.replace(/\r?\n/g, '<br>');
     return result;
