@@ -21,12 +21,11 @@ class CloudNCMB extends CloudBase {
     this.clientKey = ncmb.clientKey || '';
     this.instance = this;
     this.ncmb = new window.NCMB(this.appKey, this.clientKey);
-    console.log(this.ncmb);
 
     // カレントユーザー情報の取得
     const currentUser = this.ncmb.User.getCurrentUser();
     if (currentUser) {
-      console.log('ログイン中のユーザー: ' + currentUser.get('userName'));
+      // console.log('ログイン中のユーザー: ' + currentUser.get('userName'));
     } else {
       console.log('未ログインまたは取得に失敗');
     }

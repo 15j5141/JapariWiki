@@ -34,9 +34,12 @@ class WikiApp extends AppBase {
     const pageURI = this._jwStatus.getPageURI();
 
     // 読み込み中であることを明示.
-    this._renderer.setText('読み込み中・・・。');
+    this._renderer.cls();
+    this._renderer.println('Start Loading...');
     // 受信する.
+    this._renderer.println('Downloading.');
     const html = await this.getPageData(pageURI);
+    this._renderer.println('Downloaded.');
     // 構文解析して描画.
     this._renderer.update(html);
   }
@@ -54,7 +57,7 @@ class WikiApp extends AppBase {
     } catch (err) {
       if (err.message === 'Page:NotFound') {
         // ページが存在しなければエラーページを返す.
-        html = 'ページがありません。<br>新規作成<br>';
+        html = 'ページがありません。<br>新規作成<br>' + uri;
       } else {
         // それ以外のエラー.
         html = '通信エラーです。' + err.message;

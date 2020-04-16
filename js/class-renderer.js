@@ -51,7 +51,6 @@ class Renderer {
   }
   /**
    * 描画内容をクリアする.
-   * @param {string} html
    */
   cls() {
     $(this.selector).empty();

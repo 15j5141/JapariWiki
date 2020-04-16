@@ -1,7 +1,6 @@
 import JWStatus from './jw-status.js';
 // import JWPage from './class-page.js';
 import Cloud from './class-cloud_ncmb.js';
-import Renderer from './class-renderer.js';
 import PageRenderer from './class-page_renderer.js';
 import AjaxRenderer from './class-ajax_renderer.js';
 import WikiApp from '../app/wiki.js';

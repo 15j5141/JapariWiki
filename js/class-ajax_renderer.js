@@ -27,7 +27,7 @@ class AjaxRenderer extends Renderer {
       cache: false,
     });
     // 描画.
-    $(this.selector).html(html);
+    this.setHTML(html);
     return html;
   }
   /**
