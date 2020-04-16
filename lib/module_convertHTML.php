@@ -63,19 +63,6 @@ function loadTextFromString($input){
           $line= preg_replace('/&amp;image\((.*)\)/U',
             '<img class="tag" src="' . sqlexec_($1)" />', $line);
       */
-      $line= preg_replace_callback('#&amp;countdown\((\d{4})/(\d+)/(\d+),day\)#',
-        function ($matches){
-          return '' . DateDiff($matches[1] . '-' . $matches[2] . '-' . $matches[3]);
-        }, $line
-      );
-      $line= preg_replace_callback('#&amp;new\(text,(\d{4})/(\d+)/(\d+).*\)#U',
-        function ($matches){
-          if((int)DateDiff('NOW', $matches[1] . '-' . $matches[2] . '-' . $matches[3])>7){
-            return '';
-          }
-          return 'new';
-        }, $line
-      );
 
       $line= preg_replace('/&amp;image_raw\((.*)\)/U', '<img class="tag" src="data:image/png;base64,$1" /><br >', $line);
       $line =str_replace('&amp;br;', '<br />', $line);

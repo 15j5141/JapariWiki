@@ -247,15 +247,43 @@ class WikiSyntaxPlugin extends SyntaxPluginBase {
       },
     ]);
 
+    // &countdown(2000/01/01,day)
     syntaxes.push([
-      /^#contents\(page=(.*)\)$\n/gm,
-      '<div class="page_index">目次（予定）</div>',
+      /&countdown\((\d{4}\/[0-1]?\d\/[0-3]?\d)(,day)?\)/g,
+      (...matches) => {
+        const date = new Date(matches[1]);
+        const delta = (date - Date.now()) / 1000 / 60 / 60 / 24;
+        if (-1.0 < delta && delta < 1.0) {
+          return '今';
+        }
+        return '' + parseInt(delta);
+      },
+    ]);
+    // 未実装. &new(text,2000/12/31)
+    syntaxes.push([
+      /&new\((text,)?(\d{4}\/[0-1]?\d\/[0-3]?\d).*?\)/g,
+      (...matches) => {
+        const date = new Date(matches[2]);
+        const delta = (date - Date.now()) / 1000 / 60 / 60 / 24;
+        if (delta > 7.0 && delta < 0.0) {
+          return '[未実装構文]';
+        }
+        return '[未実装構文]';
+      },
     ]);
 
-    // 一斉処理
+    // 未実装. 目次機能.
+    syntaxes.push([
+      /^#contents\(page=(.*)\)$\n/gm,
+      '[未実装構文]',
+      // '<div class="page_index">目次（予定）</div>',
+    ]);
+
+    // 一斉処理.
     for (let i = 0; i < syntaxes.length; i++) {
       result = result.replace(syntaxes[i][0], syntaxes[i][1]);
     }
+
     // ブロック構文に余分な改行をしないように改行コード除去.
     result = result.replace(/__NewLine__\r?\n/g, '');
     // 何らかの理由で残った __NewLine__ を除去.
