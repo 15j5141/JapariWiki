@@ -8,16 +8,6 @@ class Renderer {
     this.selector = selector;
   }
   /**
-   * ページを描画する.
-   * @param {JWPage} pageClass
-   */
-  render(pageClass) {
-    const rawText = pageClass.rawText;
-    // JW独自の構文チェック. AppやPluginを判定.
-    JWSyntax.check(rawText);
-    // FX2構文の場合.
-  }
-  /**
    * HTML で書き換える.
    * @param {string} html
    */

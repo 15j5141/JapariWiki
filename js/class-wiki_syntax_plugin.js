@@ -22,11 +22,9 @@ class WikiSyntaxPlugin extends SyntaxPluginBase {
     // 新規コメント文法検出.(1個だけ)
     // fixme 同時に複数の新規コメントフォーム設置
     // fixme コメントidの重複確認
-    return await WikiSyntaxPlugin.checkBSP_NewCommentForm(resultText).catch(
-      err => {
-        throw err;
-      }
-    );
+    return await WikiSyntaxPlugin.checkNewCommentForm(resultText).catch(err => {
+      throw err;
+    });
   }
   /**
    * ページ読込後の処理. 構文確認等.
@@ -35,7 +33,6 @@ class WikiSyntaxPlugin extends SyntaxPluginBase {
    */
   async checkAfterLoadingPage(rawText) {
     let result = rawText;
-    WikiSyntaxPlugin.checkALP_Comment(result); // 実質未使用.
     result = await this.checkComment(result);
     result = WikiSyntaxPlugin.replaceSyntax(result);
     return result;
@@ -47,7 +44,7 @@ class WikiSyntaxPlugin extends SyntaxPluginBase {
    * @param {string} rawText
    * @return {Promise<string>}
    */
-  static async checkBSP_NewCommentForm(rawText) {
+  static async checkNewCommentForm(rawText) {
     let resultText = rawText;
     if (/#comment\(\s*\)/.test(rawText)) {
       resultText = resultText.replace(/#comment\(\s*\)/g, function(s) {
@@ -56,16 +53,6 @@ class WikiSyntaxPlugin extends SyntaxPluginBase {
       });
     }
     return resultText;
-  }
-  /**
-   * 実質未使用
-   * AfterLoadingPageでのコメント処理.
-   * @param {string} text
-   * @return {string}
-   */
-  static checkALP_Comment(text) {
-    const regexp = /#comment\(([a-zA-Z0-9]{6,10})\)/g;
-    return text;
   }
   /**
    * コメントフォームの差し替え.
@@ -91,15 +78,15 @@ class WikiSyntaxPlugin extends SyntaxPluginBase {
 
     // コメントフォームだけ置換. 1件以上コメントがあれば下でコメント一覧を入れる.
     const promises = ids.map(id => ncmbC.getComment(id)); // idsからPromise作成.
-    const cforms = await Promise.all(promises).catch(err => {
+    const cForms = await Promise.all(promises).catch(err => {
       throw err;
     });
-    // 並列で各コメントの受信, cforms=commentForms
-    console.info('all fullfilled, v cforms v');
-    console.log(cforms);
+    // 並列で各コメントの受信, cForms=commentForms
+    console.info('all fulfilled, v cForms v');
+    console.log(cForms);
     // 0件コメントがあっても扱いやすいようにコメントフォームの数分の連想配列作成する.
-    for (let i = 0; i < cforms.length; i++) {
-      commentLists[cforms[i].commentObjectId] = cforms[i].data;
+    for (let i = 0; i < cForms.length; i++) {
+      commentLists[cForms[i].commentObjectId] = cForms[i].data;
     }
     // 構文置換
     Object.keys(commentLists).forEach(function(key) {
@@ -135,12 +122,12 @@ class WikiSyntaxPlugin extends SyntaxPluginBase {
    * @return {string}
    */
   static rndStr(length) {
-    const moji =
+    const character =
       'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
     let result = '';
     let i = 0;
     while (i < length) {
-      result += moji[Math.floor(Math.random() * moji.length)];
+      result += character[Math.floor(Math.random() * character.length)];
       i++;
     }
     return result;
@@ -190,9 +177,9 @@ class WikiSyntaxPlugin extends SyntaxPluginBase {
     // その他
     syntaxes.push([/^\/\/.*$/gm, '']); // 「//」以降をコメントアウト.
     syntaxes.push([/^#.*$/gm, '']); // 「#」以降をコメントアウト.動作が怪しいので廃止.
-    // syntaxs.push([/\/\*(.|\s)*?\*\//g, '']); // 「/**/」内をコメントアウト. 「.」は改行には一致しない.
+    // syntaxes.push([/\/\*(.|\s)*?\*\//g, '']); // 「/**/」内をコメントアウト. 「.」は改行には一致しない.
     syntaxes.push([/\/\*\/?([^\/]|[^*]\/|\r|\n)*\*\//g, '']); // 「/**/」内をコメントアウト.詳細は不明...
-    // syntaxs.push([/(\/\/.*\r?\n)*/g, '']);
+    // syntaxes.push([/(\/\/.*\r?\n)*/g, '']);
     for (let i = 0; i < syntaxes.length; i++) {
       result = result.replace(syntaxes[i][0], syntaxes[i][1]);
     }
