@@ -24,6 +24,10 @@ const rendererHistory = new AjaxRenderer(
   '#side-edited_history',
   'text/site_menu.txt'
 );
+const rendererSiteNotice = new AjaxRenderer(
+  '#side-site_notice',
+  'text/site_Notice.txt'
+);
 
 $(function() {
   // <a class="ajaxLoad">をクリックしたら. Wiki内ページリンクを踏んだら.
@@ -104,6 +108,7 @@ $(function() {
   rendererHeader.update();
   rendererFooter.update();
   rendererHistory.update();
+  rendererSiteNotice.update();
   // FixMe ajaxLoad('#login_history', 'api/api_getLoginHistory.php');
 
   if (history.state == null) {
