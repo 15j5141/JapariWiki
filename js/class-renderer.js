@@ -34,6 +34,30 @@ class Renderer {
     $(this.selector).trigger('rewrite');
   }
   /**
+   * HTML で追記する.
+   * @param {string} html
+   */
+  print(html) {
+    $(this.selector).append(html);
+    $(this.selector).trigger('rewrite');
+  }
+  /**
+   * HTML で追記する. 改行あり.
+   * @param {string} html
+   */
+  println(html) {
+    $(this.selector).append(html + '</br>');
+    $(this.selector).trigger('rewrite');
+  }
+  /**
+   * 描画内容をクリアする.
+   * @param {string} html
+   */
+  cls() {
+    $(this.selector).empty();
+    $(this.selector).trigger('rewrite');
+  }
+  /**
    * 対象 DOM を更新.
    * @param {string} html
    * @return {Promise<string>}
