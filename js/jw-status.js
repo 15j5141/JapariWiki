@@ -35,6 +35,17 @@ class JWStatus {
       app: params.get('app') || session.app,
     };
     this._status = status;
+
+    // URL クエリから混乱を避けるため除去.
+    if (params.get('pageURI')) {
+      params.delete('pageURI');
+      // URL を書き換え.
+      history.replaceState(
+        status.pageURI,
+        null,
+        location.pathname + params.toString()
+      );
+    }
   }
   /**
    * sessionStorageへステータス情報を書き込む.
@@ -93,6 +104,14 @@ class JWStatus {
       // 配列を結合.
       return paths.join('/');
     }
+  }
+  /**
+   * クラウドのログイン済みインスタンス？
+   * @return {*}
+   */
+  getSign() {
+    // cloud.signIn();
+    return null;
   }
 }
 
