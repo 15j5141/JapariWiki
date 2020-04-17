@@ -7,9 +7,9 @@
     "lib": "lib"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "node ./node_modules/webpack/bin/webpack",
-    "release": "NODE_ENV=production node ./node_modules/webpack/bin/webpack"
+    "watch": "node ./node_modules/webpack/bin/webpack --mode=development --watch",
+    "build": "node ./node_modules/webpack/bin/webpack --mode=development",
+    "release": "node ./node_modules/webpack/bin/webpack --mode=production"
   },
   "repository": {
     "type": "git",
