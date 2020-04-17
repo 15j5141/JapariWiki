@@ -81,4 +81,12 @@ class WikiApp extends AppBase {
     this.onRender();
   }
 }
+top.$(() => {
+  const status = new JWStatus();
+  const wikiApp = new WikiApp('#app-body');
+  console.log(status);
+
+  wikiApp.move();
+}, window.document);
+
 export default WikiApp;

@@ -3,7 +3,6 @@ import JWStatus from './jw-status.js';
 import Cloud from './class-cloud_ncmb.js';
 import PageRenderer from './class-page_renderer.js';
 import AjaxRenderer from './class-ajax_renderer.js';
-import WikiApp from '../app/wiki.js';
 
 /** リンク連打対策用. */
 let doneAjax = true;
@@ -16,7 +15,6 @@ const status = new JWStatus();
 const cloud = new Cloud();
 
 // 描画部品初期化.
-const wikiApp = new WikiApp('#content_add');
 const rendererSideMenu = new PageRenderer('#side-menu', '/site_/SideMenu');
 const rendererHeader = new AjaxRenderer('#header', 'index_header.html');
 const rendererFooter = new AjaxRenderer('#footer', 'index_footer.html');
@@ -44,9 +42,8 @@ $(function() {
       (async () => {
         // <a data-page="ページ名">を取得.
         const pageName = $(this).data('page');
-        await wikiApp.move(pageName).catch(err => {
-          console.error(err);
-        });
+        $('#content_add').get(0).contentWindow.location.href =
+          'app/wiki.html?pageURI=' + pageName;
         // クリック制限を解除.
         doneAjax = true;
         // 遷移を履歴に追加.
@@ -101,9 +98,7 @@ $(function() {
   });
 
   // Wiki 内部品を非同期読み込み.
-  wikiApp.move().then(() => {
-    console.log('redraw');
-  });
+  $('#content_add').get(0).contentWindow.location.href = 'app/wiki.html';
   rendererSideMenu.update();
   rendererHeader.update();
   rendererFooter.update();

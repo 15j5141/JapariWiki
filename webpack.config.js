@@ -14,7 +14,7 @@ module.exports = {
     new HtmlWebpackPlugin({
       // inject: false,
       chunks: ['index'],
-      template: 'app/index.html',
+      template: 'index.html',
       filename: 'index.html',
     }),
     new HtmlWebpackPlugin({

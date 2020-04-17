@@ -38,6 +38,10 @@ class PageRenderer extends Renderer {
     html_ = await this.convert(html_);
     this.println('Checked Syntax .');
 
+    // jQuery を無理やり読込.
+    const $ = selector => {
+      return top.$(selector, window.document);
+    };
     // 一度ページを非表示に.
     $(this.selector).fadeOut('fast', () => {
       // 描画.
