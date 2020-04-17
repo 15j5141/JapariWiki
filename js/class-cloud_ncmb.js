@@ -45,7 +45,7 @@ class CloudNCMB extends CloudBase {
       .equalTo('path', pageURI)
       .fetch()
       .then(function(result) {
-        if (!result.text) {
+        if (!result.objectId) {
           throw new Error('Page:NotFound');
         }
         const newPage = new JWPage(pageURI, result.text);
@@ -77,7 +77,7 @@ class CloudNCMB extends CloudBase {
     console.log('b:', page);
 
     // ページデータが正しいか確認.
-    if (page.text) {
+    if (page.objectId) {
       // 更新.
       return await page
         .set('author', pageData.authorObject.id)
