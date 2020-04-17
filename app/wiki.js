@@ -23,6 +23,9 @@ class WikiApp extends AppBase {
     this._renderer = new WikiRenderer(selector);
     this._jwStatus = new JWStatus();
     this._cloud = new CloudNCMB();
+    this.htmlByFetch = fetch('app/wiki.html').then(data => {
+      return data.text();
+    });
   }
   /**
    * @override
@@ -35,6 +38,9 @@ class WikiApp extends AppBase {
 
     // 読み込み中であることを明示.
     this._renderer.cls();
+    const test = await this.htmlByFetch;
+    // console.log(test);
+    this._renderer.setHTML(test);
     this._renderer.println('Start Loading...');
     // 受信する.
     this._renderer.println('Downloading.');
@@ -81,12 +87,5 @@ class WikiApp extends AppBase {
     this.onRender();
   }
 }
-top.$(() => {
-  const status = new JWStatus();
-  const wikiApp = new WikiApp('#app-body');
-  console.log(status);
-
-  wikiApp.move();
-}, window.document);
 
 export default WikiApp;
