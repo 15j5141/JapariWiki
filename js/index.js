@@ -4,6 +4,7 @@ import Cloud from './class-cloud_ncmb.js';
 import PageRenderer from './class-page_renderer.js';
 import AjaxRenderer from './class-ajax_renderer.js';
 import WikiApp from '../app/wiki.js';
+import EditorApp from '../app/edit.js';
 
 /** リンク連打対策用. */
 let doneAjax = true;
@@ -17,6 +18,7 @@ const cloud = new Cloud();
 
 // 描画部品初期化.
 const wikiApp = new WikiApp('#content_add');
+const editorApp = new EditorApp('#content_add');
 const rendererSideMenu = new PageRenderer('#side-menu', '/site_/SideMenu');
 const rendererHeader = new AjaxRenderer('#header', 'index_header.html');
 const rendererFooter = new AjaxRenderer('#footer', 'index_footer.html');
@@ -61,7 +63,19 @@ $(function() {
   // 「編集」ボタンを押したら.
   $(document).on('click', '#ajaxLoad_edit', function(event) {
     event.preventDefault();
-    // FixMe ajaxLoad('#content_add', 'ajax_edit.php?page=' + encodeURIComponent(page));
+    // 最新ステータス取得.
+    status.load();
+    // 編集画面起動.
+    editorApp
+      .open(status.getPageURI())
+      .then(result => {
+        console.log(result);
+        // 編集したページを表示する.
+        wikiApp.move();
+      })
+      .catch(err => {
+        console.log(err);
+      });
     return false;
   });
 

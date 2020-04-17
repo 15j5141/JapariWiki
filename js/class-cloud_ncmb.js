@@ -79,7 +79,7 @@ class CloudNCMB extends CloudBase {
     // ページデータが正しいか確認.
     if (page.text) {
       // 更新.
-      await page
+      return await page
         .set('author', pageData.authorObject.id)
         .set('path', pageData.pageURI)
         .set('text', pageData.rawText)
@@ -89,7 +89,7 @@ class CloudNCMB extends CloudBase {
         });
     } else {
       // クラウドになければ新規作成にする.
-      await this.postPage(pageData);
+      return await this.postPage(pageData);
     }
   }
   /** @override */

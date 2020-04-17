@@ -5,6 +5,7 @@ module.exports = {
   entry: {
     index: './js/index.js',
     wiki: './app/wiki.js',
+    edit: './app/edit.js',
   },
   output: {
     path: __dirname + '/dist',
@@ -22,6 +23,12 @@ module.exports = {
       chunks: ['wiki'],
       template: 'app/wiki.html',
       filename: 'app/wiki.html',
+    }),
+    new HtmlWebpackPlugin({
+      // inject: false,
+      chunks: ['edit'],
+      template: 'app/edit.html',
+      filename: 'app/edit.html',
     }),
   ],
   externals: [
