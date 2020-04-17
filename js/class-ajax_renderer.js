@@ -22,28 +22,19 @@ class AjaxRenderer extends Renderer {
       this.url = url;
     }
     // 受信.
-    const html = await AjaxRenderer.ajax({
-      url: this.url,
-      cache: false,
-    });
+    const html = await AjaxRenderer.ajax(this.url);
     // 描画.
     this.setHTML(html);
     return html;
   }
   /**
    * Promise 化した $.ajax().
-   * @param {Object} obj
+   * @param {string} url
    * @return {Promise<string>}
    */
-  static async ajax(obj) {
-    return new Promise((resolve, reject) => {
-      $.ajax(obj)
-        .done(data => {
-          resolve(data);
-        })
-        .fail(err => {
-          reject(err);
-        });
+  static async ajax(url) {
+    return fetch(url).then(data => {
+      return data.text();
     });
   }
 }
