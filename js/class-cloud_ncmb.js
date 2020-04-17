@@ -20,7 +20,7 @@ class CloudNCMB extends CloudBase {
     this.appKey = ncmb.appKey || '';
     this.clientKey = ncmb.clientKey || '';
     this.instance = this;
-    this.ncmb = new window.NCMB(this.appKey, this.clientKey);
+    this.ncmb = new this.NCMB(this.appKey, this.clientKey);
 
     // カレントユーザー情報の取得
     const currentUser = this.ncmb.User.getCurrentUser();
@@ -29,6 +29,10 @@ class CloudNCMB extends CloudBase {
     } else {
       console.log('未ログインまたは取得に失敗');
     }
+  }
+  /** NCMB */
+  get NCMB() {
+    return window.top.NCMB;
   }
   /**
    * @override
@@ -44,7 +48,9 @@ class CloudNCMB extends CloudBase {
         if (!result.text) {
           throw new Error('Page:NotFound');
         }
-        return new JWPage(pageURI, result.text);
+        const newPage = new JWPage(pageURI, result.text);
+        newPage.cloudObject = result;
+        return newPage;
       })
       .catch(function(err) {
         throw err;
@@ -58,24 +64,32 @@ class CloudNCMB extends CloudBase {
     if (pageData.pageURI == null) {
       throw new Error('err');
     }
-    // NCMB 用クラス生成.
-    const ncPage = this.ncmb.DataStore('Page');
-    // 検索.
-    const page = await ncPage.equalTo('path', pageData.pageURI).fetch();
+    /** NCMB 用クラス. */
+    let page = null;
+    if (pageData.cloudObject) {
+      // クラウドから取得したページデータなら直接更新する.
+      page = pageData.cloudObject;
+    } else {
+      // 上書きするページデータのクラウド上の ID が不明なら検索する.
+      const ncPage = this.ncmb.DataStore('Page');
+      page = await ncPage.equalTo('path', pageData.pageURI).fetch();
+    }
+    console.log('b:', page);
+
+    // ページデータが正しいか確認.
     if (page.text) {
-      page
+      // 更新.
+      await page
         .set('author', pageData.authorObject.id)
         .set('path', pageData.pageURI)
         .set('text', pageData.rawText)
         .update()
-        .then(result => {
-          return result;
-        })
         .catch(err => {
           console.log(err);
         });
     } else {
-      this.postPage(pageData);
+      // クラウドになければ新規作成にする.
+      await this.postPage(pageData);
     }
   }
   /** @override */
@@ -90,7 +104,11 @@ class CloudNCMB extends CloudBase {
         throw err;
       });
   }
-  /** @override */
+  /**
+   * @override
+   * @param {JWPage} pageData
+   * @return {Promise}
+   */
   async postPage(pageData) {
     // NCMB 用クラス生成.
     const page = new (this.ncmb.DataStore('Page'))();
@@ -98,7 +116,7 @@ class CloudNCMB extends CloudBase {
     // ゲストは見えないようにする.
     // acl.setRoleReadAccess('normal', true).setPublicReadAccess(false);
     // 保存.
-    return page
+    return await page
       .set('acl', acl) // 権限設定.
       .set('author', pageData.authorObject.id)
       .set('path', pageData.pageURI)
