@@ -12,14 +12,14 @@ class AppBase {
     /** アプリが描画される DOM セレクター. */
     this.selector = selector;
     /** @type {Renderer} */
-    this.renderer = null;
+    this._renderer = null;
   }
   /**
    * 描画させる.
    * @return {Promise<void>}
    */
   async onRender() {
-    this.renderer.update();
+    this._renderer.update();
   }
 }
 export default AppBase;

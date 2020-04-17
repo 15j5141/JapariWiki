@@ -78,15 +78,13 @@ class WikiSyntaxPlugin extends SyntaxPluginBase {
 
     // コメントフォームだけ置換. 1件以上コメントがあれば下でコメント一覧を入れる.
     const promises = ids.map(id => ncmbC.getComment(id)); // idsからPromise作成.
-    const cForms = await Promise.all(promises).catch(err => {
+    // 並列で各コメントの受信.
+    const commentForms = await Promise.all(promises).catch(err => {
       throw err;
     });
-    // 並列で各コメントの受信, cForms=commentForms
-    console.info('all fulfilled, v cForms v');
-    console.log(cForms);
     // 0件コメントがあっても扱いやすいようにコメントフォームの数分の連想配列作成する.
-    for (let i = 0; i < cForms.length; i++) {
-      commentLists[cForms[i].commentObjectId] = cForms[i].data;
+    for (let i = 0; i < commentForms.length; i++) {
+      commentLists[commentForms[i].commentObjectId] = commentForms[i].data;
     }
     // 構文置換
     Object.keys(commentLists).forEach(function(key) {
@@ -241,7 +239,6 @@ class WikiSyntaxPlugin extends SyntaxPluginBase {
     syntaxes.push([
       /^\|(.*\|)[^|\n]*$/gm,
       (...matches) => {
-        console.log(matches);
         const result = matches[1].replace(/(.*?)\|/g, '<td>$1</td>');
         return '<table><tr>' + result + '</tr></table>__NewLine__';
       },
@@ -324,7 +321,6 @@ class NCMBComment {
         throw err;
       });
 
-    console.log('Successfully retrieved ' + comment.length + ' scores.');
     return { commentObjectId: id, data: comment };
   }
 

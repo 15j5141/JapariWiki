@@ -15,6 +15,9 @@ class JWPage {
       editable: {},
       ...authorObject,
     };
+    /** クラウドで処理するのに必要な DB の id 等を含んだ JSON オブジェクト. */
+    this.cloudObject = null;
+    this.error = {};
   }
   /**
    * 絶対パスか.
