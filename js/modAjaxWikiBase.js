@@ -44,7 +44,6 @@ $(function() {
   });*/
   txt =
     'start<br />\n#comment(8YxY37D1Il)<br />\n#comment(8YxY37D1I2)<br />\n#comment(8YxY37D1Il)<br />\nend<br />';
-  $('body').append('<br >loading...<br ><div id="content_add"></div>');
 
   /*
   //ncmb.User.login(username, password)
