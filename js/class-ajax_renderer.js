@@ -33,8 +33,10 @@ class AjaxRenderer extends Renderer {
    * @return {Promise<string>}
    */
   static async ajax(url) {
-    return fetch(url).then(data => {
-      return data.text();
+    return new Promise((resolve, reject) => {
+      top.$.ajax({ url: url }).done(data => {
+        resolve(data);
+      });
     });
   }
 }
