@@ -22,6 +22,17 @@ class AppBase {
     this._renderer.update();
   }
   /**
+   * fetch.
+   * @param {string} url
+   */
+  async fetch(url) {
+    return new Promise((resolve, reject) => {
+      top.$.ajax({ url: url }).done(data => {
+        resolve(data);
+      });
+    });
+  }
+  /**
    * 履歴に追加.
    * @param {string} uri
    */

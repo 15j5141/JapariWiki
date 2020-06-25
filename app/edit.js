@@ -18,8 +18,8 @@ class EditorApp extends AppBase {
      *  このエディタアプリで描画時に扱う HTML データ. Promise 完了済みか確認して取得する.
      * @type {Promise<string>}
      */
-    this.htmlByFetch = fetch('app/edit.html').then(data => {
-      return data.text();
+    this.htmlByFetch = this.fetch('app/edit.html').then(data => {
+      return data;
     });
     this._isEdited = false;
     this._editedResult = null;

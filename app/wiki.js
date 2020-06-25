@@ -23,8 +23,8 @@ class WikiApp extends AppBase {
     this._renderer = new WikiRenderer(selector);
     this._jwStatus = new JWStatus();
     this._cloud = new CloudNCMB();
-    this.htmlByFetch = fetch('app/wiki.html').then(data => {
-      return data.text();
+    this.htmlByFetch = this.fetch('app/wiki.html').then(data => {
+      return data;
     });
 
     /** リンク連打対策用. */
