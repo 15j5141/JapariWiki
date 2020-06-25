@@ -77,6 +77,35 @@ class CloudBase {
   signOut() {
     throw new Error('Not Implemented');
   }
+  /**
+   * ファイル取得.
+   * @param {JWFile} file
+   */
+  getFile(file) {
+    throw new Error('Not Implemented');
+  }
+  /**
+   * ファイルを保存.
+   * @param {JWFile} file
+   */
+  postFile(file) {
+    throw new Error('Not Implemented');
+  }
+  /**
+   * ファイルを更新.
+   * @param {JWFile} file
+   */
+  putFile(file) {
+    throw new Error('Not Implemented');
+  }
+  /**
+   * ファイルを削除.
+   * @param {JWFile} file
+   */
+  deleteFile(file) {
+    throw new Error('Not Implemented');
+  }
+  getFileLink(file) {}
 }
 
 export default CloudBase;
