@@ -26,6 +26,12 @@ class WikiApp extends AppBase {
     this.htmlByFetch = fetch('app/wiki.html').then(data => {
       return data.text();
     });
+
+    /** リンク連打対策用. */
+    this.doneAjax = true;
+    this.$ = top.jQuery;
+    // イベント登録する.
+    this.onLoad();
   }
   /**
    * @override
@@ -85,6 +91,53 @@ class WikiApp extends AppBase {
     this._jwStatus.save();
     // 受信して描画.
     this.onRender();
+  }
+  /**
+   * @override
+   */
+  onLoad() {
+    const self = this;
+    self.$(function($) {
+      // <a class="ajaxLoad">をクリックしたら. Wiki内ページリンクを踏んだら.
+      $(self._renderer.selector, top.document).on(
+        'click',
+        'a.ajaxLoad',
+        function(event) {
+          event.preventDefault(); // 標準ページ移動を無効化.
+          /* 連打対策 */
+          if (self.doneAjax) {
+            self.doneAjax = false;
+
+            // ページ上までスクロール.
+            // top.scroll2Top();
+
+            // ページを更新.
+            (async () => {
+              // <a data-page="ページ名">を取得.
+              const pageName = $(event.target).data('page');
+              await self.move(pageName).catch(err => {
+                console.error(err);
+              });
+              const uri = self._jwStatus.resolveURI(pageName);
+
+              // 履歴に追加する.
+              self.pushState(uri);
+              // クリック制限を解除.
+              self.doneAjax = true;
+              // 遷移を履歴に追加.
+              top.history.pushState('' + pageName, null, null);
+            })();
+          } /* /if */
+          return false; // <a>を無効化.
+        }
+      );
+    });
+  }
+  /**
+   * ページ上部へスクロールする.
+   */
+  scroll2Top() {
+    this.$('html,body', top.document).animate({ scrollTop: 0 }, 100, 'swing');
   }
 }
 

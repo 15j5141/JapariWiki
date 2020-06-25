@@ -6,8 +6,6 @@ import AjaxRenderer from './class-ajax_renderer.js';
 import WikiApp from '../app/wiki.js';
 import EditorApp from '../app/edit.js';
 
-/** リンク連打対策用. */
-let doneAjax = true;
 /** History API 使用の可否. */
 const isCanBeHistory =
   history && history.pushState && history.state !== undefined;
@@ -32,34 +30,6 @@ const rendererSiteNotice = new AjaxRenderer(
 );
 
 $(function() {
-  // <a class="ajaxLoad">をクリックしたら. Wiki内ページリンクを踏んだら.
-  $(document).on('click', 'a.ajaxLoad', function(event) {
-    event.preventDefault(); // 標準ページ移動を無効化.
-    /* 連打対策 */
-    if (doneAjax) {
-      doneAjax = false;
-
-      // ページ上までスクロール.
-      scroll2Top();
-
-      // ページを更新.
-      (async () => {
-        // <a data-page="ページ名">を取得.
-        const pageName = $(event.target).data('page');
-        await wikiApp.move(pageName).catch(err => {
-          console.error(err);
-        });
-        // $('#content_add').get(0).contentWindow.location.href =
-        //   'app/wiki.html?pageURI=' + pageName;
-        // クリック制限を解除.
-        doneAjax = true;
-        // 遷移を履歴に追加.
-        history.pushState('' + pageName, null, null);
-      })();
-    } /* if */
-    return false; // <a>を無効化.
-  });
-
   // 「編集」ボタンを押したら.
   $(document).on('click', '#ajaxLoad_edit', function(event) {
     event.preventDefault();
@@ -109,10 +79,11 @@ $(function() {
 
   // ページバック処理時にページ遷移を発動.
   $(window).on('popstate', function(e) {
+    if (!e.originalEvent.state) return;
     if (isCanBeHistory) {
       // FixMe ページだけでなくアプリの切り替えも行う.
       // ページ移動.
-      wikiApp.move(history.state);
+      wikiApp.move(e.originalEvent.state);
     }
   });
 
@@ -131,10 +102,3 @@ $(function() {
     history.replaceState('' + status.getPageURI(), null, null);
   }
 });
-
-/**
- * ページ上部へスクロールする.
- */
-function scroll2Top() {
-  $('html,body').animate({ scrollTop: 0 }, 100, 'swing');
-}

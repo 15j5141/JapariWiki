@@ -21,5 +21,16 @@ class AppBase {
   async onRender() {
     this._renderer.update();
   }
+  /**
+   * 履歴に追加.
+   * @param {string} uri
+   */
+  pushState(uri) {
+    top.history.pushState(uri, null, null);
+  }
+  /**
+   *
+   */
+  onLoad() {}
 }
 export default AppBase;
