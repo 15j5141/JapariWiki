@@ -5,6 +5,7 @@ import PageRenderer from './class-page_renderer.js';
 import AjaxRenderer from './class-ajax_renderer.js';
 import WikiApp from '../app/wiki.js';
 import EditorApp from '../app/edit.js';
+import { HeaderComponent, FooterComponent } from './jw_modules.js';
 
 /** History API 使用の可否. */
 const isCanBeHistory =
@@ -15,11 +16,17 @@ const status = new JWStatus();
 const cloud = new Cloud();
 
 // 描画部品初期化.
+const headerComponent = new HeaderComponent({
+  selector: '#header',
+  jQuery: window.jQuery,
+});
+const footerComponent = new FooterComponent({
+  selector: '#footer',
+  jQuery: window.jQuery,
+});
 const wikiApp = new WikiApp('#content_add');
 const editorApp = new EditorApp('#content_add');
 const rendererSideMenu = new PageRenderer('#side-menu', '/site_/SideMenu');
-const rendererHeader = new AjaxRenderer('#header', 'index_header.html');
-const rendererFooter = new AjaxRenderer('#footer', 'index_footer.html');
 const rendererHistory = new AjaxRenderer(
   '#side-edited_history',
   'text/site_menu.txt'
@@ -91,8 +98,6 @@ $(function() {
   wikiApp.move().then(() => {});
   // $('#content_add').get(0).contentWindow.location.href = 'app/wiki.html';
   rendererSideMenu.update();
-  rendererHeader.update();
-  rendererFooter.update();
   rendererHistory.update();
   rendererSiteNotice.update();
   // FixMe ajaxLoad('#login_history', 'api/api_getLoginHistory.php');
