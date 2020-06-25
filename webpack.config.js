@@ -40,7 +40,7 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\._js$/,
+        test: /\.js$/,
         exclude: /node_modules/,
         use: {
           loader: 'babel-loader',
@@ -49,6 +49,9 @@ module.exports = {
               [
                 '@babel/preset-env',
                 {
+                  targets: {
+                    ie: '11',
+                  },
                   useBuiltIns: 'usage',
                   corejs: 3, // or 2
                 },
