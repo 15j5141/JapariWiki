@@ -5,11 +5,13 @@
  */
 import Renderer from './class-renderer.js';
 import JWStatus from './jw-status.js';
+import ServiceBase from './class-service_base.js';
 /**
  * @typedef {Object} ReferenceObject
  * @property {jQuery} jQuery
  * @property {JWStatus=} status
  * @property {string} selector
+ * @property {ServiceBase=} service
  */
 /**
  * Component の基本クラス.
@@ -28,6 +30,7 @@ export default class ComponentBase {
       jQuery: null,
       status: null,
       selector: null,
+      service: null,
     };
     /** @type {ReferenceObject} */
     this.refObj = { ...originalReferenceObject, ...referenceObject };

@@ -2,7 +2,7 @@
 import JWStatus from './jw-status.js';
 // import JWPage from './class-page.js';
 import Cloud from './class-cloud_ncmb.js';
-import { Components } from './jw_modules.js';
+import { Components, Services } from './jw_modules.js';
 
 /** History API 使用の可否. */
 const isCanBeHistory =
@@ -12,11 +12,14 @@ const status = new JWStatus();
 /** クラウド管理変数. */
 const cloud = new Cloud();
 
+const service = new Services.IndexService();
+
 // 描画部品初期化.
 const headerComponent = new Components.HeaderComponent({
   selector: '#header',
   jQuery: window.jQuery,
   status: status,
+  service: service,
 });
 const footerComponent = new Components.FooterComponent({
   selector: '#footer',
@@ -26,16 +29,19 @@ const wikiApp = new Components.WikiApp({
   selector: '#content_add',
   jQuery: window.jQuery,
   status: status,
+  service: service,
 });
 const editorApp = new Components.EditorApp({
   selector: '#content_add',
   jQuery: window.jQuery,
   status: status,
+  service: service,
 });
 const menuComponent = new Components.MenuComponent({
   selector: '#side-menu',
   jQuery: window.jQuery,
   status: status,
+  service: service,
 });
 const historyComponent = new Components.HistoryComponent({
   selector: '#side-edited_history',
@@ -45,6 +51,11 @@ const siteNoticeComponent = new Components.SiteNoticeComponent({
   selector: '#side-site_notice',
   jQuery: window.jQuery,
 });
+
+// 各コンポーネントを管理下に置く.
+service.addComponent('header', headerComponent);
+service.addComponent('footer', footerComponent);
+service.addComponent('wiki_app', wikiApp);
 
 $(function() {
   // 「編集」ボタンを押したら.

@@ -19,5 +19,37 @@ export default class MenuComponent extends ComponentBase {
    */
   async onInit() {
     this._cloud = new CloudNCMB();
+    this.doneAjax = true;
+  }
+  /**
+   * @override
+   */
+  onLoad() {
+    const self = this;
+    self.$(function($) {
+      // メニューのリンクからもページを移動できるようにする.
+      $(self.refObj.selector).on('click', 'a.ajaxLoad', e => {
+        e.preventDefault(); // 標準ページ移動を無効化.
+        /* 連打対策 */
+        if (self.doneAjax) {
+          self.doneAjax = false;
+
+          // ページ上までスクロール.
+          // top.scroll2Top();
+
+          // ページを更新.
+          (async () => {
+            // <a data-page="ページ名">を取得.
+            const pageName = $(e.target).data('page');
+            await self.refObj.service.openWiki(pageName).catch(err => {
+              console.error(err);
+            });
+            // クリック制限を解除.
+            self.doneAjax = true;
+          })();
+        } /* /if */
+        return false; // <a>を無効化.
+      });
+    });
   }
 }

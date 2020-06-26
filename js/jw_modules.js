@@ -19,3 +19,7 @@ export const Components = {
   HistoryComponent,
   SiteNoticeComponent,
 };
+
+export const Services = {
+  IndexService,
+};
