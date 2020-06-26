@@ -12,7 +12,7 @@ export default class WikiApp extends ComponentBase {
    * @override
    */
   decorator() {
-    this.decoration = {};
+    super.decorator();
     this.decoration.templateUrl = './wiki.html';
     this.renderer = new PageRenderer(this.refObj.selector, null);
   }

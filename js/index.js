@@ -1,10 +1,19 @@
+// @ts-check
 import JWStatus from './jw-status.js';
 // import JWPage from './class-page.js';
 import Cloud from './class-cloud_ncmb.js';
 import PageRenderer from './class-page_renderer.js';
 import AjaxRenderer from './class-ajax_renderer.js';
 import EditorApp from '../app/edit.js';
-import { HeaderComponent, FooterComponent, WikiApp } from './jw_modules.js';
+import {
+  HeaderComponent,
+  FooterComponent,
+  WikiApp,
+  MenuComponent,
+  HistoryComponent,
+  SiteNoticeComponent,
+} from './jw_modules.js';
+import ComponentBase from './class-component_base.js';
 
 /** History API 使用の可否. */
 const isCanBeHistory =
@@ -29,15 +38,19 @@ const wikiApp = new WikiApp({
   jQuery: window.jQuery,
 });
 const editorApp = new EditorApp('#content_add');
-const rendererSideMenu = new PageRenderer('#side-menu', '/site_/SideMenu');
-const rendererHistory = new AjaxRenderer(
-  '#side-edited_history',
-  'text/site_menu.txt'
-);
-const rendererSiteNotice = new AjaxRenderer(
-  '#side-site_notice',
-  'text/site_Notice.txt'
-);
+const menuComponent = new MenuComponent({
+  selector: '#side-menu',
+  jQuery: window.jQuery,
+  status: status,
+});
+const historyComponent = new HistoryComponent({
+  selector: '#side-edited_history',
+  jQuery: window.jQuery,
+});
+const siteNoticeComponent = new SiteNoticeComponent({
+  selector: '#side-site_notice',
+  jQuery: window.jQuery,
+});
 
 $(function() {
   // 「編集」ボタンを押したら.
@@ -91,17 +104,19 @@ $(function() {
     await headerComponent.init();
     await footerComponent.init();
     await wikiApp.init();
+    await menuComponent.init();
+    await historyComponent.init();
+    await siteNoticeComponent.init();
 
-    wikiApp.draw();
-    footerComponent.draw();
-    headerComponent.draw();
+    await wikiApp.draw();
+    await footerComponent.draw();
+    await headerComponent.draw();
+    await menuComponent.draw();
+    await historyComponent.draw();
+    await siteNoticeComponent.draw();
 
     // Wiki 内部品を非同期読み込み.
     wikiApp.move().then(() => {});
-    // $('#content_add').get(0).contentWindow.location.href = 'app/wiki.html';
-    rendererSideMenu.update();
-    rendererHistory.update();
-    rendererSiteNotice.update();
     // FixMe ajaxLoad('#login_history', 'api/api_getLoginHistory.php');
   })();
 

@@ -55,9 +55,14 @@ export default class ComponentBase {
    * 疑似デコレーター.
    */
   decorator() {
+    /**
+     * @type {{templateUrl,styleUrls}}
+     */
     this.decoration = {};
-    this.decoration.templateUrl = '';
-    this.decoration.styleUrls = [''];
+    /** @type {?string} */
+    this.decoration.templateUrl = null;
+    /** @type {Array<string>} */
+    this.decoration.styleUrls = [];
   }
   /* ---------- abstract. ---------- */
   /**
@@ -113,6 +118,9 @@ export default class ComponentBase {
    */
   async loadTemplate() {
     const self = this;
+    if (self.decoration.templateUrl == null) {
+      return Promise.resolve();
+    }
     return new Promise((resolve, reject) => {
       this.$.ajax({
         url: '../app/' + self.decoration.templateUrl,
