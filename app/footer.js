@@ -14,5 +14,5 @@ export default class FooterComponent extends ComponentBase {
   /**
    * @override
    */
-  onInit() {}
+  async onInit() {}
 }

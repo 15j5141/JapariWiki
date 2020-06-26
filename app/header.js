@@ -14,7 +14,7 @@ export default class HeaderComponent extends ComponentBase {
   /**
    * @override
    */
-  onInit() {
+  async onInit() {
     console.log(this.refObj.element);
   }
 }

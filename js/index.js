@@ -19,12 +19,16 @@ const cloud = new Cloud();
 const headerComponent = new HeaderComponent({
   selector: '#header',
   jQuery: window.jQuery,
+  status: status,
 });
 const footerComponent = new FooterComponent({
   selector: '#footer',
   jQuery: window.jQuery,
 });
-const wikiApp = new WikiApp('#content_add');
+const wikiApp = new WikiApp({
+  selector: '#content_add',
+  jQuery: window.jQuery,
+});
 const editorApp = new EditorApp('#content_add');
 const rendererSideMenu = new PageRenderer('#side-menu', '/site_/SideMenu');
 const rendererHistory = new AjaxRenderer(
@@ -90,17 +94,33 @@ $(function() {
     if (isCanBeHistory) {
       // FixMe ページだけでなくアプリの切り替えも行う.
       // ページ移動.
-      wikiApp.move(e.originalEvent.state);
+
+      // パスを解決.
+      const uri = wikiApp.refObj.status.resolveURI(e.originalEvent.state);
+      wikiApp.refObj.status.setPageURI(uri);
+      // FixMe パスを解決できなければエラー?
+      wikiApp.refObj.status.save();
+      wikiApp.draw(e.originalEvent.state);
     }
   });
 
-  // Wiki 内部品を非同期読み込み.
-  wikiApp.move().then(() => {});
-  // $('#content_add').get(0).contentWindow.location.href = 'app/wiki.html';
-  rendererSideMenu.update();
-  rendererHistory.update();
-  rendererSiteNotice.update();
-  // FixMe ajaxLoad('#login_history', 'api/api_getLoginHistory.php');
+  (async () => {
+    await headerComponent.init();
+    await footerComponent.init();
+    await wikiApp.init();
+
+    wikiApp.draw();
+    footerComponent.draw();
+    headerComponent.draw();
+
+    // Wiki 内部品を非同期読み込み.
+    wikiApp.move().then(() => {});
+    // $('#content_add').get(0).contentWindow.location.href = 'app/wiki.html';
+    rendererSideMenu.update();
+    rendererHistory.update();
+    rendererSiteNotice.update();
+    // FixMe ajaxLoad('#login_history', 'api/api_getLoginHistory.php');
+  })();
 
   if (history.state == null) {
     // 履歴情報がなければ(Wikiを開いた時)現ページ名で上書き.
