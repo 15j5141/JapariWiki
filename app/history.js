@@ -10,7 +10,6 @@ export default class HistoryComponent extends ComponentBase {
    * @override
    */
   decorator() {
-    super.decorator();
     this.decoration.templateUrl = '../text/site_menu.txt';
   }
   /**

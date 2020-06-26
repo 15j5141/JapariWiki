@@ -1,3 +1,5 @@
+// / <reference path="../typings/globals/jquery/index.d.ts" />
+// @ts-check
 /**
  * @fileoverview
  */
@@ -5,12 +7,9 @@ import Renderer from './class-renderer.js';
 import JWStatus from './jw-status.js';
 /**
  * @typedef {Object} ReferenceObject
- * @property {Element} element
  * @property {jQuery} jQuery
- * @property {JWStatus} status
+ * @property {JWStatus=} status
  * @property {string} selector
- * @property {string} templateUrl
- * @property {Array<string>} styleUrls
  */
 /**
  * Component の基本クラス.
@@ -26,12 +25,9 @@ export default class ComponentBase {
   constructor(referenceObject) {
     /** @type {ReferenceObject} */
     const originalReferenceObject = {
-      element: null,
       jQuery: null,
       status: null,
       selector: null,
-      templateUrl: null,
-      styleUrls: null,
     };
     /** @type {ReferenceObject} */
     this.refObj = { ...originalReferenceObject, ...referenceObject };
@@ -39,12 +35,17 @@ export default class ComponentBase {
     // セットする.
     this.$ = this.refObj.jQuery = this.refObj.jQuery || top.jQuery;
     // element が未指定なら selector から特定する.
-    this.refObj.element =
-      this.refObj.element || this.refObj.jQuery(this.refObj.selector).get(0);
+    this.element = this.refObj.jQuery(this.refObj.selector).get(0);
     this.refObj.status = this.refObj.status || new JWStatus();
     this.$element = this.refObj.jQuery(this.refObj.selector);
     this.renderer = new Renderer(this.refObj.selector);
-    this.decoration = {};
+    /**
+     * @type {{templateUrl:string,styleUrls:Array<string>}}
+     */
+    this.decoration = {
+      templateUrl: null,
+      styleUrls: [],
+    };
 
     const self = this;
     // 疑似デコレーターを呼ぶ.
@@ -54,16 +55,7 @@ export default class ComponentBase {
    * @abstract
    * 疑似デコレーター.
    */
-  decorator() {
-    /**
-     * @type {{templateUrl,styleUrls}}
-     */
-    this.decoration = {};
-    /** @type {?string} */
-    this.decoration.templateUrl = null;
-    /** @type {Array<string>} */
-    this.decoration.styleUrls = [];
-  }
+  decorator() {}
   /* ---------- abstract. ---------- */
   /**
    * 初期化時に実行する.
@@ -94,6 +86,7 @@ export default class ComponentBase {
    */
   async init() {
     const self = this;
+    // FixMe move loadTemplate() to constructor.
     // HTML を DL する.
     this.templateHTML = await this.loadTemplate();
     // DOM にセットする.

@@ -2,18 +2,7 @@
 import JWStatus from './jw-status.js';
 // import JWPage from './class-page.js';
 import Cloud from './class-cloud_ncmb.js';
-import PageRenderer from './class-page_renderer.js';
-import AjaxRenderer from './class-ajax_renderer.js';
-import EditorApp from '../app/edit.js';
-import {
-  HeaderComponent,
-  FooterComponent,
-  WikiApp,
-  MenuComponent,
-  HistoryComponent,
-  SiteNoticeComponent,
-} from './jw_modules.js';
-import ComponentBase from './class-component_base.js';
+import { Components } from './jw_modules.js';
 
 /** History API 使用の可否. */
 const isCanBeHistory =
@@ -24,30 +13,35 @@ const status = new JWStatus();
 const cloud = new Cloud();
 
 // 描画部品初期化.
-const headerComponent = new HeaderComponent({
+const headerComponent = new Components.HeaderComponent({
   selector: '#header',
   jQuery: window.jQuery,
   status: status,
 });
-const footerComponent = new FooterComponent({
+const footerComponent = new Components.FooterComponent({
   selector: '#footer',
   jQuery: window.jQuery,
 });
-const wikiApp = new WikiApp({
+const wikiApp = new Components.WikiApp({
   selector: '#content_add',
   jQuery: window.jQuery,
+  status: status,
 });
-const editorApp = new EditorApp('#content_add');
-const menuComponent = new MenuComponent({
+const editorApp = new Components.EditorApp({
+  selector: '#content_add',
+  jQuery: window.jQuery,
+  status: status,
+});
+const menuComponent = new Components.MenuComponent({
   selector: '#side-menu',
   jQuery: window.jQuery,
   status: status,
 });
-const historyComponent = new HistoryComponent({
+const historyComponent = new Components.HistoryComponent({
   selector: '#side-edited_history',
   jQuery: window.jQuery,
 });
-const siteNoticeComponent = new SiteNoticeComponent({
+const siteNoticeComponent = new Components.SiteNoticeComponent({
   selector: '#side-site_notice',
   jQuery: window.jQuery,
 });
@@ -116,7 +110,6 @@ $(function() {
     await siteNoticeComponent.draw();
 
     // Wiki 内部品を非同期読み込み.
-    wikiApp.move().then(() => {});
     // FixMe ajaxLoad('#login_history', 'api/api_getLoginHistory.php');
   })();
 

@@ -1,3 +1,4 @@
+// @ts-check
 import ComponentBase from '../js/class-component_base';
 import PageRenderer from '../js/class-page_renderer';
 import CloudNCMB from '../js/class-cloud_ncmb';
@@ -10,7 +11,6 @@ export default class MenuComponent extends ComponentBase {
    * @override
    */
   decorator() {
-    super.decorator();
     this.decoration.templateUrl = null;
     this.renderer = new PageRenderer(this.refObj.selector, '/site_/SideMenu');
   }

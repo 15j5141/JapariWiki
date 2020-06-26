@@ -7,7 +7,6 @@ export default class FooterComponent extends ComponentBase {
    * @override
    */
   decorator() {
-    super.decorator();
     this.decoration.templateUrl = './footer.html';
     this.decoration.styleUrls = [];
   }
