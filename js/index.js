@@ -3,9 +3,8 @@ import JWStatus from './jw-status.js';
 import Cloud from './class-cloud_ncmb.js';
 import PageRenderer from './class-page_renderer.js';
 import AjaxRenderer from './class-ajax_renderer.js';
-import WikiApp from '../app/wiki.js';
 import EditorApp from '../app/edit.js';
-import { HeaderComponent, FooterComponent } from './jw_modules.js';
+import { HeaderComponent, FooterComponent, WikiApp } from './jw_modules.js';
 
 /** History API 使用の可否. */
 const isCanBeHistory =
@@ -85,22 +84,6 @@ $(function() {
         // フェードアウト後、[#modal-overlay]をHTML(DOM)上から削除
         $('#modal-overlay').remove();
       });
-    }
-  });
-
-  // ページバック処理時にページ遷移を発動.
-  $(window).on('popstate', function(e) {
-    if (!e.originalEvent.state) return;
-    if (isCanBeHistory) {
-      // FixMe ページだけでなくアプリの切り替えも行う.
-      // ページ移動.
-
-      // パスを解決.
-      const uri = wikiApp.refObj.status.resolveURI(e.originalEvent.state);
-      wikiApp.refObj.status.setPageURI(uri);
-      // FixMe パスを解決できなければエラー?
-      wikiApp.refObj.status.save();
-      wikiApp.draw(e.originalEvent.state);
     }
   });
 

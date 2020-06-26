@@ -127,7 +127,8 @@ export default class ComponentBase {
   }
   /**
    * fetch.
-   * @param {Promise<string>} url
+   * @param {string} url
+   * @return {Promise<string>}
    */
   async fetch(url) {
     return new Promise((resolve, reject) => {

@@ -115,6 +115,23 @@ export default class WikiApp extends ComponentBase {
         } /* /if */
         return false; // <a>を無効化.
       });
+
+      // ページバック処理時にページ遷移を発動.
+      $(top).on('popstate', function(e) {
+        if (!e.originalEvent.state) return;
+        const isCanBeHistory =
+          history && history.pushState && history.state !== undefined;
+        if (isCanBeHistory) {
+          // FixMe ページだけでなくアプリの切り替えも行う.
+
+          // パスを解決して現在のURIを書き換える.
+          const uri = self.refObj.status.resolveURI(e.originalEvent.state);
+          self.refObj.status.setPageURI(uri);
+          self.refObj.status.save();
+          // ページ再描画.
+          self.draw();
+        }
+      });
     });
   }
   /**
