@@ -22,9 +22,13 @@ const componentsManager = new ComponentsManager();
 const index$ = new Services.IndexService({
   componentsManager,
 });
+const app$ = new Services.ApplicationService({
+  componentsManager,
+});
 
 // サービスを登録する.
 serviceManager.register(index$);
+serviceManager.register(app$);
 
 // 描画部品初期化.
 const headerComponent = new Components.HeaderComponent({

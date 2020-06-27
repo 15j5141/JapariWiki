@@ -2,6 +2,7 @@
 import ComponentBase from '../js/class-component_base.js';
 import PageRenderer from '../js/class-page_renderer.js';
 import CloudNCMB from '../js/class-cloud_ncmb.js';
+import ApplicationService from './application.service.js';
 
 /**
  * @class
@@ -13,6 +14,13 @@ export default class MenuComponent extends ComponentBase {
   decorator() {
     this.decoration.templateUrl = null;
     this.renderer = new PageRenderer(this.refObj.selector, '/site_/SideMenu');
+    /** @type {ApplicationService} */
+    this.applicationService;
+    this.refObj.serviceManager
+      .getService(ApplicationService.prototype)
+      .subscribe(service => {
+        this.applicationService = service;
+      });
   }
   /**
    * @override
@@ -41,7 +49,7 @@ export default class MenuComponent extends ComponentBase {
           (async () => {
             // <a data-page="ページ名">を取得.
             const pageName = $(e.target).data('page');
-            await self.refObj.service.openWiki(pageName).catch(err => {
+            await self.applicationService.openWiki(pageName).catch(err => {
               console.error(err);
             });
             // クリック制限を解除.

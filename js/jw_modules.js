@@ -9,6 +9,7 @@ import MenuComponent from '../app/menu.js';
 import HistoryComponent from '../app/history.js';
 import SiteNoticeComponent from '../app/notice.js';
 import IndexService from '../app/index.service.js';
+import ApplicationService from '../app/application.service.js';
 
 export const Components = {
   HeaderComponent,
@@ -22,4 +23,5 @@ export const Components = {
 
 export const Services = {
   IndexService,
+  ApplicationService,
 };
