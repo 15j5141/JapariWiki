@@ -15,7 +15,7 @@ class WikiSyntaxPlugin extends SyntaxPluginBase {
   /**
    * 編集後の保存前の処理. コメントID割り当て等.
    * @param {string} rawText
-   * @return {Promise<void>}
+   * @return {Promise<string>}
    */
   async checkBeforeSavingPage(rawText) {
     const resultText = rawText;

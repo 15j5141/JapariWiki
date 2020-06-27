@@ -1,7 +1,7 @@
 // @ts-check
-import ComponentBase from '../js/class-component_base';
-import PageRenderer from '../js/class-page_renderer';
-import CloudNCMB from '../js/class-cloud_ncmb';
+import ComponentBase from '../js/class-component_base.js';
+import PageRenderer from '../js/class-page_renderer.js';
+import CloudNCMB from '../js/class-cloud_ncmb.js';
 
 /**
  * @class

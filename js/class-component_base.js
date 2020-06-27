@@ -36,6 +36,7 @@ export default class ComponentBase {
     this.refObj = { ...originalReferenceObject, ...referenceObject };
 
     // セットする.
+    /** @type {jQuery}*/
     this.$ = this.refObj.jQuery = this.refObj.jQuery || top.jQuery;
     // element が未指定なら selector から特定する.
     this.element = this.refObj.jQuery(this.refObj.selector).get(0);
@@ -88,7 +89,6 @@ export default class ComponentBase {
    * @return {Promise<void>}
    */
   async init() {
-    const self = this;
     // FixMe move loadTemplate() to constructor.
     // HTML を DL する.
     this.templateHTML = await this.loadTemplate();
@@ -115,7 +115,7 @@ export default class ComponentBase {
   async loadTemplate() {
     const self = this;
     if (self.decoration.templateUrl == null) {
-      return Promise.resolve();
+      return Promise.resolve('');
     }
     return new Promise((resolve, reject) => {
       this.$.ajax({
@@ -135,8 +135,9 @@ export default class ComponentBase {
    * @return {Promise<string>}
    */
   async fetch(url) {
+    const $ = this.$;
     return new Promise((resolve, reject) => {
-      top.$.ajax({ url: url }).done(data => {
+      $.ajax({ url: url }).done(data => {
         resolve(data);
       });
     });

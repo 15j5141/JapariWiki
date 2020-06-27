@@ -20,7 +20,8 @@
     "rules": {
         "semi": "error",
         "compat/compat": "error",
-        "no-undef": 2
+        "no-undef": "warn",
+        "no-unused-vars":"warn"
     },
     "plugins": [
         "compat",

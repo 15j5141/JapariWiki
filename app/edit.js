@@ -1,3 +1,4 @@
+// @ts-check
 import AppBase from '../js/class-app_base.js';
 import CloudNCMB from '../js/class-cloud_ncmb.js';
 import Renderer from '../js/class-renderer.js';
@@ -22,6 +23,7 @@ class EditorApp extends AppBase {
       return data;
     });
     this._isEdited = false;
+    /** @type {string} */
     this._editedResult = null;
   }
   /** @override */
@@ -67,6 +69,8 @@ class EditorApp extends AppBase {
    * @param {JWPage} page
    */
   async htmlScript(page) {
+    const self = this;
+    const $ = this.$;
     let oldValue = '';
     const syntax = new WikiSyntaxPlugin(page.rawText);
 
@@ -74,7 +78,7 @@ class EditorApp extends AppBase {
       form: {
         _page_name: '',
         get page_name() {
-          this._page_name = $('#ajax_edit__form__page-name').val();
+          this._page_name = '' + $('#ajax_edit__form__page-name').val();
           return this._page_name;
         },
         /** @param {string} param ページ名 */
@@ -90,27 +94,27 @@ class EditorApp extends AppBase {
     };
 
     // ページ名を表示.
-    top.$('#ajax_edit__form__page-name').val(page.pageURI);
+    $('#ajax_edit__form__page-name').val(page.pageURI);
     // 編集内容セット.
-    top.$('#ajax_edit__textarea').val(page.rawText);
+    $('#ajax_edit__textarea').val(page.rawText);
 
     /* ---------- イベント登録. ---------- */
     // 一定時間ごとに編集内容を確認して変化があればプレビューを更新する.
     const changeTimerId = setInterval(async function() {
-      // 現在の編集内容を取得.
-      const newEditedText = $('#ajax_edit__textarea').val();
+      /** @type {string} 編集中の内容 */
+      const newEditingText = '' + $('#ajax_edit__textarea').val();
       // 編集エリアが消えたら == 閉じたらタイマーを削除.
-      if (newEditedText == null) {
+      if (newEditingText == null) {
         clearInterval(changeTimerId);
       }
       // 変化があったらpreviewを更新
-      if (oldValue !== newEditedText) {
+      if (oldValue !== newEditingText) {
         // 構文解析.
-        const html = WikiSyntaxPlugin.replaceSyntax(newEditedText);
+        const html = WikiSyntaxPlugin.replaceSyntax(newEditingText);
         // プレビューに反映.
-        top.$('#ajax_edit__preview').html(html);
+        $('#ajax_edit__preview').html(html);
         // 内容を退避.
-        oldValue = newEditedText;
+        oldValue = newEditingText;
       }
     }, 1000);
     // 保存ボタン.
@@ -126,8 +130,8 @@ class EditorApp extends AppBase {
       // 編集枠無効化
       $('#ajax_edit__textarea').prop('readonly', 'true');
 
-      // 編集内容取得.
-      const newEditedText = $('#ajax_edit__textarea').val();
+      /** @type {string} 編集後の内容 */
+      const newEditedText = '' + $('#ajax_edit__textarea').val();
       // 保存前構文解析を実行.
       syntax.checkBeforeSavingPage(newEditedText).then(result => {
         this._editedResult = result;
@@ -140,6 +144,7 @@ class EditorApp extends AppBase {
   /**
    * エディタアプリを開く.
    * @param {string} pageURI
+   * @return {Promise<boolean>}
    */
   async open(pageURI) {
     this._isEdited = false;
