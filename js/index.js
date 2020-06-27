@@ -4,6 +4,7 @@ import JWStatus from './jw-status.js';
 import Cloud from './class-cloud_ncmb.js';
 import { Components, Services } from './jw_modules.js';
 import ServiceManager from './class-service_manager.js';
+import ComponentsManager from './class-components_manager.js';
 
 /** History API 使用の可否. */
 const isCanBeHistory =
@@ -15,9 +16,12 @@ const cloud = new Cloud();
 
 // 管理系の宣言する.
 const serviceManager = new ServiceManager();
+const componentsManager = new ComponentsManager();
 
 // サービスを立ち上げる.
-const index$ = new Services.IndexService();
+const index$ = new Services.IndexService({
+  componentsManager,
+});
 
 // サービスを登録する.
 serviceManager.register(index$);
@@ -63,10 +67,10 @@ const siteNoticeComponent = new Components.SiteNoticeComponent({
   serviceManager: serviceManager,
 });
 
-// 各コンポーネントを管理下に置く.
-service.addComponent('header', headerComponent);
-service.addComponent('footer', footerComponent);
-service.addComponent('wiki_app', wikiApp);
+// 各コンポーネントを登録する.
+componentsManager.register(headerComponent);
+componentsManager.register(footerComponent);
+componentsManager.register(wikiApp);
 
 $(function() {
   // 「編集」ボタンを押したら.
