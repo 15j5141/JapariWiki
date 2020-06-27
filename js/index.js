@@ -75,6 +75,7 @@ const siteNoticeComponent = new Components.SiteNoticeComponent({
 componentsManager.register(headerComponent);
 componentsManager.register(footerComponent);
 componentsManager.register(wikiApp);
+componentsManager.register(editorApp);
 
 $(function() {
   // 「編集」ボタンを押したら.
@@ -131,6 +132,7 @@ $(function() {
     await menuComponent.init();
     await historyComponent.init();
     await siteNoticeComponent.init();
+    await editorApp.init();
 
     await wikiApp.draw();
     await footerComponent.draw();

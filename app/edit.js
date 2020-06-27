@@ -4,17 +4,21 @@ import CloudNCMB from '../js/class-cloud_ncmb.js';
 import Renderer from '../js/class-renderer.js';
 import JWPage from '../js/class-page.js';
 import WikiSyntaxPlugin from '../js/class-wiki_syntax_plugin.js';
+import ComponentBase from '../js/class-component_base.js';
 
 /**
  * @class
  */
-class EditorApp extends AppBase {
+export default class EditorApp extends ComponentBase {
   /** @override */
-  constructor(selector) {
-    super(selector);
-    /** @type {Renderer} */
-    this._renderer = new EditorRenderer(selector);
+  decorator() {
+    this.decoration.templateUrl = './edit.html';
+  }
+  /** @override */
+  async onInit() {
     this._cloud = new CloudNCMB();
+    /** リンク連打対策用. */
+    this.doneAjax = true;
     /**
      *  このエディタアプリで描画時に扱う HTML データ. Promise 完了済みか確認して取得する.
      * @type {Promise<string>}
@@ -28,9 +32,8 @@ class EditorApp extends AppBase {
   }
   /** @override */
   async onRender() {
-    this._renderer.update();
     const html = await this.htmlByFetch;
-    this._renderer.setHTML(html);
+    this.renderer.setHTML(html);
   }
   /**
    * 編集画面表示.
@@ -40,7 +43,7 @@ class EditorApp extends AppBase {
   async editingPage(page) {
     const page_ = page; // 文字エンコード.
     // 基本的な HTML を描画する.
-    await this.onRender();
+    await this.draw();
 
     // イベント登録等.
     await this.htmlScript(page_);
@@ -166,7 +169,7 @@ class EditorApp extends AppBase {
         throw err;
       }
     });
-    this._renderer.setHTML('保存中...');
+    this.renderer.setHTML('保存中...');
     console.log('edited:', pageData);
 
     if (!pageData) {
@@ -187,15 +190,3 @@ class EditorApp extends AppBase {
     return true;
   }
 }
-/**
- * エディタ用の描画クラス.
- * @class
- */
-class EditorRenderer extends Renderer {
-  /**
-   * @override
-   * @param {string} html
-   */
-  update(html) {}
-}
-export default EditorApp;

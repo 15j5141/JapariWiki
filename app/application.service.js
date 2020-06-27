@@ -44,5 +44,7 @@ export default class ApplicationService extends ServiceBase {
    * エディタを開く.
    * @param {string} pageURI
    */
-  async openEditor(pageURI) {}
+  async openEditor(pageURI) {
+    return await this.editorApp.open(pageURI);
+  }
 }
