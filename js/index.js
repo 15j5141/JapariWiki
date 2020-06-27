@@ -3,6 +3,7 @@ import JWStatus from './jw-status.js';
 // import JWPage from './class-page.js';
 import Cloud from './class-cloud_ncmb.js';
 import { Components, Services } from './jw_modules.js';
+import ServiceManager from './class-service_manager.js';
 
 /** History API 使用の可否. */
 const isCanBeHistory =
@@ -12,44 +13,54 @@ const status = new JWStatus();
 /** クラウド管理変数. */
 const cloud = new Cloud();
 
-const service = new Services.IndexService();
+// 管理系の宣言する.
+const serviceManager = new ServiceManager();
+
+// サービスを立ち上げる.
+const index$ = new Services.IndexService();
+
+// サービスを登録する.
+serviceManager.register(index$);
 
 // 描画部品初期化.
 const headerComponent = new Components.HeaderComponent({
   selector: '#header',
   jQuery: window.jQuery,
   status: status,
-  service: service,
+  serviceManager: serviceManager,
 });
 const footerComponent = new Components.FooterComponent({
   selector: '#footer',
   jQuery: window.jQuery,
+  serviceManager: serviceManager,
 });
 const wikiApp = new Components.WikiApp({
   selector: '#content_add',
   jQuery: window.jQuery,
   status: status,
-  service: service,
+  serviceManager: serviceManager,
 });
 const editorApp = new Components.EditorApp({
   selector: '#content_add',
   jQuery: window.jQuery,
   status: status,
-  service: service,
+  serviceManager: serviceManager,
 });
 const menuComponent = new Components.MenuComponent({
   selector: '#side-menu',
   jQuery: window.jQuery,
   status: status,
-  service: service,
+  serviceManager: serviceManager,
 });
 const historyComponent = new Components.HistoryComponent({
   selector: '#side-edited_history',
   jQuery: window.jQuery,
+  serviceManager: serviceManager,
 });
 const siteNoticeComponent = new Components.SiteNoticeComponent({
   selector: '#side-site_notice',
   jQuery: window.jQuery,
+  serviceManager: serviceManager,
 });
 
 // 各コンポーネントを管理下に置く.

@@ -45,5 +45,6 @@
   },
   "dependencies": {
     "jquery": "^3.5.1",
+    "rxjs": "^6.5.5"
   }
 }
