@@ -78,25 +78,6 @@ componentsManager.register(wikiApp);
 componentsManager.register(editorApp);
 
 $(function() {
-  // 「編集」ボタンを押したら.
-  $(document).on('click', '#ajaxLoad_edit', function(event) {
-    event.preventDefault();
-    // 最新ステータス取得.
-    status.load();
-    // 編集画面起動.
-    editorApp
-      .open(status.getPageURI())
-      .then(result => {
-        console.log(result);
-        // 編集したページを表示する.
-        wikiApp.move();
-      })
-      .catch(err => {
-        console.log(err);
-      });
-    return false;
-  });
-
   // 「アップロード」ボタンを押したら.
   $(document).on('click', '#ajaxLoad_upload', function(event) {
     event.preventDefault();
