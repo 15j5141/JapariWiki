@@ -25,6 +25,7 @@ up/*
 node_modules
 package-lock.json
 dist/*
+/typings
 
 # editor
 .vscode
