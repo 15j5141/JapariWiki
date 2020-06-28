@@ -1,6 +1,8 @@
-import { ReplaySubject, Observable } from 'rxjs';
+// @ts-check
+/** @typedef {import("./class-service_base").default} ServiceBase */
+/** @typedef {import("rxjs").Observable} Observable */
+import { ReplaySubject } from 'rxjs';
 import { find } from 'rxjs/operators';
-import ServiceBase from './class-service_base.js';
 
 /**
  * 全サービス管理用.
@@ -10,7 +12,7 @@ export default class ServiceManager {
   /** */
   constructor() {
     // 追加後に購読しても拾えるように ReplaySubject で処理する.
-    /** @type {ReplaySubject<ServiceBase>} */
+    /** @type {ReplaySubject<any>} */
     this.services$ = new ReplaySubject();
   }
   /**

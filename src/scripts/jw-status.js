@@ -1,3 +1,4 @@
+// @ts-check
 import JWPage from './class-page.js';
 
 /**

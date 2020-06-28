@@ -1,3 +1,5 @@
+/* eslint-disable new-cap */
+// @ts-check
 import CloudNCMB from './class-cloud_ncmb.js';
 import SyntaxPluginBase from './class-syntax_plugin_base.js';
 /**
@@ -137,6 +139,7 @@ class WikiSyntaxPlugin extends SyntaxPluginBase {
    * @return {string}
    */
   static replaceSyntax(str) {
+    /** @type {Array<Array<RegExp|string|function|any>>} */
     const syntaxes = [];
     let result = str;
     // &image(xxxx.jpg)
@@ -249,11 +252,11 @@ class WikiSyntaxPlugin extends SyntaxPluginBase {
       /&countdown\((\d{4}\/[0-1]?\d\/[0-3]?\d)(,day)?\)/g,
       (...matches) => {
         const date = new Date(matches[1]);
-        const delta = (date - Date.now()) / 1000 / 60 / 60 / 24;
+        const delta = (date.getTime() - Date.now()) / 1000 / 60 / 60 / 24;
         if (-1.0 < delta && delta < 1.0) {
           return '今';
         }
-        return '' + parseInt(delta);
+        return '' + delta;
       },
     ]);
     // 未実装. &new(text,2000/12/31)
@@ -261,7 +264,7 @@ class WikiSyntaxPlugin extends SyntaxPluginBase {
       /&new\((text,)?(\d{4}\/[0-1]?\d\/[0-3]?\d).*?\)/g,
       (...matches) => {
         const date = new Date(matches[2]);
-        const delta = (date - Date.now()) / 1000 / 60 / 60 / 24;
+        const delta = (date.getTime() - Date.now()) / 1000 / 60 / 60 / 24;
         if (delta > 7.0 && delta < 0.0) {
           return '[未実装構文]';
         }
@@ -289,11 +292,6 @@ class WikiSyntaxPlugin extends SyntaxPluginBase {
     result = result.replace(/\r?\n/g, '<br>');
     return result;
   }
-  /**
-   * 構文解析実行.
-   * @return {Promise<string>}
-   */
-  async run() {}
 }
 
 /**
@@ -308,11 +306,12 @@ class NCMBComment {
   /**
    * コメント受信.
    * @param {string} id
-   * @return {Promise<void>}
+   * @return {Promise<{ commentObjectId: string, data: any }>}
    */
   async getComment(id) {
     const Comment = this._cloud.ncmb.DataStore('Comment');
     // Commentデータストアに接続.
+    /** @type {Array<any>} */
     const comment = await Comment.equalTo('commentObjectId', id)
       .order('createDate', true)
       .fetchAll()

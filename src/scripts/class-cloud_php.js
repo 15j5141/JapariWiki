@@ -3,7 +3,7 @@ import CloudBase from './class-cloud_base.js';
  * PHPクラウドクラス.
  * @class
  */
-class CloudPHP extends CloudBase {
+export default class CloudPHP extends CloudBase {
   /** */
   constructor() {
     super();
@@ -52,4 +52,3 @@ class CloudPHP extends CloudBase {
    */
   createPage(pageName, pageData) {}
 }
-export default PHPCloud;

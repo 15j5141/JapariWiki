@@ -1,5 +1,4 @@
 import Renderer from './class-renderer.js';
-import JWPage from './class-page.js';
 /** */
 class AjaxRenderer extends Renderer {
   /**

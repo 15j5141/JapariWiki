@@ -1,4 +1,6 @@
-import JWPage from './class-page.js';
+// @ts-check
+/** @typedef {import("./class-page").default} JWPage */
+/** @typedef {any} JWFile */
 /**
  * クラウドの継承元クラス.
  */
@@ -105,6 +107,9 @@ class CloudBase {
   deleteFile(file) {
     throw new Error('Not Implemented');
   }
+  /**
+   * @param {JWFile} file
+   */
   getFileLink(file) {}
 }
 

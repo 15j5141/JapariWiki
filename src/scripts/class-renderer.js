@@ -1,4 +1,4 @@
-import JWPage from './class-page.js';
+// @ts-check
 /** */
 class Renderer {
   /**

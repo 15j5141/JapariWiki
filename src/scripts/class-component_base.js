@@ -5,8 +5,7 @@
  */
 import Renderer from './class-renderer.js';
 import JWStatus from './jw-status.js';
-import ServiceBase from './class-service_base.js';
-import ServiceManager from './class-service_manager.js';
+/** @typedef {import("./class-service_manager").default} ServiceManager */
 /**
  * @typedef {Object} ReferenceObject
  * @property {jQuery} jQuery

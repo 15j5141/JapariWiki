@@ -1,4 +1,5 @@
-import Renderer from './class-renderer.js';
+// @ts-check
+/** @typedef {import("./class-renderer").default} Renderer */
 
 /**
  * @class

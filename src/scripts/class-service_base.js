@@ -1,6 +1,5 @@
 // @ts-check
-import ComponentBase from './class-component_base.js';
-import ComponentsManager from './class-components_manager.js';
+/** @typedef {import("./class-components_manager").default} ComponentsManager */
 
 /**
  * @class
@@ -24,14 +23,6 @@ export default class ServiceBase {
    * @abstract
    */
   decorator() {}
-  /**
-   * 管理するコンポーネントを追加する.
-   * @param {string} id
-   * @param {ComponentBase} component
-   */
-  addComponent(id, component) {
-    this.components[id] = component;
-  }
   /** */
   open() {}
 }

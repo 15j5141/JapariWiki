@@ -1,3 +1,4 @@
+// @ts-check
 /**
  * @fileoverview コンポーネント等の一括読込を担う.
  */

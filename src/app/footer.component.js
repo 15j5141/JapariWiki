@@ -1,3 +1,4 @@
+// @ts-check
 import ComponentBase from '../scripts/class-component_base.js';
 /**
  * @class

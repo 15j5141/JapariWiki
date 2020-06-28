@@ -1,3 +1,4 @@
+// @ts-check
 import Renderer from './class-renderer.js';
 import CloudNCMB from './class-cloud_ncmb.js';
 import JWStatus from './jw-status.js';
@@ -10,7 +11,7 @@ class PageRenderer extends Renderer {
    * @param {string} pageURI
    */
   constructor(selector, pageURI) {
-    super();
+    super(selector);
     this.selector = selector;
     this._cloud = new CloudNCMB();
     this._jwStatus = new JWStatus();
@@ -19,7 +20,7 @@ class PageRenderer extends Renderer {
      * 構文解析用クラスのインスタンス一覧を保持.
      * @property {Array<SyntaxPluginBase>}
      */
-    this.syntaxes = [new WikiSyntaxPlugin()];
+    this.syntaxes = [new WikiSyntaxPlugin('')];
   }
   /**
    * @override

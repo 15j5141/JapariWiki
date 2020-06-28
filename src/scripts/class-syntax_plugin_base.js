@@ -1,5 +1,5 @@
+// @ts-check
 import CloudNCMB from './class-cloud_ncmb.js';
-import WikiSyntaxPlugin from './class-wiki_syntax_plugin.js';
 /**
  * Wiki 構文解析用プラグインクラス.
  * @class
