@@ -1,5 +1,6 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
+const CopyPlugin = require('copy-webpack-plugin');
 
 module.exports = {
   mode: process.env.NODE_ENV || 'development',
@@ -16,6 +17,15 @@ module.exports = {
       chunks: ['index'],
       template: path.resolve(__dirname, './src/index.html'),
       filename: 'index.html',
+    }),
+    new CopyPlugin({
+      patterns: [
+        { from: 'app/*.html', to: '', context: 'src/' },
+        { from: 'lib/*.js', to: '', context: 'src/' },
+        { from: 'styles/*', to: '', context: 'src/' },
+        { from: 'img/*', to: '', context: '' },
+        { from: 'text/*', to: '', context: '' },
+      ],
     }),
   ],
   externals: [
