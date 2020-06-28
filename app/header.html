@@ -1,10 +1,27 @@
-<!-- <?php
-//ini_set( 'display_errors', 1 );
-require_once(__DIR__.'/lib/module_ajaxContents.php');
-require_once(__DIR__.'/../config.php');
-?> -->
+<!-- html/css -->
+<style>
+    a.none_decoration {
+        text-decoration: none;
+    }
+</style>
 
-<img border="0" alt="" src="img/site_face.png" width=50 />
-<a href="" data-page="/FrontPage" class="ajaxLoad">siteName<!-- $JWConfig["siteName"] --></a><br />
-<a href='' id="ajaxLoad_edit"><img border="0" alt="hensyu" src="img/site_Edit.png" width=150 height=50 /></a>,
-<a href='' id="ajaxLoad_upload"><img border="0" alt="up" src="img/site_Upload.png" width=150 height=50 /></a>
+<!-- html/body -->
+<div>
+    <a href="?pageURI=/FrontPage" data-page="/FrontPage" class="ajaxLoad none_decoration">
+        <img alt="" src="img/site_face.png" width="50px" />
+    </a>
+    <a href="?pageURI=/FrontPage" data-page="/FrontPage" class="ajaxLoad none_decoration">
+        siteName
+        <!-- $JWConfig["siteName"] -->
+    </a>
+</div>
+<div>
+    <a href="" id="ajaxLoad_edit" class="none_decoration">
+        <img alt="edit" src="img/site_Edit.png" width="150px" height="50px" />
+    </a>,
+    <a href="" id="ajaxLoad_upload" class="none_decoration">
+        <img alt="upload" src="img/site_Upload.png" width="150px" height="50px" />
+    </a>
+</div>
+
+<!-- html/body -->
