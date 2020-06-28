@@ -1,5 +1,4 @@
 // @ts-check
-// import * as convertHTML from "js/module_convertHTML.js";
 import PageRenderer from '../scripts/class-page_renderer.js';
 import CloudNCMB from '../scripts/class-cloud_ncmb.js';
 import ComponentBase from '../scripts/class-component_base.js';

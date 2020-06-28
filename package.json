@@ -4,7 +4,7 @@
   "description": "Wiki.",
   "main": "index.js",
   "directories": {
-    "lib": "lib"
+    "lib": "src/lib"
   },
   "scripts": {
     "watch": "node ./node_modules/webpack/bin/webpack --mode=development --watch",

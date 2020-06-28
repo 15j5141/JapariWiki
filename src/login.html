@@ -1,24 +1,7 @@
 <!--
-require_once(__DIR__.'/lib/module_dataBase.php');
-require_once(__DIR__.'/../config.php');
-if($JWConfig["isHTTPS"]&&!isset($_SERVER['HTTPS'])){
-  // configでhttpsにしてるのにhttpでアクセスされたらhttps付きへリダイレクト
-  header( "Location: ". $JWConfig["rootURL"]. "login.php" ) ;
-  exit;
-}
-
   // ログイン履歴を適当に残す by 2018/02/06
-  $fileData= "";
-  $fileName= "./text/log_LoginHistory.txt";
-  if(is_readable($fileName)){
-    $fileData= file_get_contents($fileName);
-  }
   $today = date("Y-m-d H:i:s");
   $fileData .= $today . ";". $loginResult. ';'.  $user_id . "\n";
-  file_put_contents($fileName, $fileData);
-
-}
-
 ?>
 -->
 <!DOCTYPE html
@@ -34,7 +17,7 @@ if($JWConfig["isHTTPS"]&&!isset($_SERVER['HTTPS'])){
   <script type="text/javascript" src="lib/md5.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="lib/ncmb.min.js"></script>
-  <link rel="stylesheet" type="text/css" href="css/login.css" />
+  <link rel="stylesheet" type="text/css" href="styles/style.css" />
 </head>
 
 <body>
@@ -144,9 +127,6 @@ if($JWConfig["isHTTPS"]&&!isset($_SERVER['HTTPS'])){
       </fieldset>
     </form>
   </div>
-  <!-- <script type="module">
-    import * as status from "japariwiki/js/index_status.js";
-  </script> -->
 </body>
 
 </html>

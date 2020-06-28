@@ -1,3 +1,4 @@
+/* eslint-disable new-cap */
 import CloudBase from './class-cloud_base.js';
 import JWPage from './class-page.js';
 // import config from './config.json';
@@ -153,7 +154,7 @@ class CloudNCMB extends CloudBase {
   /** @override */
   async signUp(id, pass) {
     // Userインスタンスの生成
-    const user = new ncmb.User();
+    const user = new this.ncmb.User();
     user.set('userName', id).set('password', pass);
     // 新規登録処理
     return await user.signUpByAccount().catch(function(err) {

@@ -31,18 +31,6 @@ exit*/;
     <a href="login.html">あるいはここからログインページへ移動</a>
     <!-- fixme クエリ付加 -->
     <script src="lib/ncmb.min.js"></script>
-    <script type="module">
-        import NCMBCloud from "./js/class-cloud_ncmb.js";
-        const cloud = new NCMBCloud();
-        setTimeout(function() {
-            cloud.signOut().then(() => {
-                location.href = "login.html"
-            });
-        }, 1000);
-    </script>
-    <script type="text/javascript">
-
-    </script>
 </BODY>
 
 </HTML>

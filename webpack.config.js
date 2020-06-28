@@ -6,6 +6,8 @@ module.exports = {
   mode: process.env.NODE_ENV || 'development',
   entry: {
     index: './src/index.js',
+    login: './src/login.js',
+    logout: './src/logout.js',
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
@@ -17,6 +19,18 @@ module.exports = {
       chunks: ['index'],
       template: path.resolve(__dirname, './src/index.html'),
       filename: 'index.html',
+    }),
+    new HtmlWebpackPlugin({
+      // inject: false,
+      chunks: ['login'],
+      template: path.resolve(__dirname, './src/login.html'),
+      filename: 'login.html',
+    }),
+    new HtmlWebpackPlugin({
+      // inject: false,
+      chunks: ['logout'],
+      template: path.resolve(__dirname, './src/logout.html'),
+      filename: 'logout.html',
     }),
     new CopyPlugin({
       patterns: [
