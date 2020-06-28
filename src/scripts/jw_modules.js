@@ -1,13 +1,13 @@
 /**
  * @fileoverview コンポーネント等の一括読込を担う.
  */
-import HeaderComponent from '../app/header.js';
-import FooterComponent from '../app/footer.js';
-import WikiApp from '../app/wiki.js';
-import EditorApp from '../app/edit.js';
-import MenuComponent from '../app/menu.js';
-import HistoryComponent from '../app/history.js';
-import SiteNoticeComponent from '../app/notice.js';
+import HeaderComponent from '../app/header.component.js';
+import FooterComponent from '../app/footer.component.js';
+import WikiApp from '../app/wiki.component.js';
+import EditorApp from '../app/editor.component.js';
+import MenuComponent from '../app/menu.component.js';
+import HistoryComponent from '../app/history.component.js';
+import SiteNoticeComponent from '../app/notice.component.js';
 import IndexService from '../app/index.service.js';
 import ApplicationService from '../app/application.service.js';
 

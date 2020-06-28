@@ -120,7 +120,7 @@ export default class ComponentBase {
     }
     return new Promise((resolve, reject) => {
       this.$.ajax({
-        url: '../app/' + self.decoration.templateUrl,
+        url: './app/' + self.decoration.templateUrl,
         success: data => {
           resolve(data);
         },

@@ -1,5 +1,5 @@
-import CloudNCMB from '../js/class-cloud_ncmb.js';
-import JWPage from '../js/class-page.js';
+import CloudNCMB from '../src/scripts/class-cloud_ncmb.js';
+import JWPage from '../src/scripts/class-page.js';
 const nc = new CloudNCMB();
 console.log(nc);
 (async function() {

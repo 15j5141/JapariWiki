@@ -1,10 +1,8 @@
 // @ts-check
-import AppBase from '../js/class-app_base.js';
-import CloudNCMB from '../js/class-cloud_ncmb.js';
-import Renderer from '../js/class-renderer.js';
-import JWPage from '../js/class-page.js';
-import WikiSyntaxPlugin from '../js/class-wiki_syntax_plugin.js';
-import ComponentBase from '../js/class-component_base.js';
+import CloudNCMB from '../scripts/class-cloud_ncmb.js';
+import JWPage from '../scripts/class-page.js';
+import WikiSyntaxPlugin from '../scripts/class-wiki_syntax_plugin.js';
+import ComponentBase from '../scripts/class-component_base.js';
 
 /**
  * @class
@@ -12,7 +10,7 @@ import ComponentBase from '../js/class-component_base.js';
 export default class EditorApp extends ComponentBase {
   /** @override */
   decorator() {
-    this.decoration.templateUrl = './edit.html';
+    this.decoration.templateUrl = './editor.component.html';
   }
   /** @override */
   async onInit() {
@@ -23,7 +21,7 @@ export default class EditorApp extends ComponentBase {
      *  このエディタアプリで描画時に扱う HTML データ. Promise 完了済みか確認して取得する.
      * @type {Promise<string>}
      */
-    this.htmlByFetch = this.fetch('app/edit.html').then(data => {
+    this.htmlByFetch = this.fetch('app/editor.component.html').then(data => {
       return data;
     });
     this._isEdited = false;

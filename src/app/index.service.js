@@ -1,5 +1,5 @@
 // @ts-check
-import ServiceBase from '../js/class-service_base.js';
+import ServiceBase from '../scripts/class-service_base.js';
 
 /**
  * @class

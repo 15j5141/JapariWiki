@@ -1,5 +1,5 @@
 // @ts-check
-import ComponentBase from '../js/class-component_base.js';
+import ComponentBase from '../scripts/class-component_base.js';
 import ApplicationService from './application.service.js';
 
 /**
@@ -10,7 +10,7 @@ export default class HeaderComponent extends ComponentBase {
    * @override
    */
   decorator() {
-    this.decoration.templateUrl = './header.html';
+    this.decoration.templateUrl = './header.component.html';
     this.decoration.styleUrls = [];
 
     /** @type {ApplicationService} */

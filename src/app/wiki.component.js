@@ -1,8 +1,8 @@
 // @ts-check
 // import * as convertHTML from "js/module_convertHTML.js";
-import PageRenderer from '../js/class-page_renderer.js';
-import CloudNCMB from '../js/class-cloud_ncmb.js';
-import ComponentBase from '../js/class-component_base.js';
+import PageRenderer from '../scripts/class-page_renderer.js';
+import CloudNCMB from '../scripts/class-cloud_ncmb.js';
+import ComponentBase from '../scripts/class-component_base.js';
 
 /**
  * @class
@@ -12,7 +12,7 @@ export default class WikiApp extends ComponentBase {
    * @override
    */
   decorator() {
-    this.decoration.templateUrl = './wiki.html';
+    this.decoration.templateUrl = './wiki.component.html';
     this.renderer = new PageRenderer(this.refObj.selector, null);
   }
   /**

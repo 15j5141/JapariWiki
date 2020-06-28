@@ -1,10 +1,9 @@
 // @ts-check
-import JWStatus from './jw-status.js';
-// import JWPage from './class-page.js';
-import Cloud from './class-cloud_ncmb.js';
-import { Components, Services } from './jw_modules.js';
-import ServiceManager from './class-service_manager.js';
-import ComponentsManager from './class-components_manager.js';
+import JWStatus from './scripts/jw-status.js';
+import Cloud from './scripts/class-cloud_ncmb.js';
+import { Components, Services } from './scripts/jw_modules.js';
+import ServiceManager from './scripts/class-service_manager.js';
+import ComponentsManager from './scripts/class-components_manager.js';
 
 /** History API 使用の可否. */
 const isCanBeHistory =

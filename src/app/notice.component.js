@@ -1,6 +1,6 @@
 // @ts-check
-import CloudNCMB from '../js/class-cloud_ncmb.js';
-import ComponentBase from '../js/class-component_base.js';
+import CloudNCMB from '../scripts/class-cloud_ncmb.js';
+import ComponentBase from '../scripts/class-component_base.js';
 
 /**
  * @class

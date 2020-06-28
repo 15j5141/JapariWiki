@@ -1,7 +1,7 @@
 // @ts-check
-import ServiceBase from '../js/class-service_base.js';
-import WikiApp from '../app/wiki.js';
-import EditorApp from '../app/edit.js';
+import ServiceBase from '../scripts/class-service_base.js';
+import WikiApp from './wiki.component.js';
+import EditorApp from './editor.component.js';
 /**
  * @class
  */
