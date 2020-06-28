@@ -50,15 +50,20 @@ export default class EditorApp extends ComponentBase {
 
     let timerId;
     // 保存ボタンが押されるまで待機.
-    await new Promise((resolve, reject) => {
+    const isSuccess = await new Promise((resolve, reject) => {
       timerId = setInterval(() => {
         // 編集結果に中身が入るまで Promise を解決させない.
         if (this._isEdited) {
           clearInterval(timerId);
-          resolve();
+          if (this._editedResult == null) {
+            // 結果が null なら異常終了と判断する.
+            resolve(false);
+          }
+          resolve(true);
         }
       }, 500);
     });
+    if (!isSuccess) throw new Error('Editor:Cancel');
 
     // 編集結果をセット.
     page_.rawText = this._editedResult;
@@ -109,6 +114,7 @@ export default class EditorApp extends ComponentBase {
       // 編集エリアが消えたら == 閉じたらタイマーを削除.
       if (newEditingText == null) {
         clearInterval(changeTimerId);
+        return;
       }
       // 変化があったらpreviewを更新
       if (oldValue !== newEditingText) {
@@ -188,5 +194,11 @@ export default class EditorApp extends ComponentBase {
     }
     // 編集アプリ正常終了.
     return true;
+  }
+  /**
+   * 強制的にエディタを終了する.
+   */
+  forceClose() {
+    this._isEdited = false;
   }
 }
