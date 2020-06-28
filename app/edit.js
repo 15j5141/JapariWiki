@@ -158,6 +158,8 @@ export default class EditorApp extends ComponentBase {
   async open(pageURI) {
     this._isEdited = false;
     this._editedResult = null;
+    // 履歴に追加する. FixMe エディタであることを履歴にも反映する.
+    this.pushState(pageURI);
     // ページ読み込み.
     let pageData = await this._cloud.getPage(pageURI).catch(err => {
       if (err.message === 'Page:NotFound') {
