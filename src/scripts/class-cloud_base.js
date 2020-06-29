@@ -111,6 +111,13 @@ class CloudBase {
    * @param {JWFile} file
    */
   getFileLink(file) {}
+  /**
+   * @abstract
+   * @return {Promise<string>}
+   */
+  async getLoginHistory() {
+    throw new Error('Not Implemented');
+  }
 }
 
 export default CloudBase;

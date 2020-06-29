@@ -11,6 +11,7 @@ import HistoryComponent from '../app/history.component.js';
 import SiteNoticeComponent from '../app/notice.component.js';
 import IndexService from '../app/index.service.js';
 import ApplicationService from '../app/application.service.js';
+import LoginHistoryComponent from '../app/login_history.component.js';
 
 export const Components = {
   HeaderComponent,
@@ -20,6 +21,7 @@ export const Components = {
   MenuComponent,
   HistoryComponent,
   SiteNoticeComponent,
+  LoginHistoryComponent,
 };
 
 export const Services = {

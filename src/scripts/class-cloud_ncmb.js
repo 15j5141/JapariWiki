@@ -167,5 +167,37 @@ class CloudNCMB extends CloudBase {
     return await this.ncmb.User.logout();
     // message: "This user doesn't login."
   }
+  /**
+   * @override
+   */
+  async getLoginHistory() {
+    const ncLH = this.ncmb.DataStore('AccessLog');
+    // 受信.
+    return await ncLH
+      .limit(50)
+      .fetchAll()
+      .then(function(results) {
+        let html = '';
+        if (results.length === 0) {
+          console.log(results);
+          html = 'LH:NotFound';
+          return html;
+        }
+        for (let i = 0; i < results.length; i++) {
+          const object = results[i];
+          html +=
+            object.get('createDate') +
+            ';' +
+            'success' +
+            ';' +
+            object.get('userName') +
+            '<br />\n';
+        }
+        return html;
+      })
+      .catch(function(err) {
+        throw err;
+      });
+  }
 }
 export default CloudNCMB;
