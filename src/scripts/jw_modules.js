@@ -11,6 +11,7 @@ import HistoryComponent from '../app/history.component.js';
 import SideMainComponent from '../app/side_main.component.js';
 import IndexService from '../app/index.service.js';
 import ApplicationService from '../app/application.service.js';
+import { StatusService } from '../app/status.service.js';
 import LoginHistoryComponent from '../app/login_history.component.js';
 
 export const Components = {
@@ -27,4 +28,5 @@ export const Components = {
 export const Services = {
   IndexService,
   ApplicationService,
+  StatusService,
 };

@@ -203,11 +203,11 @@ class CloudNCMB extends CloudBase {
   /**
    * @override
    */
-  addLoginHistory(status, userName) {
+  async addLoginHistory(status, userName) {
     const LoginLog = this.ncmb.DataStore('LoginLog');
     const instanceLL = new LoginLog();
 
-    instanceLL
+    return instanceLL
       .set('status', status) // success or failure.
       .set('userName', userName)
       .save()

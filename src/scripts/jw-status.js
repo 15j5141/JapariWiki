@@ -12,6 +12,10 @@ class JWStatus {
     this.statusDefault = {
       pageURI: '/FrontPage',
       app: 'wiki',
+      user: {
+        id: 'id',
+        name: 'name',
+      },
     };
     this._status = this.statusDefault;
     // セッションストレージから読み込む. 無ければ初期値.
@@ -26,14 +30,15 @@ class JWStatus {
     const json = sessionStorage.getItem('JW_Status');
 
     // セッションストレージに無ければデフォルト値を参照.
-    const session = JSON.parse(json) || this.statusDefault;
+    const session = { ...this.statusDefault, ...JSON.parse(json) };
     // URL クエリから読み込み.
     const params = new URLSearchParams(window.location.search);
 
     // セッションストレージと URL クエリの内容を結合.
     const status = {
+      ...session,
       pageURI: this.resolveURI(params.get('pageURI') || session.pageURI),
-      app: params.get('app') || session.app,
+      app: params.get('app'),
     };
     this._status = status;
 

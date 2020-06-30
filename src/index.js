@@ -24,10 +24,14 @@ const index$ = new Services.IndexService({
 const app$ = new Services.ApplicationService({
   componentsManager,
 });
+const status$ = new Services.StatusService({
+  componentsManager,
+});
 
 // サービスを登録する.
 serviceManager.register(index$);
 serviceManager.register(app$);
+serviceManager.register(status$);
 
 // 描画部品初期化.
 const headerComponent = new Components.HeaderComponent({

@@ -1,6 +1,7 @@
 // @ts-check
 import CloudNCMB from '../scripts/class-cloud_ncmb.js';
 import ComponentBase from '../scripts/class-component_base.js';
+import { StatusService } from './status.service.js';
 
 /**
  * @class
@@ -11,6 +12,13 @@ export default class SideMainComponent extends ComponentBase {
    */
   decorator() {
     this.decoration.templateUrl = './side_main.component.html';
+    /** @type {StatusService}*/
+    this.statusService;
+    this.refObj.serviceManager
+      .getService(StatusService.prototype)
+      .subscribe(service => {
+        this.statusService = service;
+      });
   }
   /**
    * @override
@@ -27,6 +35,6 @@ export default class SideMainComponent extends ComponentBase {
     // FixMe Page からお知らせを取得する.
     $elem.find('#side-site_notice').html('お知らせはありません。');
     // FixMe ユーザー名を表示する.
-    $elem.find('#user_id').text('user_id');
+    $elem.find('#user_id').text(this.statusService.user.id);
   }
 }
