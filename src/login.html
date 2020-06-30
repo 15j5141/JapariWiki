@@ -14,96 +14,10 @@
   <title>
     <!-- $JWConfig["siteTitle"] -->
   </title>
-  <script type="text/javascript" src="lib/md5.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  <script src="lib/ncmb.min.js"></script>
-  <link rel="stylesheet" type="text/css" href="styles/style.css" />
+  <link rel="stylesheet" type="text/css" href="styles/login.css" />
 </head>
 
 <body>
-  <script>
-
-    // NCMB用の設定.
-    const appKey = "73214ee5293b310aba334aaf6b58cb41cb89873a1eb88ab505fa7d48dcc2b911";
-    const clientKey = "79d3a32839ef780c0fe16236d8efc7bdd338312ec1d969945346a181ffc9442f";
-    const ncmb = new NCMB(appKey, clientKey);
-
-    const ViewSystem = {
-      _doms: [
-        {
-          name: 'pass',
-          query: "input[name='user_pass']",
-          type: 'html',
-          value: ''
-        }
-      ],
-      init: function () {
-        this._doms = [];
-        const objs = $('.view-auto');
-        for (let i = 0; i < objs.length; i++) {
-          this._doms.push({
-            query: objs[i].query,
-            value: objs[i].val
-          });
-        }
-        $('.view-auto').length;
-      },
-      set: function (name, value) {
-        const dom = this.findDom(name);
-        dom.value = value;
-        switch (dom.type) {
-          case 'val':
-            $(dom.query).val(val);
-            break;
-          case 'html':
-            $(dom.query).html(val);
-            break;
-        }
-      },
-      get: function (name) {
-        const dom = this.findDom(name);
-        return dom.value;
-      },
-      findDom: function (name) {
-        return this._doms.find(function (d) {
-          return r.name === name;
-        });
-      }
-    };
-
-    $(function () {
-      // ログインボタン.
-      $('#form_id').submit(function () {
-        const user_id = $('input[name=user_id]').val();
-        const user_pass = $('input[name=user_pass]').val();
-        // 空白チェック.
-        if (user_id === '' || user_pass === '') {
-          $('#form_id').append('<br />ID or PASS is empty!');
-          return false;
-        }
-        // 管理者が読めないようにハッシュ化.
-        const crypted = CryptoJS.MD5(user_pass);
-        // $("input[name='user_pass']").val(crypted);
-
-        // ログイン用インスタンス作成.
-        const user = new ncmb.User({
-          userName: user_id, password: user_pass
-        });
-
-        // 非同期でログイン処理.
-        ncmb.User.login(user)
-          .then(function (data) {
-            console.log(data);
-            location.href = 'index.html?' + location.search;
-          })
-          .catch(function (err) { // エラー.
-            console.log(err);
-          });
-
-        return false;
-      });
-    });
-  </script>
   <div class='body'>
     <!-- $JWConfig['isWarnNotHTTPS']&&!$JWConfig["isHTTPS"]? 'Wiki警告：HTTPSの利用を推奨します。（当警告はconfig.phpより非表示にできます。）': '' -->
     <form id="form_id">
@@ -123,10 +37,14 @@
           <p>
             <input type="submit" value="ログイン">
           </p>
+          <p id="result"></p>
         </div>
       </fieldset>
     </form>
   </div>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script type="text/javascript" src="lib/md5.js"></script>
+  <script src="lib/ncmb.min.js"></script>
 </body>
 
 </html>

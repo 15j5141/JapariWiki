@@ -112,10 +112,21 @@ class CloudBase {
    */
   getFileLink(file) {}
   /**
+   * ログイン履歴を取得する.
    * @abstract
    * @return {Promise<string>}
    */
   async getLoginHistory() {
+    throw new Error('Not Implemented');
+  }
+  /**
+   * ログイン履歴を追加する. 成否を返す.
+   * @abstract
+   * @param {string} status
+   * @param {string} userName
+   * @return {Promise<boolean>}
+   */
+  async addLoginHistory(status, userName) {
     throw new Error('Not Implemented');
   }
 }

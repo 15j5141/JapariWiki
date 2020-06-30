@@ -69,12 +69,18 @@ const siteNoticeComponent = new Components.SiteNoticeComponent({
   jQuery: window.jQuery,
   serviceManager: serviceManager,
 });
+const loginHistoryComponent = new Components.LoginHistoryComponent({
+  selector: '#login_history',
+  jQuery: window.jQuery,
+  serviceManager: serviceManager,
+});
 
 // 各コンポーネントを登録する.
 componentsManager.register(headerComponent);
 componentsManager.register(footerComponent);
 componentsManager.register(wikiApp);
 componentsManager.register(editorApp);
+componentsManager.register(loginHistoryComponent);
 
 $(function() {
   // 「アップロード」ボタンを押したら.
@@ -113,6 +119,7 @@ $(function() {
     await historyComponent.init();
     await siteNoticeComponent.init();
     await editorApp.init();
+    await loginHistoryComponent.init();
 
     await wikiApp.draw();
     await footerComponent.draw();
@@ -120,6 +127,7 @@ $(function() {
     await menuComponent.draw();
     await historyComponent.draw();
     await siteNoticeComponent.draw();
+    await loginHistoryComponent.draw();
 
     // Wiki 内部品を非同期読み込み.
     // FixMe ajaxLoad('#login_history', 'api/api_getLoginHistory.php');

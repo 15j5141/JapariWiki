@@ -171,16 +171,17 @@ class CloudNCMB extends CloudBase {
    * @override
    */
   async getLoginHistory() {
-    const ncLH = this.ncmb.DataStore('AccessLog');
+    const ncLL = this.ncmb.DataStore('LoginLog');
     // 受信.
-    return await ncLH
+    return await ncLL
+      .order('createDate', true) // 降順.
       .limit(50)
       .fetchAll()
       .then(function(results) {
         let html = '';
         if (results.length === 0) {
           console.log(results);
-          html = 'LH:NotFound';
+          html = 'LL:NotFound';
           return html;
         }
         for (let i = 0; i < results.length; i++) {
@@ -188,7 +189,7 @@ class CloudNCMB extends CloudBase {
           html +=
             object.get('createDate') +
             ';' +
-            'success' +
+            object.get('status') +
             ';' +
             object.get('userName') +
             '<br />\n';
@@ -197,6 +198,26 @@ class CloudNCMB extends CloudBase {
       })
       .catch(function(err) {
         throw err;
+      });
+  }
+  /**
+   * @override
+   */
+  addLoginHistory(status, userName) {
+    const LoginLog = this.ncmb.DataStore('LoginLog');
+    const instanceLL = new LoginLog();
+
+    instanceLL
+      .set('status', status) // success or failure.
+      .set('userName', userName)
+      .save()
+      .then(function(loginLog) {
+        console.log(loginLog);
+        return true;
+      })
+      .catch(function(err) {
+        console.log(err);
+        return false;
       });
   }
 }
