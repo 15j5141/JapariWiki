@@ -8,7 +8,7 @@ import WikiApp from '../app/wiki.component.js';
 import EditorApp from '../app/editor.component.js';
 import MenuComponent from '../app/menu.component.js';
 import HistoryComponent from '../app/history.component.js';
-import SiteNoticeComponent from '../app/notice.component.js';
+import SideMainComponent from '../app/side_main.component.js';
 import IndexService from '../app/index.service.js';
 import ApplicationService from '../app/application.service.js';
 import LoginHistoryComponent from '../app/login_history.component.js';
@@ -20,7 +20,7 @@ export const Components = {
   EditorApp,
   MenuComponent,
   HistoryComponent,
-  SiteNoticeComponent,
+  SideMainComponent,
   LoginHistoryComponent,
 };
 

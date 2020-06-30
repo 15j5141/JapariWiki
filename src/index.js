@@ -64,8 +64,8 @@ const historyComponent = new Components.HistoryComponent({
   jQuery: window.jQuery,
   serviceManager: serviceManager,
 });
-const siteNoticeComponent = new Components.SiteNoticeComponent({
-  selector: '#side-site_notice',
+const sideMainComponent = new Components.SideMainComponent({
+  selector: '#side_main',
   jQuery: window.jQuery,
   serviceManager: serviceManager,
 });
@@ -118,7 +118,7 @@ $(function() {
       wikiApp.init(),
       menuComponent.init(),
       historyComponent.init(),
-      siteNoticeComponent.init(),
+      sideMainComponent.init(),
       editorApp.init(),
       loginHistoryComponent.init(),
     ]);
@@ -129,7 +129,7 @@ $(function() {
       headerComponent.draw(),
       menuComponent.draw(),
       historyComponent.draw(),
-      siteNoticeComponent.draw(),
+      sideMainComponent.draw(),
       loginHistoryComponent.draw(),
     ]);
 
