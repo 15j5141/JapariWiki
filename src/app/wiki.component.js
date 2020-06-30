@@ -79,6 +79,10 @@ export default class WikiApp extends ComponentBase {
     this.refObj.status.setPageURI(uri);
     // FixMe パスを解決できなければエラー?
     this.refObj.status.save();
+
+    // ページ上までスクロール.
+    this.scroll2Top();
+
     // 受信して描画.
     this.draw();
     // 履歴に追加する.
@@ -97,9 +101,6 @@ export default class WikiApp extends ComponentBase {
         /* 連打対策 */
         if (self.doneAjax) {
           self.doneAjax = false;
-
-          // ページ上までスクロール.
-          // top.scroll2Top();
 
           // ページを更新.
           (async () => {
@@ -137,6 +138,6 @@ export default class WikiApp extends ComponentBase {
    * ページ上部へスクロールする.
    */
   scroll2Top() {
-    this.$('html,body', top.document).animate({ scrollTop: 0 }, 100, 'swing');
+    this.$('html,body').animate({ scrollTop: 0 }, 100, 'swing');
   }
 }
