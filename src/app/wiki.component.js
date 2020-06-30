@@ -84,7 +84,7 @@ export default class WikiApp extends ComponentBase {
     this.scroll2Top();
 
     // 受信して描画.
-    this.draw();
+    await this.draw();
     // 履歴に追加する.
     this.pushState(uri);
   }
