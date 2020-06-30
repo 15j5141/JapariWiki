@@ -1,36 +1,24 @@
-<!-- <?php
-require_once(__DIR__.'/../config.php');
+<!DOCTYPE html>
+<html lang="en">
 
-
-session_start();
-session_destroy();
-/*header( "Location: ". $JWConfig["rootURL"]. "login.php" ) ;
-exit*/;
-?> -->
-
-<HTML>
-
-<HEAD>
-
-    <TITLE>logout</TITLE>
-
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>logout</title>
     <!-- 5秒後に移動する場合 -->
     <!--
-    <meta http-equiv="refresh"
-        content="1;URL=<?= $JWConfig["rootURL"] ?>login.php?<?= parse_url($_SERVER['REQUEST_URI'], PHP_URL_QUERY ) ?>">
-    -->
+        <meta http-equiv="refresh"
+            content="1;URL=<?= $JWConfig["rootURL"] ?>login.php?<?= parse_url($_SERVER['REQUEST_URI'], PHP_URL_QUERY ) ?>">
+        -->
+</head>
 
-
-</HEAD>
-
-<BODY>
+<body>
     ログアウトかタイムアウトしました。<br />
     1 秒後にログインページへ移動します。
-
-    <!-- $JWConfig["rootURL"] -->
-    <a href="login.html">あるいはここからログインページへ移動</a>
     <!-- fixme クエリ付加 -->
+    <a href="login.html">あるいはここからログインページへ移動</a>
     <script src="lib/ncmb.min.js"></script>
-</BODY>
 
-</HTML>
+</body>
+
+</html>
