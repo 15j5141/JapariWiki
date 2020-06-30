@@ -55,6 +55,11 @@ export default class HeaderComponent extends ComponentBase {
           });
         return false;
       });
+      $(self.element).on('click', 'a.ajaxLoad', function(e) {
+        const pageName = $(event.target).data('page');
+        self.applicationService.openWiki(pageName);
+        return false;
+      });
     });
   }
 }
