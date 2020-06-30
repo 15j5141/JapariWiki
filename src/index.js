@@ -112,22 +112,26 @@ $(function() {
   });
 
   (async () => {
-    await headerComponent.init();
-    await footerComponent.init();
-    await wikiApp.init();
-    await menuComponent.init();
-    await historyComponent.init();
-    await siteNoticeComponent.init();
-    await editorApp.init();
-    await loginHistoryComponent.init();
+    await Promise.all([
+      headerComponent.init(),
+      footerComponent.init(),
+      wikiApp.init(),
+      menuComponent.init(),
+      historyComponent.init(),
+      siteNoticeComponent.init(),
+      editorApp.init(),
+      loginHistoryComponent.init(),
+    ]);
 
-    await wikiApp.draw();
-    await footerComponent.draw();
-    await headerComponent.draw();
-    await menuComponent.draw();
-    await historyComponent.draw();
-    await siteNoticeComponent.draw();
-    await loginHistoryComponent.draw();
+    await Promise.all([
+      wikiApp.draw(),
+      footerComponent.draw(),
+      headerComponent.draw(),
+      menuComponent.draw(),
+      historyComponent.draw(),
+      siteNoticeComponent.draw(),
+      loginHistoryComponent.draw(),
+    ]);
 
     // Wiki 内部品を非同期読み込み.
     // FixMe ajaxLoad('#login_history', 'api/api_getLoginHistory.php');

@@ -93,7 +93,7 @@ export default class ComponentBase {
     // HTML を DL する.
     this.templateHTML = await this.loadTemplate();
     // DOM にセットする.
-    this.renderer.setHTML(this.templateHTML);
+    // this.renderer.setHTML(this.templateHTML);
     // 実装された初期化処理を呼ぶ.
     await this.onInit();
     // イベント登録する.
