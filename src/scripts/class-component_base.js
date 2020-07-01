@@ -6,6 +6,7 @@
 import Renderer from './class-renderer.js';
 import JWStatus from './jw-status.js';
 /** @typedef {import("./class-service_manager").default} ServiceManager */
+/** @typedef {import("./class-service_base").default} ServiceBase */
 /**
  * @typedef {Object} ReferenceObject
  * @property {jQuery} jQuery
@@ -50,6 +51,8 @@ export default class ComponentBase {
       templateUrl: null,
       styleUrls: [],
     };
+    /** @type {Object<string, ServiceBase>} */
+    this.serviceInjection = {};
 
     const self = this;
     // 疑似デコレーターを呼ぶ.
@@ -60,6 +63,29 @@ export default class ComponentBase {
    * 疑似デコレーター.
    */
   decorator() {}
+  /**
+   * this.injectionService の中身の参照を解決する.
+   * @return {Promise<void>}
+   */
+  async _inject() {
+    const self = this;
+    // 全てのサービス解決まで待つ.
+
+    await Promise.all([
+      // this.injection にセットされたサービス一覧を取得する.
+      ...Object.keys(self.serviceInjection).map(key => {
+        return new Promise((resolve, reject) => {
+          // サービスを serviceManager で解決する.
+          self.refObj.serviceManager
+            .getService(self.serviceInjection[key])
+            .subscribe(service => {
+              self.serviceInjection[key] = service;
+              resolve();
+            });
+        });
+      }),
+    ]);
+  }
   /* ---------- abstract. ---------- */
   /**
    * 初期化時に実行する.
@@ -89,6 +115,8 @@ export default class ComponentBase {
    * @return {Promise<void>}
    */
   async init() {
+    // this.injection のサービスを解決する.
+    await this._inject();
     // FixMe move loadTemplate() to constructor.
     // HTML を DL する.
     this.templateHTML = await this.loadTemplate();

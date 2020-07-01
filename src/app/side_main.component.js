@@ -14,11 +14,11 @@ export default class SideMainComponent extends ComponentBase {
     this.decoration.templateUrl = './side_main.component.html';
     /** @type {StatusService}*/
     this.statusService;
-    this.refObj.serviceManager
-      .getService(StatusService.prototype)
-      .subscribe(service => {
-        this.statusService = service;
-      });
+
+    /** @type {{status: StatusService}} */
+    this.serviceInjection = {
+      status: StatusService.prototype,
+    };
   }
   /**
    * @override
@@ -35,6 +35,6 @@ export default class SideMainComponent extends ComponentBase {
     // FixMe Page からお知らせを取得する.
     $elem.find('#side-site_notice').html('お知らせはありません。');
     // FixMe ユーザー名を表示する.
-    $elem.find('#user_id').text(this.statusService.user.id);
+    $elem.find('#user_id').text(this.serviceInjection.status.user.id);
   }
 }

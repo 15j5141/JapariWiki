@@ -14,13 +14,10 @@ export default class MenuComponent extends ComponentBase {
   decorator() {
     this.decoration.templateUrl = null;
     this.renderer = new PageRenderer(this.refObj.selector, '/site_/SideMenu');
-    /** @type {ApplicationService} */
-    this.applicationService;
-    this.refObj.serviceManager
-      .getService(ApplicationService.prototype)
-      .subscribe(service => {
-        this.applicationService = service;
-      });
+    /** @type {{application: ApplicationService}} */
+    this.serviceInjection = {
+      application: ApplicationService.prototype,
+    };
   }
   /**
    * @override
@@ -49,9 +46,11 @@ export default class MenuComponent extends ComponentBase {
           (async () => {
             // <a data-page="ページ名">を取得.
             const pageName = $(e.target).data('page');
-            await self.applicationService.openWiki(pageName).catch(err => {
-              console.error(err);
-            });
+            await self.serviceInjection.application
+              .openWiki(pageName)
+              .catch(err => {
+                console.error(err);
+              });
             // クリック制限を解除.
             self.doneAjax = true;
           })();

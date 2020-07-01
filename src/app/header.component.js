@@ -12,14 +12,10 @@ export default class HeaderComponent extends ComponentBase {
   decorator() {
     this.decoration.templateUrl = './header.component.html';
     this.decoration.styleUrls = [];
-
-    /** @type {ApplicationService} */
-    this.applicationService;
-    this.refObj.serviceManager
-      .getService(ApplicationService.prototype)
-      .subscribe(service => {
-        this.applicationService = service;
-      });
+    /** @type {{application: ApplicationService}} */
+    this.serviceInjection = {
+      application: ApplicationService.prototype,
+    };
   }
   /**
    * @override
@@ -57,7 +53,7 @@ export default class HeaderComponent extends ComponentBase {
       });
       $(self.element).on('click', 'a.ajaxLoad', function(e) {
         const pageName = $(event.target).data('page');
-        self.applicationService.openWiki(pageName);
+        self.serviceInjection.application.openWiki(pageName);
         return false;
       });
     });

@@ -1,7 +1,7 @@
 // @ts-check
 import { ReplaySubject } from 'rxjs';
 import { filter } from 'rxjs/operators';
-/** @typedef {import('rxjs').Observable} Observable */
+import { Observable } from 'rxjs';
 /** @typedef {import('./class-component_base.js').default} ComponentBase */
 
 /**
