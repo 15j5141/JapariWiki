@@ -107,14 +107,12 @@ export default class WikiApp extends ComponentBase {
         /* 連打対策 */
         if (self.doneAjax) {
           self.doneAjax = false;
-
           // ページを更新.
           (async () => {
-            // <a data-page="ページ名">を取得.
+            // ページ名を取得する.
             const pageName = $(event.target).data('page');
-            await self.move(pageName).catch(err => {
-              console.error(err);
-            });
+            // ページを移動する.
+            await self.move(pageName);
             // クリック制限を解除.
             self.doneAjax = true;
           })();

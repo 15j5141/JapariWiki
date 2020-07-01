@@ -27,30 +27,14 @@ export default class MenuComponent extends ComponentBase {
    */
   onLoad() {
     const self = this;
-    self.$(function($) {
+    const $ = this.$;
+    $(function() {
       // メニューのリンクからもページを移動できるようにする.
       $(self.refObj.selector).on('click', 'a.ajaxLoad', e => {
-        e.preventDefault(); // 標準ページ移動を無効化.
-        /* 連打対策 */
-        if (self.doneAjax) {
-          self.doneAjax = false;
-
-          // ページ上までスクロール.
-          // top.scroll2Top();
-
-          // ページを更新.
-          (async () => {
-            // <a data-page="ページ名">を取得.
-            const pageName = $(e.target).data('page');
-            await self.serviceInjection.application
-              .openWiki(pageName)
-              .catch(err => {
-                console.error(err);
-              });
-            // クリック制限を解除.
-            self.doneAjax = true;
-          })();
-        } /* /if */
+        // ページ名を取得する.
+        const pageName = $(e.target).data('page');
+        // ページを移動する.
+        self.serviceInjection.application.openWiki(pageName);
         return false; // <a>を無効化.
       });
     });

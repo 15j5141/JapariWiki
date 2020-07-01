@@ -39,20 +39,23 @@ export default class HeaderComponent extends ComponentBase {
         // 現在のページ URI を取得する.
         const pageURI = status.getPageURI();
         // 編集画面起動.
-        self.applicationService
+        self.serviceInjection.application
           .openEditor(pageURI)
           .then(result => {
             console.log(result);
             // 編集したページを表示する.
-            self.applicationService.openWiki(pageURI);
+            self.serviceInjection.application.openWiki(pageURI);
           })
           .catch(err => {
             console.log(err);
           });
         return false;
       });
+      // メニューのリンクからもページを移動できるようにする.
       $(self.element).on('click', 'a.ajaxLoad', function(e) {
+        // ページ名を取得する.
         const pageName = $(event.target).data('page');
+        // ページを移動する.
         self.serviceInjection.application.openWiki(pageName);
         return false;
       });
