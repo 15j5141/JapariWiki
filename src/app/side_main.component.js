@@ -23,9 +23,7 @@ export default class SideMainComponent extends ComponentBase {
   /**
    * @override
    */
-  async onInit() {
-    this._cloud = new CloudNCMB();
-  }
+  async onInit() {}
   /**
    * @override
    */
@@ -35,6 +33,6 @@ export default class SideMainComponent extends ComponentBase {
     // FixMe Page からお知らせを取得する.
     $elem.find('#side-site_notice').html('お知らせはありません。');
     // FixMe ユーザー名を表示する.
-    $elem.find('#user_id').text(this.serviceInjection.status.user.id);
+    $elem.find('#user_id').text(this.serviceInjection.status.getUser().id);
   }
 }

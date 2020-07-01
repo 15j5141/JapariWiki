@@ -59,7 +59,6 @@ class CloudNCMB extends CloudBase {
   }
   /**
    * @override
-   * @param {JWPage} pageData
    */
   async putPage(pageData) {
     if (pageData.pageURI == null) {

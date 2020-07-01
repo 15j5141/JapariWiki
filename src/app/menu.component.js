@@ -1,7 +1,6 @@
 // @ts-check
 import ComponentBase from '../scripts/class-component_base.js';
 import PageRenderer from '../scripts/class-page_renderer.js';
-import CloudNCMB from '../scripts/class-cloud_ncmb.js';
 import ApplicationService from './application.service.js';
 
 /**
@@ -22,10 +21,7 @@ export default class MenuComponent extends ComponentBase {
   /**
    * @override
    */
-  async onInit() {
-    this._cloud = new CloudNCMB();
-    this.doneAjax = true;
-  }
+  async onInit() {}
   /**
    * @override
    */

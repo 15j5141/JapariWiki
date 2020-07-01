@@ -3,6 +3,7 @@ import CloudNCMB from '../scripts/class-cloud_ncmb.js';
 import JWPage from '../scripts/class-page.js';
 import WikiSyntaxPlugin from '../scripts/class-wiki_syntax_plugin.js';
 import ComponentBase from '../scripts/class-component_base.js';
+import { StatusService } from './status.service.js';
 
 /**
  * @class
@@ -11,10 +12,14 @@ export default class EditorApp extends ComponentBase {
   /** @override */
   decorator() {
     this.decoration.templateUrl = './editor.component.html';
+    /* ----- サービスのインジェクション. ----- */
+    /** @type {{status: StatusService}} */
+    this.serviceInjection = {
+      status: StatusService.prototype,
+    };
   }
   /** @override */
   async onInit() {
-    this._cloud = new CloudNCMB();
     /** リンク連打対策用. */
     this.doneAjax = true;
     /**
@@ -154,12 +159,13 @@ export default class EditorApp extends ComponentBase {
    * @return {Promise<boolean>}
    */
   async open(pageURI) {
+    const cloud = this.serviceInjection.status.getCloud();
     this._isEdited = false;
     this._editedResult = null;
     // 履歴に追加する. FixMe エディタであることを履歴にも反映する.
     this.pushState(pageURI);
     // ページ読み込み.
-    let pageData = await this._cloud.getPage(pageURI).catch(err => {
+    let pageData = await cloud.getPage(pageURI).catch(err => {
       if (err.message === 'Page:NotFound') {
         // ページがなければ新規作成して処理続行.
         return new JWPage(pageURI, '', {});
@@ -187,10 +193,10 @@ export default class EditorApp extends ComponentBase {
     if (pageData.cloudObject) {
       console.log('a:', pageData.cloudObject);
       // 更新.
-      return await this._cloud.putPage(pageData);
+      await cloud.putPage(pageData);
     } else {
       // 新規作成.
-      await this._cloud.postPage(pageData);
+      await cloud.postPage(pageData);
     }
     // 編集アプリ正常終了.
     return true;

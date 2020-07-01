@@ -2,6 +2,7 @@
 import PageRenderer from '../scripts/class-page_renderer.js';
 import CloudNCMB from '../scripts/class-cloud_ncmb.js';
 import ComponentBase from '../scripts/class-component_base.js';
+import { StatusService } from './status.service.js';
 
 /**
  * @class
@@ -13,12 +14,16 @@ export default class WikiApp extends ComponentBase {
   decorator() {
     this.decoration.templateUrl = './wiki.component.html';
     this.renderer = new PageRenderer(this.refObj.selector, null);
+    /* ----- サービスのインジェクション. ----- */
+    /** @type {{status: StatusService}} */
+    this.serviceInjection = {
+      status: StatusService.prototype,
+    };
   }
   /**
    * @override
    */
   async onInit() {
-    this._cloud = new CloudNCMB();
     /** リンク連打対策用. */
     this.doneAjax = true;
   }
@@ -52,9 +57,10 @@ export default class WikiApp extends ComponentBase {
    */
   async getPageData(uri) {
     let html;
+    const cloud = this.serviceInjection.status.getCloud();
     try {
       // クラウドからページデータ取得.
-      const pageData = await this._cloud.getPage(uri);
+      const pageData = await cloud.getPage(uri);
       html = pageData.rawText;
     } catch (err) {
       if (err.message === 'Page:NotFound') {

@@ -1,6 +1,7 @@
 // @ts-check
 import CloudNCMB from '../scripts/class-cloud_ncmb.js';
 import ComponentBase from '../scripts/class-component_base.js';
+import { StatusService } from './status.service.js';
 
 /**
  * @class
@@ -12,13 +13,18 @@ export default class LoginHistoryComponent extends ComponentBase {
   decorator() {
     this.decoration.templateUrl = '../text/site_menu.txt';
     this.html = '';
+    /* ----- サービスのインジェクション. ----- */
+    /** @type {{status: StatusService}} */
+    this.serviceInjection = {
+      status: StatusService.prototype,
+    };
   }
   /**
    * @override
    */
   async onInit() {
-    this._cloud = new CloudNCMB();
-    this.html = await this._cloud.getLoginHistory();
+    const cloud = this.serviceInjection.status.getCloud();
+    this.html = await cloud.getLoginHistory();
   }
   /**
    * @override

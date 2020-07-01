@@ -13,9 +13,9 @@ export class StatusService extends ServiceBase {
   decorator() {
     /* ----- デコレータセット. ----- */
     /* ----- プロパティ宣言. ----- */
-    this.cloud = new CloudNCMB();
-    this.status = new JWStatus();
-    this.user = this.status._status.user;
+    this._cloud = new CloudNCMB();
+    this._status = new JWStatus();
+    this._user = this._status._status.user;
 
     /* ----- コンポーネント取得. ----- */
   }
@@ -23,18 +23,18 @@ export class StatusService extends ServiceBase {
    * @return {CloudBase}
    */
   getCloud() {
-    return this.cloud;
+    return this._cloud;
   }
   /**
    * @return {{id:string, name:string}}
    */
   getUser() {
-    return this.user;
+    return this._user;
   }
   /**
    * @param {{id:string, name:string}} user
    */
   setUser(user) {
-    this.user = user;
+    this._user = user;
   }
 }
