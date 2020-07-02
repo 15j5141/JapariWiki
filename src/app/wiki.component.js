@@ -3,6 +3,7 @@ import PageRenderer from '../scripts/class-page_renderer.js';
 import CloudNCMB from '../scripts/class-cloud_ncmb.js';
 import ComponentBase from '../scripts/class-component_base.js';
 import { StatusService } from './status.service.js';
+import ApplicationService from './application.service.js';
 
 /**
  * @class
@@ -12,18 +13,30 @@ export default class WikiApp extends ComponentBase {
    * @override
    */
   decorator() {
-    this.decoration.templateUrl = './wiki.component.html';
-    this.renderer = new PageRenderer(this.refObj.selector, null);
+    this.renderer = new PageRenderer(this.element, null);
     /* ----- サービスのインジェクション. ----- */
-    /** @type {{status: StatusService}} */
+    /** @type {{status: StatusService, application: ApplicationService}} */
     this.serviceInjection = {
       status: StatusService.prototype,
+      application: ApplicationService.prototype,
     };
   }
   /**
    * @override
    */
+  static get decoration() {
+    return {
+      selector: '#app-wiki',
+      templateUrl: './wiki.component.html',
+      styleUrls: [],
+    };
+  }
+
+  /**
+   * @override
+   */
   async onInit() {
+    this.serviceInjection.application.wikiApp = this;
     /** リンク連打対策用. */
     this.doneAjax = true;
   }
@@ -45,7 +58,7 @@ export default class WikiApp extends ComponentBase {
     const html = await this.getPageData(pageURI);
     this.renderer.println('Downloaded.');
     // 構文解析して描画.
-    this.renderer.update(html);
+    await this.renderer.update(html);
 
     // タイトル書き換え.
     this.$(top.document.querySelector('title')).text(pageURI);

@@ -11,13 +11,23 @@ export default class MenuComponent extends ComponentBase {
    * @override
    */
   decorator() {
-    this.decoration.templateUrl = null;
-    this.renderer = new PageRenderer(this.refObj.selector, '/site_/SideMenu');
+    this.renderer = new PageRenderer(this.element, '/site_/SideMenu');
     /** @type {{application: ApplicationService}} */
     this.serviceInjection = {
       application: ApplicationService.prototype,
     };
   }
+  /**
+   * @override
+   */
+  static get decoration() {
+    return {
+      templateUrl: null,
+      styleUrls: [],
+      selector: '#side-custom_menu',
+    };
+  }
+
   /**
    * @override
    */
@@ -30,7 +40,7 @@ export default class MenuComponent extends ComponentBase {
     const $ = this.$;
     $(function() {
       // メニューのリンクからもページを移動できるようにする.
-      $(self.refObj.selector).on('click', 'a.ajaxLoad', e => {
+      $(self.element).on('click', 'a.ajaxLoad', e => {
         // ページ名を取得する.
         const pageName = $(e.target).data('page');
         // ページを移動する.

@@ -11,7 +11,6 @@ export default class SideMainComponent extends ComponentBase {
    * @override
    */
   decorator() {
-    this.decoration.templateUrl = './side_main.component.html';
     /** @type {StatusService}*/
     this.statusService;
 
@@ -20,6 +19,17 @@ export default class SideMainComponent extends ComponentBase {
       status: StatusService.prototype,
     };
   }
+  /**
+   * @override
+   */
+  static get decoration() {
+    return {
+      templateUrl: './side_main.component.html',
+      styleUrls: [],
+      selector: '#side-main',
+    };
+  }
+
   /**
    * @override
    */

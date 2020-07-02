@@ -1,9 +1,9 @@
 // @ts-check
-import CloudNCMB from '../scripts/class-cloud_ncmb.js';
 import JWPage from '../scripts/class-page.js';
 import WikiSyntaxPlugin from '../scripts/class-wiki_syntax_plugin.js';
 import ComponentBase from '../scripts/class-component_base.js';
 import { StatusService } from './status.service.js';
+import ApplicationService from './application.service.js';
 
 /**
  * @class
@@ -11,32 +11,36 @@ import { StatusService } from './status.service.js';
 export default class EditorApp extends ComponentBase {
   /** @override */
   decorator() {
-    this.decoration.templateUrl = './editor.component.html';
     /* ----- サービスのインジェクション. ----- */
-    /** @type {{status: StatusService}} */
+    /** @type {{status: StatusService, application: ApplicationService}} */
     this.serviceInjection = {
       status: StatusService.prototype,
+      application: ApplicationService.prototype,
     };
   }
+  /**
+   * @override
+   */
+  static get decoration() {
+    return {
+      selector: '#app-editor',
+      templateUrl: './editor.component.html',
+      styleUrls: [],
+    };
+  }
+
   /** @override */
   async onInit() {
+    this.serviceInjection.application.editorApp = this;
     /** リンク連打対策用. */
     this.doneAjax = true;
-    /**
-     *  このエディタアプリで描画時に扱う HTML データ. Promise 完了済みか確認して取得する.
-     * @type {Promise<string>}
-     */
-    this.htmlByFetch = this.fetch('app/editor.component.html').then(data => {
-      return data;
-    });
     this._isEdited = false;
     /** @type {string} */
     this._editedResult = null;
   }
   /** @override */
   async onRender() {
-    const html = await this.htmlByFetch;
-    this.renderer.setHTML(html);
+    this.renderer.setHTML(await this.templateHTML);
   }
   /**
    * 編集画面表示.
@@ -70,7 +74,6 @@ export default class EditorApp extends ComponentBase {
 
     // 編集結果をセット.
     page_.rawText = this._editedResult;
-    console.log(this._editedResult);
 
     return page_;
     // throw new Error('Editor:Cancel');
@@ -191,7 +194,6 @@ export default class EditorApp extends ComponentBase {
 
     // null 判定で新規か更新か判断して保存.
     if (pageData.cloudObject) {
-      console.log('a:', pageData.cloudObject);
       // 更新.
       await cloud.putPage(pageData);
     } else {

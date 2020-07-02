@@ -10,8 +10,6 @@ export default class HeaderComponent extends ComponentBase {
    * @override
    */
   decorator() {
-    this.decoration.templateUrl = './header.component.html';
-    this.decoration.styleUrls = [];
     /** @type {{application: ApplicationService}} */
     this.serviceInjection = {
       application: ApplicationService.prototype,
@@ -20,9 +18,18 @@ export default class HeaderComponent extends ComponentBase {
   /**
    * @override
    */
-  async onInit() {
-    console.log(this.element);
+  static get decoration() {
+    return {
+      templateUrl: './header.component.html',
+      styleUrls: [],
+      selector: '#header',
+    };
   }
+
+  /**
+   * @override
+   */
+  async onInit() {}
   /**
    * @override
    */

@@ -13,23 +13,26 @@ export class StatusService extends ServiceBase {
   decorator() {
     /* ----- デコレータセット. ----- */
     /* ----- プロパティ宣言. ----- */
+    /** クラウド管理変数. */
     this._cloud = new CloudNCMB();
+    /** Wiki 状態管理変数. */
     this._status = new JWStatus();
-    this._user = this._status._status.user;
 
     /* ----- コンポーネント取得. ----- */
   }
   /**
+   * クラウド管理変数を取得する.
    * @return {CloudBase}
    */
   getCloud() {
     return this._cloud;
   }
   /**
+   * Wiki 状態管理を取得する.
    * @return {{id:string, name:string}}
    */
   getUser() {
-    return this._user;
+    return this._status._status.user;
   }
   /**
    * @param {{id:string, name:string}} user

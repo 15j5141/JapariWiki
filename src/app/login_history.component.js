@@ -11,7 +11,6 @@ export default class LoginHistoryComponent extends ComponentBase {
    * @override
    */
   decorator() {
-    this.decoration.templateUrl = '../text/site_menu.txt';
     this.html = '';
     /* ----- サービスのインジェクション. ----- */
     /** @type {{status: StatusService}} */
@@ -19,6 +18,17 @@ export default class LoginHistoryComponent extends ComponentBase {
       status: StatusService.prototype,
     };
   }
+  /**
+   * @override
+   */
+  static get decoration() {
+    return {
+      templateUrl: '../text/site_menu.txt',
+      styleUrls: [],
+      selector: '#side-login_history',
+    };
+  }
+
   /**
    * @override
    */

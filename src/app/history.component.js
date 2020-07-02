@@ -9,9 +9,18 @@ export default class HistoryComponent extends ComponentBase {
   /**
    * @override
    */
-  decorator() {
-    this.decoration.templateUrl = '../text/site_menu.txt';
+  decorator() {}
+  /**
+   * @override
+   */
+  static get decoration() {
+    return {
+      templateUrl: '../text/site_menu.txt',
+      styleUrls: [],
+      selector: '#side-edited_history',
+    };
   }
+
   /**
    * @override
    */

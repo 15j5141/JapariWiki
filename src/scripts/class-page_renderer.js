@@ -7,12 +7,11 @@ import WikiSyntaxPlugin from './class-wiki_syntax_plugin.js';
 class PageRenderer extends Renderer {
   /**
    * @override
-   * @param {string} selector
+   * @param {Element} element
    * @param {string} pageURI
    */
-  constructor(selector, pageURI) {
-    super(selector);
-    this.selector = selector;
+  constructor(element, pageURI) {
+    super(element);
     this._cloud = new CloudNCMB();
     this._jwStatus = new JWStatus();
     this._pageURI = pageURI;
@@ -40,15 +39,13 @@ class PageRenderer extends Renderer {
     this.println('Checked Syntax .');
 
     // jQuery を無理やり読込.
-    const $ = selector => {
-      return top.$(selector, window.document);
-    };
+    const $ = top.$;
     // 一度ページを非表示に.
-    $(this.selector).fadeOut('fast', () => {
+    $(this.element).fadeOut('fast', () => {
       // 描画.
       this.setHTML(html_);
       // 非表示にしていたページを表示する.
-      $(this.selector).fadeIn('1');
+      $(this.element).fadeIn('1');
     });
     return html_;
   }

@@ -2,49 +2,44 @@
 /** */
 class Renderer {
   /**
-   * @param {string} selector
+   * @param {Element} element
    */
-  constructor(selector) {
-    this.selector = selector;
+  constructor(element) {
+    this.element = element;
   }
   /**
    * HTML で書き換える.
    * @param {string} html
    */
   setHTML(html) {
-    const element = document.querySelector(this.selector);
-    element.innerHTML = html;
+    this.element.innerHTML = html;
   }
   /**
    * Text で書き換える.
    * @param {string} text
    */
   setText(text) {
-    const element = document.querySelector(this.selector);
-    element.textContent = text;
+    this.element.textContent = text;
   }
   /**
    * HTML で追記する.
    * @param {string} html
    */
   print(html) {
-    const element = document.querySelector(this.selector);
-    element.innerHTML += html;
+    this.element.innerHTML += html;
   }
   /**
    * HTML で追記する. 改行あり.
    * @param {string} html
    */
   println(html) {
-    const element = document.querySelector(this.selector);
-    element.innerHTML += html + '</br>';
+    this.element.innerHTML += html + '</br>';
   }
   /**
    * 描画内容をクリアする.
    */
   cls() {
-    const element = document.querySelector(this.selector);
-    element.innerHTML = null;
+    this.element.innerHTML = null;
   }
   /**
    * 対象 DOM を更新.
@@ -53,6 +48,7 @@ class Renderer {
    */
   async update(html) {
     this.setHTML(html);
+    return html;
   }
 }
 export default Renderer;

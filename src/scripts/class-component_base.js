@@ -11,8 +11,10 @@ import JWStatus from './jw-status.js';
  * @typedef {Object} ReferenceObject
  * @property {jQuery} jQuery
  * @property {JWStatus=} status
- * @property {string} selector
+ * @property {string?} selector
  * @property {ServiceManager} serviceManager
+ * @property {Array<typeof ComponentBase>} declarations
+ * @property {Element} element
  */
 /**
  * Component の基本クラス.
@@ -32,6 +34,8 @@ export default class ComponentBase {
       status: null,
       selector: null,
       serviceManager: null,
+      declarations: null,
+      element: null,
     };
     /** @type {ReferenceObject} */
     this.refObj = { ...originalReferenceObject, ...referenceObject };
@@ -39,24 +43,40 @@ export default class ComponentBase {
     // セットする.
     /** @type {jQuery}*/
     this.$ = this.refObj.jQuery = this.refObj.jQuery || top.jQuery;
+    this.selector = this.refObj.selector || this.decoration.selector;
     // element が未指定なら selector から特定する.
-    this.element = this.refObj.jQuery(this.refObj.selector).get(0);
+    this.element = this.refObj.element || this.$(this.selector).get(0);
+    this.$element = this.$(this.element);
     this.refObj.status = this.refObj.status || new JWStatus();
-    this.$element = this.refObj.jQuery(this.refObj.selector);
-    this.renderer = new Renderer(this.refObj.selector);
-    /**
-     * @type {{templateUrl:string,styleUrls:Array<string>}}
-     */
-    this.decoration = {
-      templateUrl: null,
-      styleUrls: [],
-    };
+    this.renderer = new Renderer(this.element);
+
     /** @type {Object<string, ServiceBase>} */
     this.serviceInjection = {};
 
-    const self = this;
     // 疑似デコレーターを呼ぶ.
-    self.decorator();
+    this.decorator();
+    // HTML を DL する.
+    this.templateHTML = this.loadTemplate();
+  }
+  /**
+   * 疑似デコレーターセット.
+   * @abstract
+   * @return {{templateUrl:string, styleUrls:Array<string>, selector:string}}
+   */
+  static get decoration() {
+    return {
+      templateUrl: null,
+      styleUrls: [],
+      selector: '',
+    };
+  }
+  /**
+   * インスタンス内参照用.
+   * @abstract
+   * @return {{templateUrl:string, styleUrls:Array<string>, selector:string}}
+   */
+  get decoration() {
+    return this.constructor.decoration;
   }
   /**
    * @abstract
@@ -70,7 +90,6 @@ export default class ComponentBase {
   async _inject() {
     const self = this;
     // 全てのサービス解決まで待つ.
-
     await Promise.all([
       // this.injection にセットされたサービス一覧を取得する.
       ...Object.keys(self.serviceInjection).map(key => {
@@ -83,6 +102,49 @@ export default class ComponentBase {
               resolve();
             });
         });
+      }),
+    ]);
+  }
+  /**
+   * 描画部品初期化.
+   */
+  async _initChildComponents() {
+    const self = this;
+
+    // 全てのコンポーネントを解決する.
+    /** @type {Array<ComponentBase>} */
+    const components = [];
+    // declarations に宣言されたコンポーネントを生成する.
+    this.refObj.declarations.forEach(Component => {
+      // テンプレート HTML からコンポーネント要素を探す.
+      const foundElements = self.element.querySelectorAll(
+        Component.decoration.selector
+      );
+      // 見つかった全てのコンポーネント要素を Component に変換する.
+      for (let i = 0; i < foundElements.length; i++) {
+        const element = foundElements[i];
+        // コンポーネントに変換する.
+        components.push(
+          new Component({
+            ...this.refObj,
+            element,
+            declarations: [],
+          })
+        );
+      }
+    });
+
+    // コンポーネントの初期化処理をする.
+    await Promise.all([...components.map(component => component.init())]);
+
+    // コンポーネントの描画処理をする.
+    await Promise.all([
+      ...components.map(component => {
+        // data-lazydraw 属性があれば描画しない.
+        if (component.$element.data('lazydraw') !== undefined) {
+          return Promise.resolve();
+        }
+        return component.draw();
       }),
     ]);
   }
@@ -101,7 +163,7 @@ export default class ComponentBase {
    * @return {Promise<void>}
    */
   async onRender() {
-    await this.renderer.update(this.templateHTML);
+    await this.renderer.update(await this.templateHTML);
   }
   /**
    * イベント登録する.
@@ -118,8 +180,6 @@ export default class ComponentBase {
     // this.injection のサービスを解決する.
     await this._inject();
     // FixMe move loadTemplate() to constructor.
-    // HTML を DL する.
-    this.templateHTML = await this.loadTemplate();
     // DOM にセットする.
     // this.renderer.setHTML(this.templateHTML);
     // 実装された初期化処理を呼ぶ.
@@ -134,6 +194,7 @@ export default class ComponentBase {
   async draw() {
     // 実装された描画処理を呼ぶ.
     await this.onRender();
+    await this._initChildComponents();
   }
   /* ---------- その他メソッド. ---------- */
   /**
@@ -142,12 +203,13 @@ export default class ComponentBase {
    */
   async loadTemplate() {
     const self = this;
-    if (self.decoration.templateUrl == null) {
+    const url = self.decoration.templateUrl;
+    if (url == null) {
       return Promise.resolve('');
     }
     return new Promise((resolve, reject) => {
-      this.$.ajax({
-        url: './app/' + self.decoration.templateUrl,
+      self.$.ajax({
+        url: './app/' + url,
         success: data => {
           resolve(data);
         },
