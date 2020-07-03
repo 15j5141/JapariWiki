@@ -38,11 +38,11 @@ export default class SideMainComponent extends ComponentBase {
    * @override
    */
   async onRender() {
-    super.onRender();
-    const $elem = this.$(this.element);
+    await super.onRender();
     // FixMe Page からお知らせを取得する.
-    $elem.find('#side-site_notice').html('お知らせはありません。');
+    this.$element.find('#side-site_notice').html('お知らせはありません。');
     // FixMe ユーザー名を表示する.
-    $elem.find('#user_id').text(this.serviceInjection.status.getUser().id);
+    const user = this.serviceInjection.status.getUser();
+    this.$element.find('#user_id').text(user.id);
   }
 }

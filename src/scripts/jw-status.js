@@ -59,10 +59,7 @@ class JWStatus {
    */
   save() {
     // 安全の為保存する値を手動指定.
-    const json = JSON.stringify({
-      pageURI: this._status.pageURI,
-      app: this._status.app,
-    });
+    const json = JSON.stringify(this._status);
     // セッションストレージへ書き込み.
     sessionStorage.setItem('JW_Status', json);
   }

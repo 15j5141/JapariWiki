@@ -1,8 +1,9 @@
 // @ts-check
 import Cloud from './scripts/class-cloud_ncmb.js';
-
+import JWStatus from './scripts/jw-status.js';
 // NCMB用の設定.
 const cloud = new Cloud();
+const jWStatus = new JWStatus();
 
 /** @type {jQuery} */
 const $ = window.$;
@@ -56,7 +57,7 @@ $(function() {
 
   // ログインボタン.
   $('#form_id').submit(function() {
-    const user = { id: $id.val(), pass: $pass.val() };
+    const user = { id: '' + $id.val(), pass: '' + $pass.val() };
     // 空白チェック.
     if (user.id === '' || user.pass === '') {
       $('#form_id').append('<br />ID or PASS is empty!');
@@ -76,6 +77,10 @@ $(function() {
         loginResult = 'success';
         // ログイン履歴を追加する. FixMe ログイン処理をクラウドで行う.
         await cloud.addLoginHistory(loginResult, user.id);
+        // ステータスを更新する.
+        jWStatus._status.user = { id: user.id, name: user.id };
+        jWStatus.save();
+        // リダイレクトする.
         location.href = './' + (location.search ? '?' + location.search : '');
       } catch (error) {
         // 失敗した.
