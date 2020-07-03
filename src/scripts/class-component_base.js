@@ -55,6 +55,17 @@ export default class ComponentBase {
 
     // 疑似デコレーターを呼ぶ.
     this.decorator();
+
+    /** <link ...> に組み立てられた CSS 一覧. */
+    this.stylesLinkTag = this.decoration.styleUrls.reduce(
+      (previous, current) => {
+        return (
+          previous +
+          `<link rel="stylesheet" type="text/css" href="app/${current}" />\n`
+        );
+      },
+      ''
+    );
     // HTML を DL する.
     this.templateHTML = this.loadTemplate();
   }
@@ -211,7 +222,8 @@ export default class ComponentBase {
       self.$.ajax({
         url: './app/' + url,
         success: data => {
-          resolve(data);
+          // CSS リンクと HTML を結合する.
+          resolve(self.stylesLinkTag + data);
         },
         error: err => {
           reject(err);
