@@ -34,7 +34,11 @@ export default class LoginHistoryComponent extends ComponentBase {
    */
   async onInit() {
     const cloud = this.serviceInjection.status.getCloud();
-    this.html = await cloud.getLoginHistory();
+    this.html = await cloud.getLoginHistory().catch(e => {
+      if (e.message === 'JWCloud:Unauthorized') {
+        return '';
+      }
+    });
   }
   /**
    * @override

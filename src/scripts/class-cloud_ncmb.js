@@ -54,7 +54,13 @@ class CloudNCMB extends CloudBase {
         return newPage;
       })
       .catch(function(err) {
-        throw err;
+        /** @type {Error} */ const e = err;
+        const obj = e.message.match(/^cannot GET .+ \((\d+)\)$/);
+        if (obj && obj[1] == '401') {
+          throw new Error('JWCloud:Unauthorized');
+        } else {
+          throw err;
+        }
       });
   }
   /**
@@ -85,7 +91,13 @@ class CloudNCMB extends CloudBase {
         .set('text', pageData.rawText)
         .update()
         .catch(err => {
-          console.log(err);
+          /** @type {Error} */ const e = err;
+          const obj = e.message.match(/^cannot GET .+ \((\d+)\)$/);
+          if (obj && obj[1] == '401') {
+            throw new Error('JWCloud:Unauthorized');
+          } else {
+            throw err;
+          }
         });
     } else {
       // クラウドになければ新規作成にする.
@@ -101,7 +113,13 @@ class CloudNCMB extends CloudBase {
       .fetch()
       .delete()
       .catch(function(err) {
-        throw err;
+        /** @type {Error} */ const e = err;
+        const obj = e.message.match(/^cannot GET .+ \((\d+)\)$/);
+        if (obj && obj[1] == '401') {
+          throw new Error('JWCloud:Unauthorized');
+        } else {
+          throw err;
+        }
       });
   }
   /**
@@ -126,7 +144,13 @@ class CloudNCMB extends CloudBase {
         return result;
       })
       .catch(err => {
-        console.log(err);
+        /** @type {Error} */ const e = err;
+        const obj = e.message.match(/^cannot GET .+ \((\d+)\)$/);
+        if (obj && obj[1] == '401') {
+          throw new Error('JWCloud:Unauthorized');
+        } else {
+          throw err;
+        }
       });
   }
   /** @override */
@@ -146,8 +170,13 @@ class CloudNCMB extends CloudBase {
     try {
       return await this.ncmb.User.login(user);
     } catch (err) {
-      console.log(err);
-      throw err; // エラー.
+      /** @type {Error} */ const e = err;
+      const obj = e.message.match(/^cannot GET .+ \((\d+)\)$/);
+      if (obj && obj[1] == '401') {
+        throw new Error('JWCloud:Unauthorized');
+      } else {
+        throw err;
+      }
     }
   }
   /** @override */
@@ -157,13 +186,26 @@ class CloudNCMB extends CloudBase {
     user.set('userName', id).set('password', pass);
     // 新規登録処理
     return await user.signUpByAccount().catch(function(err) {
-      // エラー処理.
-      throw err;
+      /** @type {Error} */ const e = err;
+      const obj = e.message.match(/^cannot GET .+ \((\d+)\)$/);
+      if (obj && obj[1] == '401') {
+        throw new Error('JWCloud:Unauthorized');
+      } else {
+        throw err;
+      }
     });
   }
   /** @override */
   async signOut() {
-    return await this.ncmb.User.logout();
+    return await this.ncmb.User.logout().catch(err => {
+      /** @type {Error} */ const e = err;
+      const obj = e.message.match(/^cannot GET .+ \((\d+)\)$/);
+      if (obj && obj[1] == '401') {
+        throw new Error('JWCloud:Unauthorized');
+      } else {
+        throw err;
+      }
+    });
     // message: "This user doesn't login."
   }
   /**
@@ -180,7 +222,7 @@ class CloudNCMB extends CloudBase {
         let html = '';
         if (results.length === 0) {
           console.log(results);
-          html = 'LL:NotFound';
+          html = 'LoginLog:NotFound';
           return html;
         }
         for (let i = 0; i < results.length; i++) {
@@ -196,7 +238,13 @@ class CloudNCMB extends CloudBase {
         return html;
       })
       .catch(function(err) {
-        throw err;
+        /** @type {Error} */ const e = err;
+        const obj = e.message.match(/^cannot GET .+ \((\d+)\)$/);
+        if (obj && obj[1] == '401') {
+          throw new Error('JWCloud:Unauthorized');
+        } else {
+          throw err;
+        }
       });
   }
   /**
@@ -215,8 +263,13 @@ class CloudNCMB extends CloudBase {
         return true;
       })
       .catch(function(err) {
-        console.log(err);
-        return false;
+        /** @type {Error} */ const e = err;
+        const obj = e.message.match(/^cannot GET .+ \((\d+)\)$/);
+        if (obj && obj[1] == '401') {
+          throw new Error('JWCloud:Unauthorized');
+        } else {
+          throw err;
+        }
       });
   }
 }
