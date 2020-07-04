@@ -13,6 +13,14 @@ class WikiSyntaxPlugin extends SyntaxPluginBase {
   constructor(text) {
     super(text);
     this._cloud = new CloudNCMB();
+    /** 簡易的に取得したファイルへのリンクのディレクトリ部分. */
+    this.uploadedImageLink = 'up/';
+    (async () => {
+      this.uploadedImageLink = (await this._cloud.getFileLink('CONST')).replace(
+        /CONST/,
+        ''
+      );
+    })();
   }
   /**
    * 編集後の保存前の処理. コメントID割り当て等.
@@ -36,7 +44,7 @@ class WikiSyntaxPlugin extends SyntaxPluginBase {
   async checkAfterLoadingPage(rawText) {
     let result = rawText;
     result = await this.checkComment(result);
-    result = WikiSyntaxPlugin.replaceSyntax(result);
+    result = this.replaceSyntax(result);
     return result;
   }
 
@@ -62,6 +70,7 @@ class WikiSyntaxPlugin extends SyntaxPluginBase {
    * @return {Promise<string>}
    */
   async checkComment(rawText) {
+    const self = this;
     // 初期化
     let resultText = rawText;
     const regexp = /#comment\(([a-zA-Z0-9]{6,10})\)/g;
@@ -104,9 +113,9 @@ class WikiSyntaxPlugin extends SyntaxPluginBase {
         commentLists[key]
           .map(
             v =>
-              `<li>${WikiSyntaxPlugin.replaceSyntax(
-                v.contributor
-              )}: ${WikiSyntaxPlugin.replaceSyntax(v.content)}</li>`
+              `<li>${self.replaceSyntax(v.contributor)}: ${self.replaceSyntax(
+                v.content
+              )}</li>`
           )
           .reduce((c0, c1) => c0 + c1, '') /* 1件も無ければここが空になる*/ +
         '</ul>' +
@@ -138,19 +147,23 @@ class WikiSyntaxPlugin extends SyntaxPluginBase {
    * @param {string} str
    * @return {string}
    */
-  static replaceSyntax(str) {
+  replaceSyntax(str) {
     /** @type {Array<Array<RegExp|string|function|any>>} */
     const syntaxes = [];
     let result = str;
     // &image(xxxx.jpg)
     syntaxes.push([
       /&image\((\w+\.\w+)\)/g,
-      '<img src="up/$1" class="tag" style="width:200px;" />',
+      '<img src="' +
+        this.uploadedImageLink +
+        '$1" class="tag" style="max-width:360px;" />',
     ]);
     // &image(xxxx.jpg,200,100)
     syntaxes.push([
       /&image\((\w+\.\w+),([0-9]*),([0-9]*)\)/g,
-      '<img src="up/$1" class="tag" style="width:$2px;height:$3px;" />',
+      '<img src="' +
+        this.uploadedImageLink +
+        '$1" class="tag" style="width:$2px;height:$3px;" />',
     ]);
     // &img(https://domain.com/aaa/bbb/ccc.jpg)
     syntaxes.push([

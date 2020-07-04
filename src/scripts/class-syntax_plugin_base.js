@@ -39,7 +39,7 @@ class SyntaxPluginBase {
    * @param {string} str
    * @return {string}
    */
-  static replaceSyntax(str) {
+  replaceSyntax(str) {
     throw new Error('Not Implemented');
   }
   /**

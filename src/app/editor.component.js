@@ -146,7 +146,7 @@ export default class EditorApp extends ComponentBase {
       // 変化があったらpreviewを更新
       if (oldValue !== newEditingText) {
         // 構文解析.
-        const html = WikiSyntaxPlugin.replaceSyntax(newEditingText);
+        const html = syntax.replaceSyntax(newEditingText);
         // プレビューに反映.
         $('#ajax_edit__preview').html(html);
         // 内容を退避.
