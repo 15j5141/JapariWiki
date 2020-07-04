@@ -208,6 +208,30 @@ class CloudNCMB extends CloudBase {
     });
     // message: "This user doesn't login."
   }
+  /** @override */
+  async getFileNames(partFileName) {
+    const f = this.ncmb.File.order('createDate', true);
+
+    // 部分一致で検索できるようにクエリを微調整する.
+    f._where = { fileName: { $regex: partFileName } };
+
+    // 取得する.
+    return await f
+      .fetchAll()
+      .then(function(fileObjects) {
+        // ファイル名のみの配列にして返す.
+        return fileObjects.map(fileObject => fileObject.fileName);
+      })
+      .catch(function(err) {
+        /** @type {Error} */ const e = err;
+        const obj = e.message.match(/^cannot GET .+ \((\d+)\)$/);
+        if (obj && obj[1] == '401') {
+          throw new Error('JWCloud:Unauthorized');
+        } else {
+          throw err;
+        }
+      });
+  }
   /**
    * @override
    */

@@ -1,6 +1,14 @@
 // @ts-check
 /** @typedef {import("./class-page").default} JWPage */
-/** @typedef {any} JWFile */
+/**
+ * @typedef {Object} JWFile
+ * @property {Object?} acl
+ * @property {string!} filename "aaa.png"
+ * @property {string?} createDate "2020-04-18T15:15:23.424Z"
+ * @property {number?} fileSize 741758
+ * @property {string?} mimeType "image/png"
+ * @property {string?} updateDate "2020-04-18T15:15:23.424Z"
+ */
 /**
  * クラウドの継承元クラス.
  */
@@ -81,36 +89,58 @@ class CloudBase {
   }
   /**
    * ファイル取得.
+   * @deprecated
+   * @abstract
    * @param {JWFile} file
    */
-  getFile(file) {
+  async getFile(file) {
     throw new Error('Not Implemented');
   }
   /**
    * ファイルを保存.
+   * @abstract
    * @param {JWFile} file
+   * @return {Promise<boolean>}
    */
-  postFile(file) {
+  async postFile(file) {
     throw new Error('Not Implemented');
   }
   /**
    * ファイルを更新.
+   * @abstract
    * @param {JWFile} file
+   * @return {Promise<boolean>}
    */
-  putFile(file) {
+  async putFile(file) {
     throw new Error('Not Implemented');
   }
   /**
    * ファイルを削除.
+   * @abstract
    * @param {JWFile} file
+   * @return {Promise<boolean>}
    */
-  deleteFile(file) {
+  async deleteFile(file) {
     throw new Error('Not Implemented');
   }
   /**
+   * ファイルのパブリックなパスを取得する.
+   * @abstract
    * @param {JWFile} file
+   * @return {Promise<string>}
    */
-  getFileLink(file) {}
+  async getFileLink(file) {
+    throw new Error('Not Implemented');
+  }
+  /**
+   * ファイル名を部分一致で検索する.
+   * @abstract
+   * @param {string} partFileName
+   * @return {Promise<Array<string>>}
+   */
+  async getFileNames(partFileName) {
+    throw new Error('Not Implemented');
+  }
   /**
    * ログイン履歴を取得する.
    * @abstract
