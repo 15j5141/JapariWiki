@@ -66,6 +66,12 @@ export default class HeaderComponent extends ComponentBase {
         self.serviceInjection.application.openWiki(pageName);
         return false;
       });
+      $(self.element).on('click', '#ajaxLoad_upload', function(event) {
+        event.preventDefault();
+        // 起動.
+        self.serviceInjection.application.toggleUploader();
+        return false;
+      });
     });
   }
 }

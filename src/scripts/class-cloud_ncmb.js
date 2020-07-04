@@ -17,9 +17,11 @@ class CloudNCMB extends CloudBase {
       clientKey:
         '79d3a32839ef780c0fe16236d8efc7bdd338312ec1d969945346a181ffc9442f',
       instance: null,
+      APPLICATION_ID: 'Q5BkzYpYGt0sshPj',
     };
     this.appKey = ncmb.appKey || '';
     this.clientKey = ncmb.clientKey || '';
+    this.APPLICATION_ID = ncmb.APPLICATION_ID;
     this.instance = this;
     this.ncmb = new this.NCMB(this.appKey, this.clientKey);
 
@@ -208,7 +210,23 @@ class CloudNCMB extends CloudBase {
     });
     // message: "This user doesn't login."
   }
-  /** @override */
+  /**
+   * @override
+   * @param {string} fileName
+   */
+  async getFileLink(fileName) {
+    return (
+      'https://mbaas.api.nifcloud.com/2013-09-01/applications/' +
+      this.APPLICATION_ID +
+      '/publicFiles/' +
+      fileName.replace(/[^a-zA-Z0-9_.]/g, '')
+    );
+  }
+  /**
+   * @override
+   * @param {string} partFileName
+   * @return {Promise<Array<string>>}
+   */
   async getFileNames(partFileName) {
     const f = this.ncmb.File.order('createDate', true);
 

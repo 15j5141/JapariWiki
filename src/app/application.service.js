@@ -2,6 +2,7 @@
 import ServiceBase from '../scripts/class-service_base.js';
 import WikiApp from './wiki.component.js';
 import EditorApp from './editor.component.js';
+import { UploaderComponent } from './uploader.component.js';
 /**
  * @class
  */
@@ -19,6 +20,10 @@ export default class ApplicationService extends ServiceBase {
     this.editorApp = null;
     /** @type {boolean} 連打対策等の制御用真理値. */
     this.canOpenWiki = true;
+    /** @type {UploaderComponent} */
+    this.uploaderApp = null;
+    /** オンオフ制御用 */
+    this.isOpenUploader = false;
 
     /* ----- コンポーネント取得. ----- */
     this.componentsManager
@@ -59,5 +64,28 @@ export default class ApplicationService extends ServiceBase {
     this.editorApp.forceClose();
     await this.editorApp.open(pageURI);
     return;
+  }
+  /**
+   * アップロード画面を出す.
+   */
+  async openUploader() {
+    await this.uploaderApp.open();
+  }
+  /**
+   * アップロード画面を閉じる.
+   */
+  async closeUploader() {
+    await this.uploaderApp.close();
+  }
+  /**
+   * アップロード画面をオンオフする.
+   */
+  async toggleUploader() {
+    if (this.isOpenUploader) {
+      await this.closeUploader();
+    } else {
+      await this.openUploader();
+    }
+    this.isOpenUploader = !this.isOpenUploader;
   }
 }

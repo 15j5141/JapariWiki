@@ -156,19 +156,6 @@ th {
     /* max-width: auto; */
 }
 
-table.uploaded_list {
-    margin: 0 auto;
-}
-
-table.uploaded_list {
-    width: 100%;
-}
-
-td.uploaded_list {
-    text-align: center;
-    width: 30%;
-}
-
 #site_history {
     height: 10em;
     width: 100%;

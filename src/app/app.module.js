@@ -15,6 +15,7 @@ import { AppComponent } from './app.component.js';
 
 import ComponentBase from '../scripts/class-component_base.js';
 import ServiceBase from '../scripts/class-service_base.js';
+import { UploaderComponent } from './uploader.component.js';
 
 /**
  * @typedef {Object} Modules
@@ -43,6 +44,7 @@ export class AppModule {
         HistoryComponent,
         EditorApp,
         WikiApp,
+        UploaderComponent,
       ],
       // providers.
       services: [IndexService, ApplicationService, StatusService],
