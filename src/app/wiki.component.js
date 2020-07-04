@@ -115,7 +115,7 @@ export default class WikiApp extends ComponentBase {
     const $ = this.$;
     $(function() {
       // <a class="ajaxLoad">をクリックしたら. Wiki内ページリンクを踏んだら.
-      $(self.refObj.selector).on('click', 'a.ajaxLoad', function(event) {
+      $(self.element).on('click', 'a.ajaxLoad', function(event) {
         event.preventDefault(); // 標準ページ移動を無効化.
         /* 連打対策 */
         if (self.doneAjax) {

@@ -25,7 +25,7 @@ export default class EditorApp extends ComponentBase {
     return {
       selector: '#app-editor',
       templateUrl: './editor.component.html',
-      styleUrls: [],
+      styleUrls: ['./editor.component.css'],
     };
   }
 
@@ -41,6 +41,27 @@ export default class EditorApp extends ComponentBase {
   /** @override */
   async onRender() {
     this.renderer.setHTML(await this.templateHTML);
+  }
+  /** @override */
+  async onLoad() {
+    const $ = this.$;
+    const self = this;
+    $(function() {
+      self.$element.on('click', 'input.btn-cancel', event => {
+        self.forceClose();
+        return false;
+      });
+    });
+  }
+  /** @override */
+  show() {
+    this.$element.removeClass('app-editor--hide');
+    this.$element.addClass('app-editor--show');
+  }
+  /** @override */
+  hide() {
+    this.$element.removeClass('app-editor--show');
+    this.$element.addClass('app-editor--hide');
   }
   /**
    * 編集画面表示.
@@ -166,7 +187,8 @@ export default class EditorApp extends ComponentBase {
     this._isEdited = false;
     this._editedResult = null;
     // 履歴に追加する. FixMe エディタであることを履歴にも反映する.
-    this.pushState(pageURI);
+    // this.pushState(pageURI);
+    this.show();
     // ページ読み込み.
     let pageData = await cloud.getPage(pageURI).catch(err => {
       if (err.message === 'Page:NotFound') {
@@ -201,12 +223,14 @@ export default class EditorApp extends ComponentBase {
       await cloud.postPage(pageData);
     }
     // 編集アプリ正常終了.
+    this.forceClose();
     return true;
   }
   /**
    * 強制的にエディタを終了する.
    */
   forceClose() {
+    this.hide();
     this._isEdited = false;
   }
 }

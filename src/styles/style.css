@@ -64,7 +64,7 @@ div#content_body {
     /* 右寄せにする */
     padding: 10px;
     min-height: 60vh;
-    /* ajax時に背景をチラ見にないように vw=Viewport Height*/
+    display: flex;
 }
 
 div#footer {
@@ -205,4 +205,9 @@ iframe#content_add{
 }
 .hidden {
     display:none;
+}
+#content_add {
+    position: relative;
+    overflow-x: hidden;
+    width: 100%;
 }

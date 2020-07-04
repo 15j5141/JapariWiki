@@ -203,11 +203,24 @@ export default class ComponentBase {
    * @return {Promise<void>}
    */
   async draw() {
+    // this.show();
     // 実装された描画処理を呼ぶ.
     await this.onRender();
     await this._initChildComponents();
   }
   /* ---------- その他メソッド. ---------- */
+  /**
+   *
+   */
+  show() {
+    this.$element.show();
+  }
+  /**
+   *
+   */
+  hide() {
+    this.$element.hide();
+  }
   /**
    * template html を読み込む.
    * @return {Promise<string>}
