@@ -35,6 +35,7 @@ module.exports = {
     new CopyPlugin({
       patterns: [
         { from: 'app/*.html', to: '', context: 'src/' },
+        { from: 'app/*.css', to: '', context: 'src/' },
         { from: 'lib/*.js', to: '', context: 'src/' },
         { from: 'styles/*', to: '', context: 'src/' },
         { from: 'img/*', to: '', context: '' },
