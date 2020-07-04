@@ -2,12 +2,14 @@
 /** @typedef {import("./class-page").default} JWPage */
 /**
  * @typedef {Object} JWFile
- * @property {Object?} acl
+ * @property {Object=} acl
  * @property {string!} filename "aaa.png"
- * @property {string?} createDate "2020-04-18T15:15:23.424Z"
- * @property {number?} fileSize 741758
- * @property {string?} mimeType "image/png"
- * @property {string?} updateDate "2020-04-18T15:15:23.424Z"
+ * @property {string=} createDate "2020-04-18T15:15:23.424Z"
+ * @property {number=} fileSize 741758
+ * @property {string=} mimeType "image/png"
+ * @property {string=} updateDate "2020-04-18T15:15:23.424Z"
+ * @property {string=} updateDate "2020-04-18T15:15:23.424Z"
+ * @property {File=} rawFile
  */
 /**
  * クラウドの継承元クラス.
@@ -126,10 +128,10 @@ class CloudBase {
   /**
    * ファイルのパブリックなパスを取得する.
    * @abstract
-   * @param {JWFile} file
+   * @param {string} fileName
    * @return {Promise<string>}
    */
-  async getFileLink(file) {
+  async getFileLink(fileName) {
     throw new Error('Not Implemented');
   }
   /**

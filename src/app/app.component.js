@@ -57,8 +57,7 @@ export class AppComponent extends ComponentBase {
     const self = this;
     const $ = this.$;
     $(function() {
-      // 「アップロード」ボタンを押したら.
-      $(document).on('click', '#ajaxLoad_upload', function(event) {
+      $(document).on('click', '#ajaxLoad_upload_', function(event) {
         event.preventDefault();
         // キーボード操作などにより、オーバーレイが多重起動するのを防止する
         $(event.target).blur(); // ボタンからフォーカスを外す
@@ -75,7 +74,7 @@ export class AppComponent extends ComponentBase {
         return false;
       });
 
-      $(document).on('click', '#modal-overlay', function(event) {
+      $(document).on('click', '#modal-overlay_', function(event) {
         // [#modal-overlay]と[#modal-close]をフェードアウトする
         if ($(event.target).is('#modal-overlay')) {
           $('#modal-close,#modal-overlay').fadeOut('slow', function() {

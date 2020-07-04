@@ -1,6 +1,7 @@
 /* eslint-disable new-cap */
 import CloudBase from './class-cloud_base.js';
 import JWPage from './class-page.js';
+/** @typedef {import('./class-cloud_base.js').JWFile} JWFile*/
 // import config from './config.json';
 /**
  * ニフクラクラス.
@@ -209,6 +210,21 @@ class CloudNCMB extends CloudBase {
       }
     });
     // message: "This user doesn't login."
+  }
+  /**
+   * @override
+   * @param {JWFile} file
+   * @return {Promise<boolean>}
+   */
+  async postFile(file) {
+    return await this.ncmb.File.upload(file.filename, file.rawFile)
+      .then(function(res) {
+        return true;
+      })
+      .catch(function(err) {
+        console.log(err);
+        return false;
+      });
   }
   /**
    * @override

@@ -9,11 +9,14 @@ array(
 )
 -->
 
-<form id="form_upload" enctype="multipart/form-data" action="ajax_upload.php" method="POST">
-  <!-- MAX_FILE_SIZE は、必ず "file" input フィールドより前になければなりません -->
+<form id="form_upload" enctype="multipart/form-data">
   <input type="hidden" name="MAX_FILE_SIZE" value="10240000" />
-  <!-- input 要素の name 属性の値が、$_FILES 配列のキーになります -->
   アップロード(Max 10MB): <input name="userfile" type="file" />
   <input type="submit" value="ファイルを送信" />
 </form>
+<!-- アップロード結果のログ. -->
+<hr>
+<div class="uploaded_log"></div>
+<hr>
+<!-- アップロードした画像一覧. -->
 <div class="uploaded_images"></div>
