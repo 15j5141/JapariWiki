@@ -31,7 +31,7 @@ class CloudNCMB extends CloudBase {
     if (currentUser) {
       // console.log('ログイン中のユーザー: ' + currentUser.get('userName'));
     } else {
-      console.log('未ログインまたは取得に失敗');
+      // console.log('未ログインまたは取得に失敗');
     }
   }
   /** NCMB */
@@ -157,10 +157,36 @@ class CloudNCMB extends CloudBase {
       });
   }
   /** @override */
-  isLogin() {
+  async isLogin() {
     // カレントユーザー情報の取得
     const currentUser = this.ncmb.User.getCurrentUser();
-    return Boolean(currentUser);
+    const self = this;
+    // ログイン履歴を取得できるかでセッション切れ等を判断する.
+    const ncLL = this.ncmb.DataStore('LoginLog');
+    const result = await ncLL.fetch().catch(err => {
+      /** @type {Error} */ const e = err;
+      const obj = e.message.match(/^cannot GET .+ \((\d+)\)$/);
+      if (obj && obj[1] == '401') {
+        // セッション切れの時.
+        //  throw new Error('JWCloud:Unauthorized');
+        const user = self.ncmb.User.getCurrentUser();
+        return (async () => {
+          // 一度ログアウト.
+          await self.signOut();
+          // 再度ログイン.
+          await self.signIn(user.get('userName'), user.get('password'));
+          console.log('relogin:' + user.get('userName'));
+          return true;
+        })();
+      } else if (obj && obj[1] == '403') {
+        // 未ログインの時.
+        //  throw new Error('JWCloud:Forbidden');
+        return false;
+      } else {
+        throw err;
+      }
+    });
+    return Boolean(result);
   }
   /** @override */
   async signIn(id, pass) {
@@ -300,6 +326,9 @@ class CloudNCMB extends CloudBase {
         const obj = e.message.match(/^cannot GET .+ \((\d+)\)$/);
         if (obj && obj[1] == '401') {
           throw new Error('JWCloud:Unauthorized');
+        } else if (obj && obj[1] == '403') {
+          // new Error('JWCloud:Forbidden');
+          return '権限がありません.';
         } else {
           throw err;
         }

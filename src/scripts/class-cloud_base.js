@@ -56,9 +56,9 @@ class CloudBase {
   /**
    * 現在のログイン状況を取得する.
    * @abstract
-   * @return {boolean}
+   * @return {Promise<boolean>}
    */
-  isLogin() {
+  async isLogin() {
     throw new Error('Not Implemented');
   }
   /**

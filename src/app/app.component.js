@@ -43,11 +43,16 @@ export class AppComponent extends ComponentBase {
    */
   async onInit() {
     this.status = this.serviceInjection.status._status;
+    this.cloud = this.serviceInjection.status.getCloud();
   }
   /**
    * @override
    */
   async onRender() {
+    // ログインセッション切れを確認する.
+    this.renderer.setHTML('認証確認中...');
+    console.log('check:', await this.cloud.isLogin());
+    // 描画する.
     this.renderer.setHTML(await this.templateHTML);
   }
   /**
