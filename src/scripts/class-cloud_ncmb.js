@@ -156,6 +156,42 @@ class CloudNCMB extends CloudBase {
         }
       });
   }
+  /**
+   * 未実装.
+   * ページ一覧を取得する.
+   * @param {number} limit
+   * @param {string} author
+   */
+  async listPages(limit = 10, author = null) {
+    const ncPage = this.ncmb.DataStore('Page');
+    let query = ncPage.limit(limit);
+    // 所有者指定があればセットする.
+    if (author) query = query.equalTo('author', author);
+    // 受信.
+    return await query
+      .fetchAll()
+      .then(function(results) {
+        /** @type {Array}*/
+        const results_ = results;
+        // 整形して返す.
+        return results_.map(result => {
+          return {
+            path: result.path,
+            author: result.author,
+            updateDate: result.updateDate,
+          };
+        });
+      })
+      .catch(function(err) {
+        /** @type {Error} */ const e = err;
+        const obj = e.message.match(/^cannot GET .+ \((\d+)\)$/);
+        if (obj && obj[1] == '401') {
+          throw new Error('JWCloud:Unauthorized');
+        } else {
+          throw err;
+        }
+      });
+  }
   /** @override */
   async isLogin() {
     // カレントユーザー情報の取得
