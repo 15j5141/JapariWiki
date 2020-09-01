@@ -14,14 +14,17 @@ export default class ServiceBase {
     this.componentsManager = referenceObject.componentsManager;
     this.serviceManager = referenceObject.serviceManager;
 
+    /** @type {Object<string, ServiceBase>} */
+    this.serviceInjection = {};
+
     /**
      * @type {Object}
      */
     this.decoration = {};
     this.decorator();
 
-    /** @type {Object<string, ServiceBase>} */
-    this.serviceInjection = {};
+    // サービスを解決する.
+    this._inject();
   }
   /**
    * 疑似デコレーター.
