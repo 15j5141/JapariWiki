@@ -24,6 +24,7 @@ export default class ApplicationService extends ServiceBase {
     this.uploaderApp = null;
     /** オンオフ制御用 */
     this.isOpenUploader = false;
+    this.isOpenEditor = false;
 
     /* ----- コンポーネント取得. ----- */
     this.componentsManager
@@ -64,6 +65,25 @@ export default class ApplicationService extends ServiceBase {
     this.editorApp.forceClose();
     await this.editorApp.open(pageURI);
     return;
+  }
+  /**
+   * エディタを閉じる.
+   */
+  async closeEditor() {
+    this.editorApp.forceClose();
+    return;
+  }
+  /**
+   * エディタをオンオフする.
+   * @param {string} pageURI
+   */
+  async toggleEditor(pageURI) {
+    if (this.isOpenEditor) {
+      await this.closeEditor();
+    } else {
+      await this.openEditor(pageURI);
+    }
+    this.isOpenEditor = !this.isOpenEditor;
   }
   /**
    * アップロード画面を出す.
