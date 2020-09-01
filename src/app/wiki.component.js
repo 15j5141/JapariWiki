@@ -1,9 +1,9 @@
 // @ts-check
 import PageRenderer from '../scripts/class-page_renderer.js';
-import CloudNCMB from '../scripts/class-cloud_ncmb.js';
 import ComponentBase from '../scripts/class-component_base.js';
 import { StatusService } from './status.service.js';
 import ApplicationService from './application.service.js';
+import ModelsService from './models.service.js';
 
 /**
  * @class
@@ -15,10 +15,11 @@ export default class WikiApp extends ComponentBase {
   decorator() {
     this.renderer = new PageRenderer(this.element, null);
     /* ----- サービスのインジェクション. ----- */
-    /** @type {{status: StatusService, application: ApplicationService}} */
+    /** @type {{status: StatusService, application: ApplicationService, models: ModelsService}} */
     this.serviceInjection = {
       status: StatusService.prototype,
       application: ApplicationService.prototype,
+      models: ModelsService.prototype,
     };
   }
   /**
@@ -55,7 +56,7 @@ export default class WikiApp extends ComponentBase {
     this.renderer.println('Start Loading...');
     // 受信する.
     this.renderer.println('Downloading.');
-    const html = await this.getPageData(pageURI);
+    const html = await this.getPageHTML(pageURI);
     this.renderer.println('Downloaded.');
     // 構文解析して描画.
     await this.renderer.update(html);
@@ -68,12 +69,12 @@ export default class WikiApp extends ComponentBase {
    * @param {string} uri
    * @return {Promise<string>}
    */
-  async getPageData(uri) {
+  async getPageHTML(uri) {
     let html;
-    const cloud = this.serviceInjection.status.getCloud();
+    const models = this.serviceInjection.models;
     try {
       // クラウドからページデータ取得.
-      const pageData = await cloud.getPage(uri);
+      const pageData = await models.readPage(uri);
       html = pageData.rawText;
     } catch (err) {
       if (err.message === 'Page:NotFound') {

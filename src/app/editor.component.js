@@ -4,6 +4,7 @@ import WikiSyntaxPlugin from '../scripts/class-wiki_syntax_plugin.js';
 import ComponentBase from '../scripts/class-component_base.js';
 import { StatusService } from './status.service.js';
 import ApplicationService from './application.service.js';
+import ModelsService from './models.service.js';
 
 /**
  * @class
@@ -12,10 +13,11 @@ export default class EditorApp extends ComponentBase {
   /** @override */
   decorator() {
     /* ----- サービスのインジェクション. ----- */
-    /** @type {{status: StatusService, application: ApplicationService}} */
+    /** @type {{status: StatusService, application: ApplicationService, models: ModelsService}} */
     this.serviceInjection = {
       status: StatusService.prototype,
       application: ApplicationService.prototype,
+      models: ModelsService.prototype,
     };
   }
   /**
@@ -183,14 +185,14 @@ export default class EditorApp extends ComponentBase {
    * @return {Promise<boolean>}
    */
   async open(pageURI) {
-    const cloud = this.serviceInjection.status.getCloud();
+    const models = this.serviceInjection.models;
     this._isEdited = false;
     this._editedResult = null;
     // 履歴に追加する. FixMe エディタであることを履歴にも反映する.
     // this.pushState(pageURI);
     this.show();
     // ページ読み込み.
-    let pageData = await cloud.getPage(pageURI).catch(err => {
+    let pageData = await models.readPage(pageURI).catch(err => {
       if (err.message === 'Page:NotFound') {
         // ページがなければ新規作成して処理続行.
         return new JWPage(pageURI, '', {});
@@ -214,14 +216,9 @@ export default class EditorApp extends ComponentBase {
       return false;
     }
 
-    // null 判定で新規か更新か判断して保存.
-    if (pageData.cloudObject) {
-      // 更新.
-      await cloud.putPage(pageData);
-    } else {
-      // 新規作成.
-      await cloud.postPage(pageData);
-    }
+    // 保存する.
+    models.writePage(pageData);
+
     // 編集アプリ正常終了.
     this.forceClose();
     return true;

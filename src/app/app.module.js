@@ -16,6 +16,7 @@ import { AppComponent } from './app.component.js';
 import ComponentBase from '../scripts/class-component_base.js';
 import ServiceBase from '../scripts/class-service_base.js';
 import { UploaderComponent } from './uploader.component.js';
+import ModelsService from './models.service.js';
 
 /**
  * @typedef {Object} Modules
@@ -47,7 +48,12 @@ export class AppModule {
         UploaderComponent,
       ],
       // providers.
-      services: [IndexService, ApplicationService, StatusService],
+      services: [
+        IndexService,
+        ApplicationService,
+        StatusService,
+        ModelsService,
+      ],
       bootstrap: [AppComponent],
     };
   }
