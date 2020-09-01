@@ -14,7 +14,7 @@ function bootstrapModule(Module) {
 
   // サービスを立ち上げる.
   Module.decoration.services.forEach(Service => {
-    const service = new Service({ componentsManager });
+    const service = new Service({ componentsManager, serviceManager });
     // サービスを登録する.
     serviceManager.register(service);
   });
