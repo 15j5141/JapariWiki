@@ -8,6 +8,7 @@ module.exports = {
     index: './src/index.js',
     login: './src/login.js',
     logout: './src/logout.js',
+    signup: './src/signup.js',
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
@@ -31,6 +32,12 @@ module.exports = {
       chunks: ['logout'],
       template: path.resolve(__dirname, './src/logout.html'),
       filename: 'logout.html',
+    }),
+    new HtmlWebpackPlugin({
+      // inject: false,
+      chunks: ['signup'],
+      template: path.resolve(__dirname, './src/signup.html'),
+      filename: 'signup.html',
     }),
     new CopyPlugin({
       patterns: [

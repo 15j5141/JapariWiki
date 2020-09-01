@@ -246,19 +246,50 @@ class CloudNCMB extends CloudBase {
   }
   /** @override */
   async signUp(id, pass) {
+    const self = this;
     // Userインスタンスの生成
     const user = new this.ncmb.User();
     user.set('userName', id).set('password', pass);
+
     // 新規登録処理
-    return await user.signUpByAccount().catch(function(err) {
+    const userObj = await user.signUpByAccount().catch(function(err) {
       /** @type {Error} */ const e = err;
       const obj = e.message.match(/^cannot GET .+ \((\d+)\)$/);
       if (obj && obj[1] == '401') {
         throw new Error('JWCloud:Unauthorized');
+      } else if (obj && obj[1] == '409') {
+        throw new Error('JWCloud:Conflict');
       } else {
         throw err;
       }
     });
+
+    // ロールを検索する.
+    const role = await self.ncmb.Role.equalTo('roleName', 'normal')
+      .fetch()
+      .catch(function(err) {
+        // 検索に失敗した場合
+        throw new Error('JWCloud:ErrorSearchRole');
+      });
+
+    // normal ロールに追加する.
+    if (JSON.stringify(role) === '{}') {
+      // ロールが存在しない場合
+      throw new Error('JWCloud:NotFoundRole');
+    } else {
+      // 会員をロールに追加
+      await role
+        .addUser(userObj)
+        .update()
+        .then(function(role) {
+          // ログイン処理へ移行する.
+          return self.signIn(id, pass);
+        })
+        .catch(function(err) {
+          // 失敗した場合の処理
+          throw new Error('JWCloud:ErrorAddUserToRole');
+        });
+    }
   }
   /** @override */
   async signOut() {
