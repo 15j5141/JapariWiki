@@ -17,6 +17,7 @@ import ComponentBase from '../scripts/class-component_base.js';
 import ServiceBase from '../scripts/class-service_base.js';
 import { UploaderComponent } from './uploader.component.js';
 import ModelsService from './models.service.js';
+import WikiService from './wiki.service.js';
 
 /**
  * @typedef {Object} Modules
@@ -53,6 +54,7 @@ export class AppModule {
         ApplicationService,
         StatusService,
         ModelsService,
+        WikiService,
       ],
       bootstrap: [AppComponent],
     };
