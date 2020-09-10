@@ -1,7 +1,5 @@
 // @ts-check
 import ServiceBase from '../scripts/class-service_base.js';
-import WikiApp from './wiki.component.js';
-import EditorApp from './editor.component.js';
 import JWPage from '../scripts/class-page.js';
 import { StatusService } from './status.service.js';
 import ApplicationService from './application.service.js';
@@ -17,15 +15,6 @@ export default class ModelsService extends ServiceBase {
     /* ----- デコレータセット. ----- */
 
     /* ----- プロパティ宣言. ----- */
-    /** @type {WikiApp} */
-    this.wikiApp = null;
-    /** @type {EditorApp} */
-    this.editorApp = null;
-    /** @type {boolean} 連打対策等の制御用真理値. */
-    this.canOpenWiki = true;
-    /** オンオフ制御用 */
-    this.isOpenUploader = false;
-    this.isOpenEditor = false;
     /** @type {Array<JWPage>}*/
     this.jwPages = [];
 
@@ -37,16 +26,6 @@ export default class ModelsService extends ServiceBase {
     };
 
     /* ----- コンポーネント取得. ----- */
-    this.componentsManager
-      .getComponents(WikiApp.prototype)
-      .subscribe(component => {
-        this.wikiApp = component;
-      });
-    this.componentsManager
-      .getComponents(EditorApp.prototype)
-      .subscribe(component => {
-        this.editorApp = component;
-      });
   }
   /**
    * ページデータを読み込む.

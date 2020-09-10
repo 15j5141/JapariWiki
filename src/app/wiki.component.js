@@ -4,6 +4,7 @@ import ComponentBase from '../scripts/class-component_base.js';
 import { StatusService } from './status.service.js';
 import ApplicationService from './application.service.js';
 import ModelsService from './models.service.js';
+import WikiService from './wiki.service.js';
 
 /**
  * @class
@@ -14,12 +15,14 @@ export default class WikiApp extends ComponentBase {
    */
   decorator() {
     this.renderer = new PageRenderer(this.element, null);
+
     /* ----- サービスのインジェクション. ----- */
-    /** @type {{status: StatusService, application: ApplicationService, models: ModelsService}} */
+    /** @type {{status: StatusService, application: ApplicationService, models: ModelsService, wiki: WikiService}} */
     this.serviceInjection = {
       status: StatusService.prototype,
       application: ApplicationService.prototype,
       models: ModelsService.prototype,
+      wiki: WikiService.prototype,
     };
   }
   /**
@@ -40,6 +43,44 @@ export default class WikiApp extends ComponentBase {
     this.serviceInjection.application.wikiApp = this;
     /** リンク連打対策用. */
     this.doneAjax = true;
+
+    // ページデータ読込完了時に表示を書き換える.
+    const subscribe = () => {
+      this.serviceInjection.wiki.page$.subscribe(
+        jwPage => {
+          console.log('page$-onNext', jwPage);
+          // クリック制限を解除.
+          this.doneAjax = true;
+
+          // 受信してものを構文解析して描画する.
+          this.renderer.html$.next({ value: jwPage.rawText });
+
+          // タイトル書き換え.
+          this.$(top.document.querySelector('title')).text(jwPage.pageURI);
+        },
+        e => {
+          console.log('page$-onErr', e);
+          subscribe();
+        },
+        () => console.log('page$-onComp')
+      );
+    };
+    subscribe();
+
+    // ページ移動の瞬間に読み込み画面を表示する.
+    this.serviceInjection.wiki.pageURI$.subscribe(uri => {
+      console.log('pageURI$-onNext', uri);
+      // 読み込み中であることを明示.
+      this.renderer.cls();
+      // await this.loadTemplate();
+      this.renderer.println('Start Loading...');
+      // 受信する.
+      this.renderer.println('Downloading ' + uri + ' .');
+    });
+
+    // トップページ読み込みを発火する.
+    const uri = history.state || '/FrontPage';
+    this.serviceInjection.wiki.pageURI$.next(uri);
   }
   /**
    * @override
@@ -51,19 +92,7 @@ export default class WikiApp extends ComponentBase {
     // ページ名取得.
     const pageURI = statusObj.getPageURI();
 
-    // 読み込み中であることを明示.
     this.renderer.cls();
-    // await this.loadTemplate();
-    this.renderer.println('Start Loading...');
-    // 受信する.
-    this.renderer.println('Downloading.');
-    const html = await this.getPageHTML(pageURI);
-    this.renderer.println('Downloaded.');
-    // 構文解析して描画.
-    await this.renderer.update(html);
-
-    // タイトル書き換え.
-    this.$(top.document.querySelector('title')).text(pageURI);
   }
   /**
    * Wikiデータ取得()
@@ -103,8 +132,9 @@ export default class WikiApp extends ComponentBase {
     // ページ上までスクロール.
     this.scroll2Top();
 
-    // 受信して描画.
-    await this.draw();
+    // ページの読み込みを開始する.
+    this.serviceInjection.wiki.pageURI$.next(uri);
+
     // 履歴に追加する.
     this.pushState(uri);
   }

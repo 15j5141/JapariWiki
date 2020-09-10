@@ -14,7 +14,14 @@ import {
   throwError,
   Observable,
 } from 'rxjs';
-import { switchMap, map, catchError, takeUntil, filter } from 'rxjs/operators';
+import {
+  switchMap,
+  map,
+  catchError,
+  takeUntil,
+  filter,
+  tap,
+} from 'rxjs/operators';
 
 /**
  * @class
@@ -30,7 +37,7 @@ export default class WikiService extends ServiceBase {
     const self = this;
     /** @type {Subject} 履歴移動等でキャンセル割り込みキャンセル用 */
     this.exitSignal$ = new Subject();
-    /** @type {Subject<string>} ページ移動用 */
+    /** @type {BehaviorSubject<string>} ページ移動用 */
     this.pageURI$ = new BehaviorSubject(null);
     /** @type {Observable<JWPage>} ページ移動観測用 */
     this.page$ = this.pageURI$.pipe(
@@ -46,7 +53,8 @@ export default class WikiService extends ServiceBase {
                 return of(
                   new JWPage(
                     pageURI,
-                    'ページがありません。<br>新規作成<br>' + pageURI,
+                    'ページがありません。<br>編集ボタンで作成します<br>' +
+                      pageURI,
                     null
                   )
                 );
@@ -64,10 +72,17 @@ export default class WikiService extends ServiceBase {
         if (page == null) {
           throw new Error('JW:UnknownError');
         }
+
         return page;
       }),
-      takeUntil(self.exitSignal$)
+      takeUntil(self.exitSignal$),
+      tap(page => {
+        // 購読していなくてもページデータを読み取れるようにする.
+        self.page = page;
+      })
     );
+    /** @type {JWPage} ページ */
+    this.page = null;
 
     /* ----- サービスのインジェクション. ----- */
     /** @type {{status: StatusService, application: ApplicationService, models: ModelsService}} */

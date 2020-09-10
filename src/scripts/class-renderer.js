@@ -1,4 +1,7 @@
 // @ts-check
+
+import { Subject } from 'rxjs';
+
 /** */
 class Renderer {
   /**
@@ -6,6 +9,57 @@ class Renderer {
    */
   constructor(element) {
     this.element = element;
+
+    /**
+     * @typedef DeltaDom
+     * @property {string=} selector
+     * @property {string} [type='html'] html | text | append
+     * @property {string} value
+     */
+    /**
+     * 差分をストリーム出来るようにする.
+     * @type {Subject<DeltaDom>}
+     */
+    this.html$ = new Subject();
+    /*
+    {
+      selector: '', // 書き換える対象セレクタ.
+      type: 'html', // 書き換え方法.
+      value: element.innerHTML, // 書き換え内容.
+    }
+    */
+    // next() で書き換えられるようにする.
+    this.html$.subscribe(async deltaDOM => {
+      const delta = {
+        selector: '',
+        type: 'html',
+        value: '',
+        ...deltaDOM,
+      };
+      const targets =
+        delta.selector == '' || delta.selector == null
+          ? [this.element]
+          : Array.from(this.element.querySelectorAll(delta.selector));
+
+      if (delta.selector === '' && delta.type === 'html') {
+        await this.update(delta.value);
+      } else if (delta.type === 'html') {
+        // HTML として書き換える.
+        targets.map(target => {
+          target.innerHTML = delta.value;
+        });
+      } else if (delta.type === 'text') {
+        // テキストとして書き換える.
+        targets.map(target => {
+          target.textContent = delta.value;
+        });
+      } else if (delta.type === 'append') {
+        // HTML として追記する.
+        targets.map(target => {
+          target.innerHTML = target.innerHTML + delta.value;
+        });
+      }
+    });
   }
   /**
    * HTML で書き換える.
