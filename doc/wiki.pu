@@ -1,0 +1,125 @@
+@startuml Wiki
+
+actor User
+participant IndexView as Index
+participant WikiApp as WikiApp <<ComponentBase>>
+participant WikiService as WikiService <<ServiceBase>>
+participant Menu_etc as Menu <<ComponentBase>>
+participant EditorApp as EditorApp <<ComponentBase>>
+participant SyntaxPlugin as SyntaxPlugin <<PluginBase>>
+participant ViewModels as modelsService <<ServiceBase>>
+participant Cloud
+participant Observer
+
+== 監視開始処理 subscribe ==
+WikiService -> WikiService++ : new Subject()
+WikiApp -> WikiService : subscribe(onNext(pageURI))
+Menu -> WikiService : subscribe(onNext(pageURI))
+== 値変化 next ==
+
+User -> Index : リンクをクリック.
+activate Index
+    Index -> WikiApp : OnClick
+    deactivate Index
+activate WikiApp
+    WikiApp -> WikiService : next(pageURI)\n 現在のページ名を変更.
+    deactivate WikiApp
+
+== 通知 onNext ==
+
+activate WikiService
+    par Menu, etc...
+        WikiService -> Menu++ : onNext(pageURI)\n 通知
+            return
+    else WikiApp
+        group 非同期処理
+            WikiService -> WikiService++ #ffaaaa : pipe.switchMap(pageURI)\n 非同期通信処理
+                WikiService ->> modelsService++ : readPageModel():Page\n ページデータ取得
+                    modelsService <<->> Cloud : Ajax
+                    return page:Page
+                WikiService -> WikiService++ #ffaaaa : pipe.catchError()
+                    alt ページが存在しない
+                        WikiService <- WikiService : return new Page()
+                    else 権限がない
+                        WikiService <- WikiService : return new Page()
+                    else その他
+                        WikiService <- WikiService : throw 'UnknownError'
+                    end
+                    return
+                return page:Page
+            end
+        WikiService -> WikiService++ #ffaaaa : pipe.map(page)\n 変換処理
+            opt page==null
+                WikiService -> WikiService : throw Error
+            end
+            return
+        WikiService -> WikiService++ #ffaaaa : pipe.takeUntil(exit$)\n 割り込み停止がないか確認
+            return
+        return page:Page
+    WikiService -> WikiApp++ : onNext(pageURI)\n 通知
+            ' return
+    deactivate WikiService
+        WikiApp -> SyntaxPlugin++ : 構文即時置換(html):string
+            return html
+        WikiApp ->> SyntaxPlugin : will構文遅延置換(html):string
+            activate SyntaxPlugin
+        WikiApp -> WikiApp++ : ページ移動,履歴変更処理()
+            return
+        WikiApp -> Index++ : DOM書き換え()
+            return
+    end
+        Index <<- WikiApp-- : ページ移動完了:void
+        ' deactivate WikiApp
+    deactivate Index
+
+== 非同期での構文解析 ==
+
+modelsService <<- SyntaxPlugin-- : did構文遅延置換:Object
+    activate modelsService
+    modelsService ->> WikiApp++ : 差分HTML:Object
+        WikiApp -> Index++ : DOM部分書き換え()
+            return
+        return
+    deactivate modelsService
+
+' == section ==
+' SyntaxPlugin -> WikiApp : htmlを置換.
+' WikiApp -> modelsService : next 表示中のhtmlを変更.
+' modelsService -> WikiApp : onNext Observer通知(html)
+' WikiApp -> Index : DOM書き換え(html)
+
+@enduml
+
+@startuml memo
+actor User
+participant IndexView as Index
+participant WikiApp as WikiApp <<ComponentBase>>
+' participant EditorApp as EditorApp <<ComponentBase>>
+participant SyntaxPlugin as SyntaxPlugin <<PluginBase>>
+participant Models as modelsService <<ServiceBase>>
+participant ViewModelObserver
+participant Cloud
+
+User -> Index++ : リンクをクリック.
+    Index ->> WikiApp++ : ページ移動():void
+        WikiApp ->> WikiApp++ : ページデータ取得():Page
+            WikiApp ->> modelsService++ : readPageModel():Page
+                modelsService ->> Cloud : Ajax
+                return
+            return
+        return
+    return
+
+Cloud -> modelsService++ : Ajax done
+    modelsService -> ViewModelObserver++ : next ページデータ変更.
+    deactivate modelsService
+
+ViewModelObserver -> WikiApp++ : onNext ページデータ変更された.
+    WikiApp -> SyntaxPlugin++ : 構文置換(html):string
+        return html
+    WikiApp <-> Index : DOM書き換え()
+return
+deactivate ViewModelObserver
+
+
+@enduml

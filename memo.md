@@ -86,3 +86,16 @@ Rendererを内包？
 */
 
 ```
+
+HeaderやApplication部分をComponentとして扱う。
+app/wiki.component.js
+app/wiki.component.html
+app/editor.component.js
+app/editor.component.html
+app/uploader.component.js
+app/uploader.component.html
+app/header.component.js
+app/header.component.html
+app/footer.component.js
+app/footer.component.html
+app/menu.component.js

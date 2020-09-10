@@ -1,0 +1,22 @@
+<!--
+array(
+  'gif' => 'image/gif',
+  'jpg' => 'image/jpeg',
+  'bmp' => 'image/x-ms-bmp',
+  'webp' => 'image/webp',
+  'apng' => 'image/vnd.mozilla.apng',
+  'png' => 'image/png',
+)
+-->
+
+<form id="form_upload" enctype="multipart/form-data">
+  <input type="hidden" name="MAX_FILE_SIZE" value="10240000" />
+  アップロード(Max 10MB): <input name="userfile" type="file" />
+  <input type="submit" value="ファイルを送信" />
+</form>
+<!-- アップロード結果のログ. -->
+<hr>
+<div class="uploaded_log"></div>
+<hr>
+<!-- アップロードした画像一覧. -->
+<div class="uploaded_images"></div>

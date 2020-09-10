@@ -1,34 +1,53 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const path = require('path');
+const CopyPlugin = require('copy-webpack-plugin');
 
 module.exports = {
   mode: process.env.NODE_ENV || 'development',
   entry: {
-    index: './js/index.js',
-    wiki: './app/wiki.js',
-    edit: './app/edit.js',
+    index: './src/index.js',
+    login: './src/login.js',
+    logout: './src/logout.js',
+    signup: './src/signup.js',
   },
   output: {
-    path: __dirname + '/dist',
-    filename: 'app/[name].js',
+    path: path.resolve(__dirname, 'dist'),
+    filename: '[name].bundle.js',
   },
   plugins: [
     new HtmlWebpackPlugin({
       // inject: false,
       chunks: ['index'],
-      template: 'index.html',
+      template: path.resolve(__dirname, './src/index.html'),
       filename: 'index.html',
     }),
     new HtmlWebpackPlugin({
       // inject: false,
-      chunks: ['wiki'],
-      template: 'app/wiki.html',
-      filename: 'app/wiki.html',
+      chunks: ['login'],
+      template: path.resolve(__dirname, './src/login.html'),
+      filename: 'login.html',
     }),
     new HtmlWebpackPlugin({
       // inject: false,
-      chunks: ['edit'],
-      template: 'app/edit.html',
-      filename: 'app/edit.html',
+      chunks: ['logout'],
+      template: path.resolve(__dirname, './src/logout.html'),
+      filename: 'logout.html',
+    }),
+    new HtmlWebpackPlugin({
+      // inject: false,
+      chunks: ['signup'],
+      template: path.resolve(__dirname, './src/signup.html'),
+      filename: 'signup.html',
+    }),
+    new CopyPlugin({
+      patterns: [
+        { from: 'app/*.html', to: '', context: 'src/' },
+        { from: 'app/*.css', to: '', context: 'src/' },
+        { from: 'lib/*.js', to: '', context: 'src/' },
+        { from: 'styles/*', to: '', context: 'src/' },
+        { from: 'img/*', to: '', context: '' },
+        { from: 'text/*', to: '', context: '' },
+      ],
     }),
   ],
   externals: [

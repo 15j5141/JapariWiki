@@ -1,0 +1,140 @@
+@startuml Index
+
+actor User
+participant Index
+participant ServiceManager
+participant アプリ用サービス as applicationService <<ServiceBase>>
+participant ステータス用サービス as statusService <<ServiceBase>>
+participant ComponentsManager
+
+User -> Index : Wiki を開く.
+
+activate Index
+Index -> ServiceManager** : new
+Index -> ComponentsManager** : new
+
+group サービスを開始する.
+    Index -> Index++ : アプリ用サービスを開始する.
+        Index -> applicationService** : new
+        Index -> ServiceManager++ : サービスとして登録する.
+        return
+    return
+
+    Index -> Index++ : ステータス用サービスを開始する.
+        Index -> statusService** : new
+        Index -> ServiceManager++ : サービスとして登録する.
+        return
+    return
+end
+
+Index -> Index++ : コンポーネントを配置する.
+    Index -> AppComponent** : new
+    Index -> ComponentsManager++ : 追加する.
+    return
+    ref over Index, AppComponent : AppComponent
+return
+
+@enduml
+
+@startuml AppComponent
+participant Index
+participant AppComponent as AppComponent <<ComponentBase>>
+participant ヘッダー as headerComponent <<ComponentBase>>
+participant フッター as footerComponent <<ComponentBase>>
+participant サイド as sideComponent <<ComponentBase>>
+participant メイン as applicationComponent <<ComponentBase>>
+
+activate Index
+
+
+Index -> AppComponent : init():void
+activate AppComponent
+
+AppComponent -> AppComponent : onInit():void
+AppComponent -> AppComponent : onLoad():void
+return
+
+Index -> AppComponent++ : draw():void
+AppComponent <-> AppComponent : onRender():void
+
+'loop 1, 子コンポーネント数
+'    AppComponent -> childComponent** : new
+'end
+group 子コンポーネント生成する.
+    AppComponent -> AppComponent++ : _initChildComponents():void
+    par 並行処理.
+        AppComponent -> headerComponent ** : new
+        AppComponent <-> headerComponent : init():void
+        AppComponent <-> headerComponent : draw():void
+    else
+        AppComponent -> footerComponent ** : new
+        AppComponent <-> footerComponent : init():void
+        AppComponent <-> footerComponent : draw():void
+    else
+        AppComponent -> sideComponent ** : new
+        AppComponent <-> sideComponent : init():void
+        AppComponent <-> sideComponent : draw():void
+    else
+        AppComponent -> applicationComponent ** : new
+        AppComponent <-> applicationComponent : init():void
+        AppComponent <-> applicationComponent : draw():void
+    end
+    return
+end
+
+@enduml
+
+@startuml Cloud_
+
+participant Manager
+participant CloudService as CloudService <<ServiceBase>>
+participant NCMB
+database mBaaS
+
+Manager -> CloudService** : new
+CloudService -> CloudService : constructor():CloudService
+
+Manager -> CloudService++ : init():void
+    CloudService -> NCMB** : 接続用インスタンス生成.
+    CloudService -> NCMB++ : Get Instance.
+    return instance
+return
+
+Manager -> CloudService++ : ログイン中か確認する.
+CloudService -> NCMB++ : インスタンスが有効か確認する.
+    alt ログイン時
+        CloudService <-- NCMB : OK
+    else 非ログイン時
+        CloudService <-- NCMB : Error
+        deactivate NCMB
+        CloudService -> NCMB++ : ログイン処理.
+            NCMB <-> mBaaS
+        return
+    end
+return OK
+
+Manager -> CloudService++ : Access Page Data.
+    alt Get
+        CloudService -> NCMB++ : GetPage
+            NCMB <-> mBaaS
+        return JWPage
+    else Post
+        CloudService -> NCMB++ : SetPage JWPage
+            NCMB <-> mBaaS
+        return
+    end
+return
+
+@enduml
+
+@startuml Syntax
+abstract class SyntaxPluginBase {
+    {abstract} + String replaceSyntax()
+    {abstract} + String checkBeforeSavingPage()
+    {abstract} + String checkAfterLoadingPage()
+    {static} + String rndStr()
+}
+class WikiSyntaxPlugin extends SyntaxPluginBase {
+    + String checkComment()
+}
+@enduml
