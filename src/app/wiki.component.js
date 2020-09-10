@@ -144,6 +144,7 @@ export default class WikiApp extends ComponentBase {
   onLoad() {
     const self = this;
     const $ = this.$;
+    const statusObj = this.serviceInjection.status._status;
     $(function() {
       // <a class="ajaxLoad">をクリックしたら. Wiki内ページリンクを踏んだら.
       $(self.element).on('click', 'a.ajaxLoad', function(event) {
@@ -166,18 +167,17 @@ export default class WikiApp extends ComponentBase {
 
       // ページバック処理時にページ遷移を発動.
       $(top).on('popstate', function(e) {
-        if (!e.originalEvent.state) return;
         const isCanBeHistory =
           history && history.pushState && history.state !== undefined;
         if (isCanBeHistory) {
           // FixMe ページだけでなくアプリの切り替えも行う.
 
           // パスを解決して現在のURIを書き換える.
-          const uri = statusObj.resolveURI(e.originalEvent.state);
+          const uri = statusObj.resolveURI(history.state);
           statusObj.setPageURI(uri);
           statusObj.save();
-          // ページ再描画.
-          self.draw();
+          // ページ名をセット.
+          self.serviceInjection.wiki.pageURI$.next(uri);
         }
       });
     });
