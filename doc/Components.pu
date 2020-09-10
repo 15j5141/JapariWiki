@@ -1,0 +1,28 @@
+@startuml Components
+
+
+abstract class ComponentBase {
+    - jQuery $
+    - String selector
+    - Element element
+    - JQuery $element
+    - JWStatus status
+    - Renderer renderer
+    
+    {abstract} Promise onInit()
+    {abstract} Promise onRender()
+    {abstract} Promise onLoad()
+    + Promise init()
+    + Promise draw()
+}
+class HeaderComponent extends ComponentBase {
+}
+class FooterComponent extends ComponentBase {
+}
+class SideComponent extends ComponentBase {
+}
+class WikiComponent extends ComponentBase {
+    + void getPageData() : Promise
+    + String move() : Promise
+}
+@enduml
