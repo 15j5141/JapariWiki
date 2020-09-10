@@ -45,10 +45,11 @@ export default class WikiApp extends ComponentBase {
    * @override
    */
   async onRender() {
+    const statusObj = this.serviceInjection.status._status;
     // 最新のステータス取得.
-    this.refObj.status.load();
+    statusObj.load();
     // ページ名取得.
-    const pageURI = this.refObj.status.getPageURI();
+    const pageURI = statusObj.getPageURI();
 
     // 読み込み中であることを明示.
     this.renderer.cls();
@@ -92,13 +93,12 @@ export default class WikiApp extends ComponentBase {
    * @param {string} pageURI
    */
   async move(pageURI = null) {
+    const statusObj = this.serviceInjection.status._status;
     // パスを解決.
-    const uri = this.refObj.status.resolveURI(
-      pageURI || this.refObj.status.getPageURI()
-    );
-    this.refObj.status.setPageURI(uri);
+    const uri = statusObj.resolveURI(pageURI || statusObj.getPageURI());
+    statusObj.setPageURI(uri);
     // FixMe パスを解決できなければエラー?
-    this.refObj.status.save();
+    statusObj.save();
 
     // ページ上までスクロール.
     this.scroll2Top();
@@ -143,9 +143,9 @@ export default class WikiApp extends ComponentBase {
           // FixMe ページだけでなくアプリの切り替えも行う.
 
           // パスを解決して現在のURIを書き換える.
-          const uri = self.refObj.status.resolveURI(e.originalEvent.state);
-          self.refObj.status.setPageURI(uri);
-          self.refObj.status.save();
+          const uri = statusObj.resolveURI(e.originalEvent.state);
+          statusObj.setPageURI(uri);
+          statusObj.save();
           // ページ再描画.
           self.draw();
         }

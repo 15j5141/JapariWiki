@@ -49,13 +49,14 @@ export default class HeaderComponent extends ComponentBase {
    */
   onLoad() {
     const self = this;
+    const statusObj = this.serviceInjection.status._status;
     const $ = this.$;
     $(function() {
       // 「編集」ボタンを押したら.
       $(self.element).on('click', '#ajaxLoad_edit', function(event) {
         event.preventDefault();
         // 最新ステータス取得する.
-        const status = self.refObj.status;
+        const status = statusObj;
         status.load();
         // 現在のページ URI を取得する.
         const pageURI = status.getPageURI();
