@@ -1,0 +1,47 @@
+{
+  "name": "japariwiki",
+  "version": "1.0.0",
+  "description": "Wiki.",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "watch": "node ./node_modules/webpack/bin/webpack --mode=development --watch",
+    "build": "node ./node_modules/webpack/bin/webpack --mode=development",
+    "release": "node ./node_modules/webpack/bin/webpack --mode=production"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/15j5141/JapariWiki.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/15j5141/JapariWiki/issues"
+  },
+  "homepage": "https://github.com/15j5141/JapariWiki#readme",
+  "browserslist": [
+    "last 2 Chrome versions",
+    "not ie <= 11"
+  ],
+  "devDependencies": {
+    "@babel/core": "^7.7.5",
+    "@babel/polyfill": "^7.7.0",
+    "@babel/preset-env": "^7.7.6",
+    "babel-loader": "^8.0.6",
+    "core-js": "^3.5.0",
+    "eslint": "^6.6.0",
+    "eslint-config-google": "^0.14.0",
+    "eslint-config-prettier": "^6.10.1",
+    "eslint-plugin-compat": "^3.5.1",
+    "eslint-plugin-jquery": "^1.5.1",
+    "eslint-plugin-prettier": "^3.1.2",
+    "html-webpack-plugin": "^4.2.0",
+    "json-loader": "^0.5.7",
+    "prettier": "^1.19.1",
+    "webpack": "^4.42.1",
+    "webpack-cli": "^3.3.11"
+  },
+  "dependencies": {}
+}

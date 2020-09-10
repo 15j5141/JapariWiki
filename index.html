@@ -1,0 +1,83 @@
+<!-- <?php
+/* php-init*/
+
+require_once(__DIR__.'/lib/module_convertHTML.php');
+require_once(__DIR__.'/lib/module_login.php');
+require_once(__DIR__.'/../config.php');
+
+?>
+<?php
+/* php-run */
+
+if(isset($_GET['page'])){
+	$_SESSION['page']=htmlspecialchars($_GET['page'], ENT_QUOTES|ENT_HTML5);
+	header( "Location: " . parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
+}
+//$page = isset($_GET['page']) ? urldecode($_GET['page']) : '';
+$page = isset($_SESSION['page']) ? $_SESSION['page'] : 'FrontPage';
+//$page = $page==='' ?  : '';
+?> -->
+
+<!-- html-body -->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <link rel="stylesheet" type="text/css" href="css/style.css" />
+  <title>
+    <!-- $JWConfig["siteTitle"] -->
+  </title>
+</head>
+
+<body>
+  <div class="bg-image">
+  </div>
+  <div id="header">
+    <!-- auto ajax insert -->
+    Loading Now...<br />
+  </div><!-- /header-->
+  <div id="content">
+    <div id="content_body">
+      <div id="content_add" src="app/wiki.html">
+        Loading Now...<br /><br /><br />
+        <!-- auto ajax insert -->
+      </div>
+    </div>
+  </div>
+  <div id="side">
+    <div id="side_menu">
+      <p class="bar">メニュー</p>
+      アカウント名：
+      <!-- $_SESSION['id'] --><br>
+      <a href="logout.html">ログアウト</a><br />
+      お知らせ<br />
+      <div id="site_history">
+        <div id="side-site_notice"></div>
+      </div>
+      <!-- <a href='' id="ajaxLoad_kanban">
+        kanban(test)
+      </a><br /> -->
+      ログイン履歴<br />
+      <div id="login_history">
+        Loading Now...<br />
+      </div>
+      <div id="side-menu"></div>
+
+    </div>
+    <div id="side_history">
+      History<br />
+      <div id="side-edited_history"></div>
+    </div>
+  </div>
+  <div id="footer">
+    Loading Now...<br />
+  </div>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script type="text/javascript" src="lib/ncmb.min.js" charset="utf-8"></script>
+  <!-- <script type="text/javascript" src="js/modAjaxWikiBase.js"></script> -->
+  <!-- <script type="module" src="js/index.js"></script> -->
+</body>
+
+</html>
