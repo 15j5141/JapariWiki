@@ -1,6 +1,9 @@
 // @ts-check
 import ComponentBase from '../scripts/class-component_base.js';
 import ApplicationService from './application.service.js';
+import { StatusService } from './status.service.js';
+import ModelsService from './models.service.js';
+import WikiService from './wiki.service.js';
 
 /**
  * @class
@@ -10,9 +13,12 @@ export default class HeaderComponent extends ComponentBase {
    * @override
    */
   decorator() {
-    /** @type {{application: ApplicationService}} */
+    /** @type {{status: StatusService, application: ApplicationService, models: ModelsService, wiki: WikiService}} */
     this.serviceInjection = {
+      status: StatusService.prototype,
       application: ApplicationService.prototype,
+      models: ModelsService.prototype,
+      wiki: WikiService.prototype,
     };
   }
   /**
@@ -29,7 +35,15 @@ export default class HeaderComponent extends ComponentBase {
   /**
    * @override
    */
-  async onInit() {}
+  async onInit() {
+    this.serviceInjection.wiki.page$.subscribe(page => {
+      this.renderer.html$.next({
+        selector: 'span#header-page_name',
+        value: `<a data-page="${page.pageURI}" class="ajaxLoad none_decoration">${page.pageURI}</a>`,
+        type: 'html',
+      });
+    });
+  }
   /**
    * @override
    */
