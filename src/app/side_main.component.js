@@ -48,7 +48,7 @@ export default class SideMainComponent extends ComponentBase {
   onStart() {
     // 初期描画時にデータバインディングを予約する.
     this.serviceInjection.status.user$
-      .pipe(filter(user => user.id !== 'id')) // 初期値は無視する.
+      .pipe(filter(user => user !== null)) // 初期値は無視する.
       .subscribe(user => {
         console.log(user);
         this.renderer.html$.next({ selector: '#user_id', value: user.id });

@@ -49,13 +49,12 @@ export class AppComponent extends ComponentBase {
    * @override
    */
   async onRender() {
+    const status = this.serviceInjection.status;
+
     // ログインセッション切れを確認する.
     this.renderer.setHTML('認証確認中...');
-    console.log('check:', await this.cloud.isLogin());
-    const status = this.serviceInjection.status;
-    // Fixme ログイン確認処理を移動して, this.cloud への参照をなくす.
-    const userObj = this.cloud.ncmb.User.getCurrentUser();
-    status.setUser({ id: userObj.userName, name: userObj.userName });
+    const user = await this.cloud.isLogin();
+    status.setUser(user);
 
     // 描画する.
     this.renderer.setHTML(await this.templateHTML);

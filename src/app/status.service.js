@@ -2,7 +2,9 @@
 import ServiceBase from '../scripts/class-service_base.js';
 import CloudNCMB from '../scripts/class-cloud_ncmb.js';
 import JWStatus from '../scripts/jw-status.js';
+import { BehaviorSubject } from 'rxjs';
 /** @typedef {import("../scripts/class-cloud_base").default} CloudBase */
+/** @typedef {import("../scripts/class-cloud_base").JWUser} JWUser */
 
 /**
  * ユーザー名やログイン状況等を管理する.
@@ -19,7 +21,9 @@ export class StatusService extends ServiceBase {
     this._status = null;
     /** @type {BehaviorSubject<JWStatus>} */
     this.status$ = new BehaviorSubject(new JWStatus());
-    this.user$ = new BehaviorSubject({ id: 'id', name: 'name' });
+    /** @type {BehaviorSubject<JWUser>} */
+    this.user$ = new BehaviorSubject(null);
+    // ステータス情報の更新を伝える.
     this.status$.subscribe(status => {
       this._status = status;
       // 更新されたステータス情報からユーザ情報を伝播させる.

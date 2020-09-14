@@ -8,8 +8,14 @@
  * @property {number=} fileSize 741758
  * @property {string=} mimeType "image/png"
  * @property {string=} updateDate "2020-04-18T15:15:23.424Z"
- * @property {string=} updateDate "2020-04-18T15:15:23.424Z"
  * @property {File=} rawFile
+ */
+/**
+ * @typedef {Object} JWUser ユーザ情報
+ * @property {string!} id "id"
+ * @property {string!} name "name"
+ * @property {string=} createDate "2020-04-18T15:15:23.424Z"
+ * @property {string=} updateDate "2020-04-18T15:15:23.424Z"
  */
 /**
  * クラウドの継承元クラス.
@@ -56,7 +62,7 @@ class CloudBase {
   /**
    * 現在のログイン状況を取得する.
    * @abstract
-   * @return {Promise<boolean>}
+   * @return {Promise<JWUser>}
    */
   async isLogin() {
     throw new Error('Not Implemented');
@@ -66,7 +72,7 @@ class CloudBase {
    * @abstract
    * @param {*} id
    * @param {*} pass
-   * @return {Promise}
+   * @return {Promise<JWUser>}
    */
   signIn(id, pass) {
     throw new Error('Not Implemented');
