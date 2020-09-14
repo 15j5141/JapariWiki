@@ -47,7 +47,7 @@ class JWStatus {
       params.delete('pageURI');
       // URL を書き換え.
       history.replaceState(
-        status.pageURI,
+        { pageURI: status.pageURI },
         null,
         location.pathname + params.toString()
       );
@@ -66,13 +66,13 @@ class JWStatus {
   /** */
   setURL() {
     // 現在のページ閲覧履歴がなければ.
-    if (history.state !== this.getPageURI()) {
+    if ((history.state && history.state.pageURI) !== this.getPageURI()) {
       // URL 生成.
       const url = new URL(window.location.href);
       url.searchParams.set('pageURI', this._status.pageURI);
       url.searchParams.set('app', this._status.app);
       // 履歴に登録.
-      window.history.pushState(this.getPageURI(), '', url.href);
+      window.history.pushState({ pageURI: this.getPageURI() }, '', url.href);
     }
   }
   /**

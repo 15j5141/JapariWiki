@@ -92,11 +92,6 @@ export class AppComponent extends ComponentBase {
           });
         }
       });
-
-      if (history.state == null) {
-        // 履歴情報がなければ(Wikiを開いた時)現ページ名で上書き.
-        history.replaceState('' + self.status.getPageURI(), null, null);
-      }
     });
   }
 }
