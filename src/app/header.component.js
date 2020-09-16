@@ -35,7 +35,11 @@ export default class HeaderComponent extends ComponentBase {
   /**
    * @override
    */
-  async onInit() {
+  async onInit() {}
+  /**
+   * @override
+   */
+  async onStart() {
     this.serviceInjection.wiki.page$.subscribe(page => {
       this.renderer.html$.next({
         selector: 'span#header-page_name',
