@@ -155,10 +155,11 @@ export default class EditorApp extends ComponentBase {
         oldValue = newEditingText;
       }
     }, 1000);
-    // 保存ボタン.
-    $(document).on('submit', '#ajax_edit', event => {
-      console.log('submit');
 
+    /* ----- 保存ボタン. ----- */
+    // 複数回イベントリスナーを登録する場合は毎回解除しないと多重に登録される.
+    $(document).off('submit.editor', '#ajax_edit');
+    $(document).on('submit.editor', '#ajax_edit', event => {
       event.preventDefault(); // 本来のPOSTを打ち消すおまじない
       if (changeTimerId != null) {
         clearInterval(changeTimerId);
