@@ -58,6 +58,11 @@ class Renderer {
         targets.map(target => {
           target.innerHTML = target.innerHTML + delta.value;
         });
+      } else if (delta.type === 'prepend') {
+        // HTML としてプリペンドする.
+        targets.map(target => {
+          target.innerHTML = delta.value + target.innerHTML;
+        });
       }
     });
   }
