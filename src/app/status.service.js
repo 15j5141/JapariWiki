@@ -2,7 +2,9 @@
 import ServiceBase from '../scripts/class-service_base.js';
 import CloudNCMB from '../scripts/class-cloud_ncmb.js';
 import JWStatus from '../scripts/jw-status.js';
+import { BehaviorSubject } from 'rxjs';
 /** @typedef {import("../scripts/class-cloud_base").default} CloudBase */
+/** @typedef {import("../scripts/class-cloud_base").JWUser} JWUser */
 
 /**
  * ユーザー名やログイン状況等を管理する.
@@ -15,8 +17,19 @@ export class StatusService extends ServiceBase {
     /* ----- プロパティ宣言. ----- */
     /** クラウド管理変数. */
     this._cloud = new CloudNCMB();
-    /** Wiki 状態管理変数. */
-    this._status = new JWStatus();
+    /** @type {JWStatus} Wiki 状態管理変数. */
+    this._status = null;
+    /** @type {BehaviorSubject<JWStatus>} */
+    this.status$ = new BehaviorSubject(new JWStatus());
+    /** @type {BehaviorSubject<JWUser>} */
+    this.user$ = new BehaviorSubject(null);
+    // ステータス情報の更新を伝える.
+    this.status$.subscribe(status => {
+      this._status = status;
+      // 更新されたステータス情報からユーザ情報を伝播させる.
+      this.user$.next(status._status.user);
+    });
+
 
     /* ----- コンポーネント取得. ----- */
   }
@@ -32,12 +45,17 @@ export class StatusService extends ServiceBase {
    * @return {{id:string, name:string}}
    */
   getUser() {
-    return this._status._status.user;
+    // ステータスオブジェクトを取得する.
+    return this.status$.getValue()._status.user;
   }
   /**
    * @param {{id:string, name:string}} user
    */
   setUser(user) {
-    this._user = user;
+    // ステータスオブジェクトを取得する.
+    const status = this.status$.getValue();
+    // ユーザー情報を含めて反映する.
+    status._status.user = user;
+    this.status$.next(status);
   }
 }

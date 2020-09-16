@@ -49,6 +49,8 @@ export default class ComponentBase {
     this.$element = this.$(this.element);
     this.refObj.status = this.refObj.status || new JWStatus();
     this.renderer = new Renderer(this.element);
+    /** DOM 上に初期描画済みかどうか. onStart() 用. */
+    this.wasInitDraw = false;
 
     /** @type {Object<string, ServiceBase>} */
     this.serviceInjection = {};
@@ -182,6 +184,13 @@ export default class ComponentBase {
    * @return {void}
    */
   onLoad() {}
+  /**
+   * コンポーネントが最初に描画された後呼ばれる.
+   * @abstract
+   */
+  onStart() {
+    console.log('onStart:' + this.constructor.name);
+  }
   /* ---------- 実装の呼び出し. ---------- */
   /**
    * 非同期でコンポーネントを初期化する.

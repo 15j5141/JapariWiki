@@ -2,6 +2,7 @@
 import CloudBase from './class-cloud_base.js';
 import JWPage from './class-page.js';
 /** @typedef {import('./class-cloud_base.js').JWFile} JWFile*/
+/** @typedef {import('./class-cloud_base.js').JWUser} JWUser*/
 // import config from './config.json';
 /**
  * ニフクラクラス.
@@ -192,39 +193,59 @@ class CloudNCMB extends CloudBase {
         }
       });
   }
-  /** @override */
+  /**
+   * @override
+   * @return {Promise<JWUser>}
+   */
   async isLogin() {
     // カレントユーザー情報の取得
-    const currentUser = this.ncmb.User.getCurrentUser();
     const self = this;
     // ログイン履歴を取得できるかでセッション切れ等を判断する.
     const ncLL = this.ncmb.DataStore('LoginLog');
-    const result = await ncLL.fetch().catch(err => {
+    const user = await ncLL
+      .fetch()
+      .then(data => {
+        const userObj = this.ncmb.User.getCurrentUser();
+        // JWUser へキャストする.
+        return {
+          id: userObj.userName,
+          name: userObj.userName,
+          updateDate: userObj.updateDate,
+          createDate: userObj.createDate,
+        };
+      })
+      .catch(err => {
       /** @type {Error} */ const e = err;
       const obj = e.message.match(/^cannot GET .+ \((\d+)\)$/);
       if (obj && obj[1] == '401') {
         // セッション切れの時.
         //  throw new Error('JWCloud:Unauthorized');
-        const user = self.ncmb.User.getCurrentUser();
+          const userObj = self.ncmb.User.getCurrentUser();
         return (async () => {
           // 一度ログアウト.
           await self.signOut();
           // 再度ログイン.
-          await self.signIn(user.get('userName'), user.get('password'));
-          console.log('relogin:' + user.get('userName'));
-          return true;
+            const user = await self.signIn(
+              userObj.get('userName'),
+              userObj.get('password')
+            );
+            console.log('ReLogin:', user);
+            return user;
         })();
       } else if (obj && obj[1] == '403') {
         // 未ログインの時.
         //  throw new Error('JWCloud:Forbidden');
-        return false;
+          return null;
       } else {
         throw err;
       }
     });
-    return Boolean(result);
+    return user;
   }
-  /** @override */
+  /**
+   * @override
+   * @return {Promise<JWUser>}
+   */
   async signIn(id, pass) {
     // ログイン用インスタンス作成.
     const user = new this.ncmb.User({
@@ -233,7 +254,13 @@ class CloudNCMB extends CloudBase {
     });
     // 非同期でログイン処理.
     try {
-      return await this.ncmb.User.login(user);
+      const userObj = await this.ncmb.User.login(user);
+      return {
+        id: userObj.userName,
+        name: userObj.userName,
+        updateDate: userObj.updateDate,
+        createDate: userObj.createDate,
+      };
     } catch (err) {
       /** @type {Error} */ const e = err;
       const obj = e.message.match(/^cannot GET .+ \((\d+)\)$/);

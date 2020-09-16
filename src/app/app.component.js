@@ -49,9 +49,13 @@ export class AppComponent extends ComponentBase {
    * @override
    */
   async onRender() {
+    const status = this.serviceInjection.status;
+
     // ログインセッション切れを確認する.
     this.renderer.setHTML('認証確認中...');
-    console.log('check:', await this.cloud.isLogin());
+    const user = await this.cloud.isLogin();
+    status.setUser(user);
+
     // 描画する.
     this.renderer.setHTML(await this.templateHTML);
   }
@@ -88,11 +92,6 @@ export class AppComponent extends ComponentBase {
           });
         }
       });
-
-      if (history.state == null) {
-        // 履歴情報がなければ(Wikiを開いた時)現ページ名で上書き.
-        history.replaceState('' + self.status.getPageURI(), null, null);
-      }
     });
   }
 }

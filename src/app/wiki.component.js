@@ -79,7 +79,7 @@ export default class WikiApp extends ComponentBase {
     });
 
     // トップページ読み込みを発火する.
-    const uri = history.state || '/FrontPage';
+    const uri = (history.state && history.state.pageURI) || '/FrontPage';
     this.serviceInjection.wiki.pageURI$.next(uri);
   }
   /**
@@ -173,7 +173,7 @@ export default class WikiApp extends ComponentBase {
           // FixMe ページだけでなくアプリの切り替えも行う.
 
           // パスを解決して現在のURIを書き換える.
-          const uri = statusObj.resolveURI(history.state);
+          const uri = statusObj.resolveURI(history.state.pageURI);
           statusObj.setPageURI(uri);
           statusObj.save();
           // ページ名をセット.

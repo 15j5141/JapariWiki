@@ -18,6 +18,7 @@ import ServiceBase from '../scripts/class-service_base.js';
 import { UploaderComponent } from './uploader.component.js';
 import ModelsService from './models.service.js';
 import WikiService from './wiki.service.js';
+import DebugWindowComponent from './debug_window.component.js';
 
 /**
  * @typedef {Object} Modules
@@ -47,6 +48,7 @@ export class AppModule {
         EditorApp,
         WikiApp,
         UploaderComponent,
+        DebugWindowComponent,
       ],
       // providers.
       services: [

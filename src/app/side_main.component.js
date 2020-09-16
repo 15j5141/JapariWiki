@@ -1,7 +1,7 @@
 // @ts-check
-import CloudNCMB from '../scripts/class-cloud_ncmb.js';
 import ComponentBase from '../scripts/class-component_base.js';
 import { StatusService } from './status.service.js';
+import { filter } from 'rxjs/operators';
 
 /**
  * @class
@@ -41,8 +41,17 @@ export default class SideMainComponent extends ComponentBase {
     await super.onRender();
     // FixMe Page からお知らせを取得する.
     this.$element.find('#side-site_notice').html('お知らせはありません。');
-    // FixMe ユーザー名を表示する.
-    const user = this.serviceInjection.status.getUser();
-    this.$element.find('#user_id').text(user.id);
+  }
+  /**
+   * @override
+   */
+  onStart() {
+    // 初期描画時にデータバインディングを予約する.
+    this.serviceInjection.status.user$
+      .pipe(filter(user => user !== null)) // 初期値は無視する.
+      .subscribe(user => {
+        console.log(user);
+        this.renderer.html$.next({ selector: '#user_id', value: user.id });
+      });
   }
 }

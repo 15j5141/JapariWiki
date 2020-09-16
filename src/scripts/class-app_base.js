@@ -38,7 +38,7 @@ class AppBase {
    * @param {string} uri
    */
   pushState(uri) {
-    top.history.pushState(uri, null, null);
+    top.history.pushState({ pageURI: uri }, null, null);
   }
   /**
    *
