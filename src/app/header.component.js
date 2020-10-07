@@ -4,6 +4,7 @@ import ApplicationService from './application.service.js';
 import { StatusService } from './status.service.js';
 import ModelsService from './models.service.js';
 import WikiService from './wiki.service.js';
+import IndexService from './index.service.js';
 
 /**
  * @class
@@ -13,12 +14,13 @@ export default class HeaderComponent extends ComponentBase {
    * @override
    */
   decorator() {
-    /** @type {{status: StatusService, application: ApplicationService, models: ModelsService, wiki: WikiService}} */
+    /** @type {{status: StatusService, application: ApplicationService, models: ModelsService, wiki: WikiService, index: IndexService}} */
     this.serviceInjection = {
       status: StatusService.prototype,
       application: ApplicationService.prototype,
       models: ModelsService.prototype,
       wiki: WikiService.prototype,
+      index: IndexService.prototype,
     };
   }
   /**
@@ -40,7 +42,7 @@ export default class HeaderComponent extends ComponentBase {
    * @override
    */
   async onStart() {
-    this.serviceInjection.wiki.page$.subscribe(page => {
+    this.serviceInjection.wiki.pulledJWPage$.subscribe(page => {
       this.renderer.html$.next({
         selector: 'span#header-page_name',
         value: `<a data-page="${page.pageURI}" class="ajaxLoad none_decoration">${page.pageURI}</a>`,
@@ -63,18 +65,13 @@ export default class HeaderComponent extends ComponentBase {
         const status = statusObj;
         status.load();
         // 現在のページ URI を取得する.
-        const pageURI = status.getPageURI();
+        const pageURI = self.serviceInjection.wiki.pageURI$.getValue();
+        console.log('open', pageURI);
         // 編集画面起動.
-        self.serviceInjection.application
-          .openEditor(pageURI)
-          .then(result => {
-            console.log(result);
-            // 編集したページを表示する.
-            self.serviceInjection.application.openWiki(pageURI);
-          })
-          .catch(err => {
-            console.log(err);
-          });
+        self.serviceInjection.index.siteHistory$.next({
+          appName: 'Editor',
+          pageURI: pageURI,
+        });
         return false;
       });
       // メニューのリンクからもページを移動できるようにする.

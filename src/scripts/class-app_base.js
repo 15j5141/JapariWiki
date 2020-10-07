@@ -34,13 +34,6 @@ class AppBase {
     });
   }
   /**
-   * 履歴に追加.
-   * @param {string} uri
-   */
-  pushState(uri) {
-    top.history.pushState({ pageURI: uri }, null, null);
-  }
-  /**
    *
    */
   onLoad() {}

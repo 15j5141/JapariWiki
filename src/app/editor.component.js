@@ -5,6 +5,8 @@ import ComponentBase from '../scripts/class-component_base.js';
 import { StatusService } from './status.service.js';
 import ApplicationService from './application.service.js';
 import ModelsService from './models.service.js';
+import EditorService from './editor.service.js';
+import IndexService from './index.service.js';
 
 /**
  * @class
@@ -13,11 +15,13 @@ export default class EditorApp extends ComponentBase {
   /** @override */
   decorator() {
     /* ----- サービスのインジェクション. ----- */
-    /** @type {{status: StatusService, application: ApplicationService, models: ModelsService}} */
+    /** @type {{status: StatusService, application: ApplicationService, models: ModelsService, editor: EditorService, index: IndexService}} */
     this.serviceInjection = {
       status: StatusService.prototype,
       application: ApplicationService.prototype,
       models: ModelsService.prototype,
+      editor: EditorService.prototype,
+      index: IndexService.prototype,
     };
   }
   /**
@@ -33,12 +37,39 @@ export default class EditorApp extends ComponentBase {
 
   /** @override */
   async onInit() {
+    const self = this;
     this.serviceInjection.application.editorApp = this;
     /** リンク連打対策用. */
     this.doneAjax = true;
     this._isEdited = false;
     /** @type {string} */
     this._editedResult = null;
+
+    // 編集画面が呼ばれたときエディタを開く.
+    this.serviceInjection.editor.pageURI$.subscribe(pageURI => {
+      if (pageURI == null) {
+        // 閉じる処理.
+        self.forceClose();
+        return;
+      }
+      // 開く処理.
+      // エディタが開いている場合は閉じる.
+      this.forceClose();
+      this.open(pageURI)
+        .then(result => {
+          // Fixme 開いているページ以外を編集して上書きすることがある.
+          console.log('opend', pageURI);
+          console.log(result);
+          // 編集したページを表示する.
+          self.serviceInjection.index.siteHistory$.next({
+            appName: 'WikiApp',
+            pageURI: pageURI,
+          });
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    });
   }
   /** @override */
   async onRender() {
@@ -176,6 +207,7 @@ export default class EditorApp extends ComponentBase {
         this._editedResult = result;
         this._isEdited = true;
       });
+      return false;
     });
 
     return;
@@ -189,8 +221,6 @@ export default class EditorApp extends ComponentBase {
     const models = this.serviceInjection.models;
     this._isEdited = false;
     this._editedResult = null;
-    // 履歴に追加する. FixMe エディタであることを履歴にも反映する.
-    // this.pushState(pageURI);
     this.show();
     // ページ読み込み.
     let pageData = await models.readPage(pageURI).catch(err => {
@@ -218,7 +248,8 @@ export default class EditorApp extends ComponentBase {
     }
 
     // 保存する.
-    models.writePage(pageData);
+    await models.writePage(pageData);
+    this.renderer.setHTML('');
 
     // 編集アプリ正常終了.
     this.forceClose();

@@ -5,6 +5,7 @@ import { StatusService } from './status.service.js';
 import ApplicationService from './application.service.js';
 import ModelsService from './models.service.js';
 import WikiService from './wiki.service.js';
+import IndexService from './index.service.js';
 
 /**
  * @class
@@ -17,12 +18,13 @@ export default class WikiApp extends ComponentBase {
     this.renderer = new PageRenderer(this.element, null);
 
     /* ----- サービスのインジェクション. ----- */
-    /** @type {{status: StatusService, application: ApplicationService, models: ModelsService, wiki: WikiService}} */
+    /** @type {{status: StatusService, application: ApplicationService, models: ModelsService, wiki: WikiService, index: IndexService}} */
     this.serviceInjection = {
       status: StatusService.prototype,
       application: ApplicationService.prototype,
       models: ModelsService.prototype,
       wiki: WikiService.prototype,
+      index: IndexService.prototype,
     };
   }
   /**
@@ -46,7 +48,7 @@ export default class WikiApp extends ComponentBase {
 
     // ページデータ読込完了時に表示を書き換える.
     const subscribe = () => {
-      this.serviceInjection.wiki.page$.subscribe(
+      this.serviceInjection.wiki.pulledJWPage$.subscribe(
         jwPage => {
           console.log('page$-onNext', jwPage);
           // クリック制限を解除.
@@ -54,9 +56,6 @@ export default class WikiApp extends ComponentBase {
 
           // 受信してものを構文解析して描画する.
           this.renderer.html$.next({ value: jwPage.rawText });
-
-          // タイトル書き換え.
-          this.$(top.document.querySelector('title')).text(jwPage.pageURI);
         },
         e => {
           console.log('page$-onErr', e);
@@ -79,8 +78,8 @@ export default class WikiApp extends ComponentBase {
     });
 
     // トップページ読み込みを発火する.
-    const uri = (history.state && history.state.pageURI) || '/FrontPage';
-    this.serviceInjection.wiki.pageURI$.next(uri);
+    // const uri = (history.state && history.state.pageURI) || '/FrontPage';
+    // this.serviceInjection.wiki.pageURI$.next(uri);
   }
   /**
    * @override
@@ -90,7 +89,7 @@ export default class WikiApp extends ComponentBase {
     // 最新のステータス取得.
     statusObj.load();
     // ページ名取得.
-    const pageURI = statusObj.getPageURI();
+    // const pageURI = statusObj.getPageURI();
 
     this.renderer.cls();
   }
@@ -124,7 +123,7 @@ export default class WikiApp extends ComponentBase {
   async move(pageURI = null) {
     const statusObj = this.serviceInjection.status._status;
     // パスを解決.
-    const uri = statusObj.resolveURI(pageURI || statusObj.getPageURI());
+    const uri = this.serviceInjection.wiki.resolveURI(pageURI);
     statusObj.setPageURI(uri);
     // FixMe パスを解決できなければエラー?
     statusObj.save();
@@ -133,10 +132,10 @@ export default class WikiApp extends ComponentBase {
     this.scroll2Top();
 
     // ページの読み込みを開始する.
-    this.serviceInjection.wiki.pageURI$.next(uri);
-
-    // 履歴に追加する.
-    this.pushState(uri);
+    this.serviceInjection.index.siteHistory$.next({
+      appName: 'WikiApp',
+      pageURI: uri,
+    });
   }
   /**
    * @override
@@ -163,22 +162,6 @@ export default class WikiApp extends ComponentBase {
           })();
         } /* /if */
         return false; // <a>を無効化.
-      });
-
-      // ページバック処理時にページ遷移を発動.
-      $(top).on('popstate', function(e) {
-        const isCanBeHistory =
-          history && history.pushState && history.state !== undefined;
-        if (isCanBeHistory) {
-          // FixMe ページだけでなくアプリの切り替えも行う.
-
-          // パスを解決して現在のURIを書き換える.
-          const uri = statusObj.resolveURI(history.state.pageURI);
-          statusObj.setPageURI(uri);
-          statusObj.save();
-          // ページ名をセット.
-          self.serviceInjection.wiki.pageURI$.next(uri);
-        }
       });
     });
   }

@@ -14,19 +14,12 @@ import {
   throwError,
   Observable,
 } from 'rxjs';
-import {
-  switchMap,
-  map,
-  catchError,
-  takeUntil,
-  filter,
-  tap,
-} from 'rxjs/operators';
+import { switchMap, map, catchError, takeUntil, filter } from 'rxjs/operators';
 
 /**
  * @class
  */
-export default class WikiService extends ServiceBase {
+export default class EditorService extends ServiceBase {
   /**
    * @override
    */
@@ -35,7 +28,7 @@ export default class WikiService extends ServiceBase {
 
     /* ----- プロパティ宣言. ----- */
     const self = this;
-    /** @type {Subject} 履歴移動等でキャンセル割り込みキャンセル用 */
+    /** @type {Subject} 履歴移動等で割り込みキャンセル用 */
     this.exitSignal$ = new Subject();
     /** @type {BehaviorSubject<string>} ページ移動用 */
     this.pageURI$ = new BehaviorSubject(null);
@@ -76,11 +69,7 @@ export default class WikiService extends ServiceBase {
 
         return page;
       }),
-      takeUntil(self.exitSignal$),
-      tap(page => {
-        // 購読していなくてもページデータを読み取れるようにする.
-        // self.page = page;
-      })
+      takeUntil(self.exitSignal$)
     );
 
     /* ----- サービスのインジェクション. ----- */
@@ -92,25 +81,5 @@ export default class WikiService extends ServiceBase {
     };
 
     /* ----- コンポーネント取得. ----- */
-  }
-  /**
-   * 相対パスを絶対パスに解決.
-   * @param {string} pageURI
-   * @return {string}
-   */
-  resolveURI(pageURI) {
-    const nowURI = this.pageURI$.getValue();
-    if (JWPage.isAbsoluteURI(pageURI)) {
-      // 絶対パスならそのまま.
-      return pageURI;
-    } else {
-      // 相対パスなら現在のページ URI から解決.
-      // 現在のページ URI を取得.
-      const paths = nowURI.split('/');
-      // ページ名に当たる部分を書き換え.
-      paths[paths.length - 1] = pageURI;
-      // 配列を結合.
-      return paths.join('/');
-    }
   }
 }

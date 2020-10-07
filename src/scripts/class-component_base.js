@@ -215,7 +215,13 @@ export default class ComponentBase {
     // this.show();
     // 実装された描画処理を呼ぶ.
     await this.onRender();
+
+    // 初期描画時に一度だけ実行する.
+    if (!this.wasInitDraw) {
     await this._initChildComponents();
+      this.onStart();
+      this.wasInitDraw = true;
+    }
   }
   /* ---------- その他メソッド. ---------- */
   /**
@@ -265,12 +271,5 @@ export default class ComponentBase {
         resolve(data);
       });
     });
-  }
-  /**
-   * 履歴に追加.
-   * @param {string} uri
-   */
-  pushState(uri) {
-    top.history.pushState(uri, uri, null);
   }
 }
