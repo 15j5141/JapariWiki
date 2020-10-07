@@ -189,7 +189,7 @@ export default class ComponentBase {
    * @abstract
    */
   onStart() {
-    console.log('onStart:' + this.constructor.name);
+    // console.log('onStart:' + this.constructor.name);
   }
   /* ---------- 実装の呼び出し. ---------- */
   /**

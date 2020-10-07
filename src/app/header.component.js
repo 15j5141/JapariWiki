@@ -66,7 +66,6 @@ export default class HeaderComponent extends ComponentBase {
         status.load();
         // 現在のページ URI を取得する.
         const pageURI = self.serviceInjection.wiki.pageURI$.getValue();
-        console.log('open', pageURI);
         // 編集画面起動.
         self.serviceInjection.index.siteHistory$.next({
           appName: 'Editor',

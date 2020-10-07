@@ -51,7 +51,6 @@ export default class DebugWindowComponent extends ComponentBase {
     services.status.status$.subscribe(status => {
       this.debug({
         'status$._status': status._status,
-        'status$.getPageURI': status.getPageURI(),
       });
     });
     services.wiki.pageURI$.subscribe(pageURI => {

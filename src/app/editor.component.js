@@ -57,9 +57,6 @@ export default class EditorApp extends ComponentBase {
       this.forceClose();
       this.open(pageURI)
         .then(result => {
-          // Fixme 開いているページ以外を編集して上書きすることがある.
-          console.log('opend', pageURI);
-          console.log(result);
           // 編集したページを表示する.
           self.serviceInjection.index.siteHistory$.next({
             appName: 'WikiApp',
