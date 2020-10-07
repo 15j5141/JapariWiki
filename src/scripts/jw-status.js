@@ -71,8 +71,6 @@ class JWStatus {
       const url = new URL(window.location.href);
       url.searchParams.set('pageURI', this._status.pageURI);
       url.searchParams.set('app', this._status.app);
-      // 履歴に登録.
-      window.history.pushState({ pageURI: this.getPageURI() }, '', url.href);
     }
   }
   /**

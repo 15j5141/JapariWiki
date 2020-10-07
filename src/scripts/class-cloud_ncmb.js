@@ -51,10 +51,12 @@ class CloudNCMB extends CloudBase {
       .fetch()
       .then(function(result) {
         if (!result.objectId) {
+          // Fixme return new JWPage(uri,notfound,null); page.error = ...
           throw new Error('Page:NotFound');
         }
         const newPage = new JWPage(pageURI, result.text);
         newPage.cloudObject = result;
+        newPage.error = {};
         return newPage;
       })
       .catch(function(err) {

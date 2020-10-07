@@ -24,7 +24,10 @@ export default class ServiceBase {
     this.decorator();
 
     // サービスを解決する.
-    this._inject();
+    this._inject().then(() => {
+      // 依存しているサービスが全て起動したら初期化処理を呼ぶ.
+      this.onStart();
+    });
   }
   /**
    * 疑似デコレーター.
@@ -55,4 +58,20 @@ export default class ServiceBase {
   }
   /** */
   open() {}
+  /** @abstract */
+  onCreate() {} // onInit
+
+  /** @abstract */
+  onStart() {} // didDraw
+
+  /** @abstract */
+  onResume() {}
+  /** @abstract */
+  onPause() {}
+  /** @abstract */
+  onStop() {}
+  /** @abstract */
+  onDestroy() {}
+  /** @abstract */
+  onRestart() {}
 }

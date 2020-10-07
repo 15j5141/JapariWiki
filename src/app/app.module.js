@@ -19,6 +19,7 @@ import { UploaderComponent } from './uploader.component.js';
 import ModelsService from './models.service.js';
 import WikiService from './wiki.service.js';
 import DebugWindowComponent from './debug_window.component.js';
+import EditorService from './editor.service.js';
 
 /**
  * @typedef {Object} Modules
@@ -57,6 +58,7 @@ export class AppModule {
         StatusService,
         ModelsService,
         WikiService,
+        EditorService,
       ],
       bootstrap: [AppComponent],
     };
