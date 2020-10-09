@@ -10,8 +10,10 @@ class JWStatus {
   constructor() {
     // 初期値.
     this.statusDefault = {
-      pageURI: '/FrontPage',
-      app: 'wiki',
+      app: {
+        pageURI: '/FrontPage',
+        appName: 'WikiApp',
+      },
       user: {
         id: 'id',
         name: 'name',
@@ -23,7 +25,10 @@ class JWStatus {
     this.save();
   }
   /**
-   * sessionStorageからステータス情報を読み込む.
+   * ステータス情報を読み込む.
+   * 次の順に取得を試みる.
+   * "URLのクエリ > window.HistoryAPI > sessionStorage > デフォルト".
+
    */
   load() {
     // セッションストレージからステータスを読み込み.
@@ -31,31 +36,38 @@ class JWStatus {
 
     // セッションストレージに無ければデフォルト値を参照.
     const session = { ...this.statusDefault, ...JSON.parse(json) };
-    // URL クエリから読み込み.
-    const params = new URLSearchParams(window.location.search);
+
+    /** URL のクエリ確認用 */
+    const url = new URL(window.location.href);
+    /** URL クエリ */
+    const params = url.searchParams;
 
     // セッションストレージと URL クエリの内容を結合.
-    const status = {
-      ...session,
-      pageURI: this.resolveURI(params.get('pageURI') || session.pageURI),
-      app: params.get('app'),
+    this._status.user = session.user;
+    this._status.app = {
+      pageURI: this.resolveURI(
+        params.get('pageURI') ||
+          (window.history.state && window.history.state.pageURI) ||
+          session.app.pageURI
+      ),
+      appName:
+        params.get('appName') ||
+        (window.history.state && window.history.state.appName) ||
+        session.app.appName,
     };
-    this._status = status;
 
-    // URL クエリから混乱を避けるため除去.
-    if (params.get('pageURI')) {
-      params.delete('pageURI');
-      // URL を書き換え.
-      history.replaceState(
-        { pageURI: status.pageURI },
-        null,
-        location.pathname + params.toString()
-      );
-    }
+    // URL にクエリがある場合取り除く.
+    params.delete('appName');
+    params.delete('pageURI');
+    // URL を書き換え.
+    window.history.replaceState(
+      this._status.app,
+      this._status.app.appName + ': ' + this._status.app.pageURI,
+      url.href
+    );
   }
   /**
    * sessionStorageへステータス情報を書き込む.
-   * @param {string} status
    */
   save() {
     // 安全の為保存する値を手動指定.
@@ -63,29 +75,19 @@ class JWStatus {
     // セッションストレージへ書き込み.
     sessionStorage.setItem('JW_Status', json);
   }
-  /** */
-  setURL() {
-    // 現在のページ閲覧履歴がなければ.
-    if ((history.state && history.state.pageURI) !== this.getPageURI()) {
-      // URL 生成.
-      const url = new URL(window.location.href);
-      url.searchParams.set('pageURI', this._status.pageURI);
-      url.searchParams.set('app', this._status.app);
-    }
-  }
   /**
    * ページ URI を取得.
    * @return {string}
    */
   getPageURI() {
-    return this._status.pageURI;
+    return this._status.app.pageURI;
   }
   /**
    * ページ URI を記録.
    * @param {string} pageURI
    */
   setPageURI(pageURI) {
-    this._status.pageURI = this.resolveURI(pageURI);
+    this._status.app.pageURI = this.resolveURI(pageURI);
   }
   /**
    * 相対パスを絶対パスに解決.
