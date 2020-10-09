@@ -60,6 +60,14 @@ class CloudBase {
     throw new Error('Not Implemented');
   }
   /**
+   * ページ更新履歴を取得する.
+   * @abstract
+   * @return {Promise<Array<{path:string, updateDate:string}>>}
+   */
+  async getPageHistory() {
+    throw new Error('Not Implemented');
+  }
+  /**
    * 現在のログイン状況を取得する.
    * @abstract
    * @return {Promise<JWUser>}

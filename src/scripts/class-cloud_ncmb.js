@@ -196,6 +196,21 @@ class CloudNCMB extends CloudBase {
       });
   }
   /**
+   * ページ更新履歴を取得する.
+   * @return {Promise<Array<{path:string, updateDate:string}>>}
+   */
+  async getPageHistory() {
+    return await this.ncmb.Script.exec('GET', 'page_history.js')
+      .then(function(res) {
+        // 実行後処理
+        return JSON.parse(res.body);
+      })
+      .catch(function(err) {
+        // エラー処理
+        return err;
+      });
+  }
+  /**
    * @override
    * @return {Promise<JWUser>}
    */
@@ -217,31 +232,31 @@ class CloudNCMB extends CloudBase {
         };
       })
       .catch(err => {
-      /** @type {Error} */ const e = err;
-      const obj = e.message.match(/^cannot GET .+ \((\d+)\)$/);
-      if (obj && obj[1] == '401') {
-        // セッション切れの時.
-        //  throw new Error('JWCloud:Unauthorized');
+        /** @type {Error} */ const e = err;
+        const obj = e.message.match(/^cannot GET .+ \((\d+)\)$/);
+        if (obj && obj[1] == '401') {
+          // セッション切れの時.
+          //  throw new Error('JWCloud:Unauthorized');
           const userObj = self.ncmb.User.getCurrentUser();
-        return (async () => {
-          // 一度ログアウト.
-          await self.signOut();
-          // 再度ログイン.
+          return (async () => {
+            // 一度ログアウト.
+            await self.signOut();
+            // 再度ログイン.
             const user = await self.signIn(
               userObj.get('userName'),
               userObj.get('password')
             );
             console.log('ReLogin:', user);
             return user;
-        })();
-      } else if (obj && obj[1] == '403') {
-        // 未ログインの時.
-        //  throw new Error('JWCloud:Forbidden');
+          })();
+        } else if (obj && obj[1] == '403') {
+          // 未ログインの時.
+          //  throw new Error('JWCloud:Forbidden');
           return null;
-      } else {
-        throw err;
-      }
-    });
+        } else {
+          throw err;
+        }
+      });
     return user;
   }
   /**

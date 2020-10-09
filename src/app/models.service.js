@@ -59,4 +59,11 @@ export default class ModelsService extends ServiceBase {
       await cloud.postPage(pageData);
     }
   }
+  /**
+   * @return {Promise<Array<{path:string, updateDate:string}>>}
+   */
+  async readPageHistory() {
+    const cloud = this.serviceInjection.status.getCloud();
+    return await cloud.getPageHistory();
+  }
 }

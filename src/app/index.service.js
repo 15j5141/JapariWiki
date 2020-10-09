@@ -1,7 +1,6 @@
 // @ts-check
 import ServiceBase from '../scripts/class-service_base.js';
 import { BehaviorSubject } from 'rxjs';
-import { filter } from 'rxjs/operators';
 import { StatusService } from './status.service.js';
 import ApplicationService from './application.service.js';
 import ModelsService from './models.service.js';
@@ -34,39 +33,15 @@ export default class IndexService extends ServiceBase {
     };
 
     /* ----- プロパティ宣言. ----- */
-    /** URL のクエリ確認用 */
-    const url = new URL(window.location.href);
-    /**
-     * @type {SiteState}
-     * サービス起動時の状態遷移情報.
-     * 次の順にページ名の取得を試みる.
-     * "URLのクエリ > window.HistoryAPI > sessionStorage > デフォルト(/FrontPage)".
-     */
-    const siteHistory = {
-      appName:
-        url.searchParams.get('appName') ||
-        (window.history.state && window.history.state.appName) ||
-        window.sessionStorage.getItem('appName') ||
-        'WikiApp',
-      pageURI:
-        url.searchParams.get('pageURI') ||
-        (window.history.state && window.history.state.pageURI) ||
-        window.sessionStorage.getItem('pageURI') ||
-        '/FrontPage',
-    };
-    // URL にクエリがある場合取り除く.
-    url.searchParams.delete('appName');
-    url.searchParams.delete('pageURI');
-    window.history.replaceState(siteHistory, siteHistory.pageURI, url.href);
-
     /** @type {BehaviorSubject<SiteState>} サイトの状態遷移用. */
-    this.siteHistory$ = new BehaviorSubject(siteHistory);
+    this.siteHistory$ = new BehaviorSubject(null);
 
     /* ----- コンポーネント取得. ----- */
   }
   /** @override */
   onStart() {
     const self = this;
+    const status = this.serviceInjection.status.status$.getValue();
     /**
      * アプリケーション呼び出し.
      * @param {SiteState} state
@@ -74,7 +49,7 @@ export default class IndexService extends ServiceBase {
     const execute = state => {
       // タイトル書き換え.
       $(top.document.querySelector('title')).text(
-        state.appName + ':' + state.pageURI
+        state.appName + ': ' + state.pageURI
       );
 
       // ページの描画は各コンポーネント側のオブザーバで受け取って処理する.
@@ -92,14 +67,17 @@ export default class IndexService extends ServiceBase {
     };
 
     // 履歴に追加してアプリを起動する.
-    this.siteHistory$.pipe(filter(v => v != null)).subscribe(state => {
-      // 履歴に追加する.
-      window.history.pushState(
-        state,
-        state.appName + ':' + state.pageURI,
-        null
-      );
-      execute(state);
+    this.siteHistory$.pipe().subscribe(app => {
+      if (app == null) {
+        // null なら読み込む.
+        status.load();
+        app = status._status.app;
+      } else {
+        // 履歴に追加する.
+        window.history.pushState(app, app.appName + ': ' + app.pageURI, null);
+      }
+      // アプリを起動する.
+      execute(app);
     });
 
     // ページバック処理時にページ遷移を発動.
