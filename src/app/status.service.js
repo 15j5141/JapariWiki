@@ -29,6 +29,9 @@ export class StatusService extends ServiceBase {
       // 更新されたステータス情報からユーザ情報を伝播させる.
       this.user$.next(status._status.user);
     });
+    /** @type {BehaviorSubject<string>} 画面に表示する状態文字列(1行). */
+    this.displayState$ = new BehaviorSubject(null);
+
 
 
     /* ----- コンポーネント取得. ----- */

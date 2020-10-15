@@ -56,6 +56,13 @@ export default class DebugWindowComponent extends ComponentBase {
     services.wiki.pageURI$.subscribe(pageURI => {
       this.debug({ pageURI$: pageURI });
     });
+    services.status.displayState$.subscribe(displayState => {
+      this.renderer.html$.next({
+        selector: 'div.debug_info__now',
+        type: 'html',
+        value: displayState,
+      });
+    });
   }
   /**
    *
