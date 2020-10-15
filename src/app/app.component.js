@@ -54,6 +54,8 @@ export class AppComponent extends ComponentBase {
     // ログインセッション切れを確認する.
     this.renderer.setHTML('認証確認中...');
     const user = await this.cloud.isLogin();
+    // 未ログインなら
+    if (user == null) location.href = './logout.html';
     status.setUser(user);
 
     // 描画する.

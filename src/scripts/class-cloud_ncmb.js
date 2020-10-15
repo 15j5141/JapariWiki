@@ -237,6 +237,7 @@ class CloudNCMB extends CloudBase {
         if (obj && obj[1] == '401') {
           // セッション切れの時.
           //  throw new Error('JWCloud:Unauthorized');
+          return null; // 自動再ログインをしない.
           const userObj = self.ncmb.User.getCurrentUser();
           return (async () => {
             // 一度ログアウト.
