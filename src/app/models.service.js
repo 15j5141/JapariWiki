@@ -41,6 +41,7 @@ export default class ModelsService extends ServiceBase {
     } catch (err) {
       throw err;
     }
+    this.serviceInjection.status.displayState$.next(`readPage ${pageURI}`);
     return pageData;
   }
   /**
@@ -58,6 +59,9 @@ export default class ModelsService extends ServiceBase {
       // 新規作成.
       await cloud.postPage(pageData);
     }
+    this.serviceInjection.status.displayState$.next(
+      `writePage ${pageData.pageURI}`
+    );
   }
   /**
    * @return {Promise<Array<{path:string, updateDate:string}>>}

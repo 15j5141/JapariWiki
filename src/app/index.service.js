@@ -51,6 +51,9 @@ export default class IndexService extends ServiceBase {
       $(top.document.querySelector('title')).text(
         state.appName + ': ' + state.pageURI
       );
+      self.serviceInjection.status.displayState$.next(
+        `open ${state.appName} ${state.pageURI}`
+      );
 
       // ページの描画は各コンポーネント側のオブザーバで受け取って処理する.
       if (state.appName === 'WikiApp') {
