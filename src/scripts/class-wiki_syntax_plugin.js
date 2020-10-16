@@ -220,11 +220,11 @@ class WikiSyntaxPlugin extends SyntaxPluginBase {
     syntaxes.push([/#code((.|\s)+?)#end/g, '<code>$1</code>']);
 
     // その他
-    syntaxes.push([/^\/\/.*$/gm, '__NewLine__']); // 「//」以降をコメントアウト.
-    syntaxes.push([/^#.*$/gm, '__NewLine__']); // 「#」以降をコメントアウト.動作が怪しいので廃止.
+    syntaxes.push([/(?<!https:)(?<!http:)\/\/.*/g, '__NewLine__']); // 「//」以降をコメントアウト.
+    syntaxes.push([/(?<!https:)(?<!http:)#.*/g, '__NewLine__']); // 「#」以降をコメントアウト.動作が怪しいので廃止.
     // syntaxes.push([/\/\*(.|\s)*?\*\//g, '']); // 「/**/」内をコメントアウト. 「.」は改行には一致しない.
-    syntaxes.push([/\/\*\/?([^\/]|[^*]\/|\r|\n)*\*\//g, '']); // 「/**/」内をコメントアウト.詳細は不明...
-    // syntaxes.push([/(\/\/.*\r?\n)*/g, '']);
+    // syntaxes.push([/\/\*\/?([^\/]|[^*]\/|\r|\n)*\*\//g, '']); // 「/**/」内をコメントアウト.詳細は不明...
+    syntaxes.push([/\/\*[\s\S]*?\*\//g, '']); // a79c210bae23a29d4ff1 from Qiita.
 
     // ***title [#za0b2c5d]
     syntaxes.push([
