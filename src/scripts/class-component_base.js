@@ -136,6 +136,8 @@ export default class ComponentBase {
       // 見つかった全てのコンポーネント要素を Component に変換する.
       for (let i = 0; i < foundElements.length; i++) {
         const element = foundElements[i];
+        // コンポーネントの共通クラスを付与する.
+        element.classList.add('jw-component');
         // コンポーネントに変換する.
         components.push(
           new Component({
@@ -218,7 +220,7 @@ export default class ComponentBase {
 
     // 初期描画時に一度だけ実行する.
     if (!this.wasInitDraw) {
-    await this._initChildComponents();
+      await this._initChildComponents();
       this.onStart();
       this.wasInitDraw = true;
     }

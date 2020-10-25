@@ -30,7 +30,7 @@ export default class HeaderComponent extends ComponentBase {
     return {
       templateUrl: './header.component.html',
       styleUrls: [],
-      selector: '#header',
+      selector: 'component-header',
     };
   }
 
@@ -74,7 +74,7 @@ export default class HeaderComponent extends ComponentBase {
         return false;
       });
       // メニューのリンクからもページを移動できるようにする.
-      $(self.element).on('click', 'a.ajaxLoad', function(e) {
+      $(self.element).on('click', 'a.ajaxLoad', function(event) {
         // ページ名を取得する.
         const pageName = $(event.target).data('page');
         // ページを移動する.

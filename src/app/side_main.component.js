@@ -26,7 +26,7 @@ export default class SideMainComponent extends ComponentBase {
     return {
       templateUrl: './side_main.component.html',
       styleUrls: [],
-      selector: '#side-main',
+      selector: 'component-side_main',
     };
   }
 

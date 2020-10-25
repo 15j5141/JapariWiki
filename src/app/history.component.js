@@ -30,7 +30,7 @@ export default class HistoryComponent extends ComponentBase {
     return {
       templateUrl: '../text/site_menu.txt',
       styleUrls: [],
-      selector: '#side-edited_history',
+      selector: 'component-edited_history',
     };
   }
 

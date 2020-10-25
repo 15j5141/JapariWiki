@@ -13,7 +13,7 @@ export default class FooterComponent extends ComponentBase {
    */
   static get decoration() {
     return {
-      selector: '#footer',
+      selector: 'component-footer',
       templateUrl: './footer.component.html',
       styleUrls: [],
     };
