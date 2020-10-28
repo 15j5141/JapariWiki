@@ -22,11 +22,8 @@ function bootstrapModule(Module) {
   // 読み込む.
   Module.decoration.bootstrap.forEach(Component => {
     const component = new Component({
-      selector: null,
-      jQuery: window.jQuery,
       serviceManager: serviceManager,
       declarations: Module.decoration.declarations,
-      element: null,
     });
     // 各コンポーネントを登録する.
     componentsManager.register(component);

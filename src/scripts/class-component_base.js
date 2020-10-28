@@ -4,17 +4,14 @@
  * @fileoverview
  */
 import Renderer from './class-renderer.js';
-import JWStatus from './jw-status.js';
 /** @typedef {import("./class-service_manager").default} ServiceManager */
 /** @typedef {import("./class-service_base").default} ServiceBase */
 /**
  * @typedef {Object} ReferenceObject
- * @property {jQuery} jQuery
- * @property {JWStatus=} status
- * @property {string?} selector
+ * @property {string=} selectorForGetElement element取得用
  * @property {ServiceManager} serviceManager
  * @property {Array<typeof ComponentBase>} declarations
- * @property {Element} element
+ * @property {Element=} element
  */
 /**
  * Component の基本クラス.
@@ -30,9 +27,7 @@ export default class ComponentBase {
   constructor(referenceObject) {
     /** @type {ReferenceObject} */
     const originalReferenceObject = {
-      jQuery: null,
-      status: null,
-      selector: null,
+      selectorForGetElement: null,
       serviceManager: null,
       declarations: null,
       element: null,
@@ -42,12 +37,14 @@ export default class ComponentBase {
 
     // セットする.
     /** @type {jQuery}*/
-    this.$ = this.refObj.jQuery = this.refObj.jQuery || top.jQuery;
-    this.selector = this.refObj.selector || this.decoration.selector;
+    this.$ = top.jQuery;
+    this.selector = this.decoration.selector;
     // element が未指定なら selector から特定する.
-    this.element = this.refObj.element || this.$(this.selector).get(0);
+    this.element =
+      this.refObj.element ||
+      this.$(this.refObj.selectorForGetElement).get(0) ||
+      this.$(this.selector).get(0);
     this.$element = this.$(this.element);
-    this.refObj.status = this.refObj.status || new JWStatus();
     this.renderer = new Renderer(this.element);
     /** DOM 上に初期描画済みかどうか. onStart() 用. */
     this.wasInitDraw = false;
