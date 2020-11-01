@@ -1,7 +1,6 @@
 // @ts-check
 import { filter } from 'rxjs/operators';
 import ComponentBase from '../scripts/class-component_base.js';
-import ApplicationService from './application.service.js';
 import { StatusService } from './status.service.js';
 import UploaderService from './uploader.service.js';
 /**
@@ -24,10 +23,9 @@ export class UploaderComponent extends ComponentBase {
    */
   decorator() {
     /* ----- サービスのインジェクション. ----- */
-    /** @type {{status: StatusService, application: ApplicationService, uploader:UploaderService}} */
+    /** @type {{status: StatusService, uploader:UploaderService}} */
     this.serviceInjection = {
       status: StatusService.prototype,
-      application: ApplicationService.prototype,
       uploader: UploaderService.prototype,
     };
 
@@ -42,7 +40,6 @@ export class UploaderComponent extends ComponentBase {
    */
   async onInit() {
     this.status = this.serviceInjection.status;
-    this.application = this.serviceInjection.application;
 
     // コンポーネント開閉の為のイベントを登録する.
     const event$ = this.serviceInjection.uploader.event$.pipe(

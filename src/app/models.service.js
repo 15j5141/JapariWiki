@@ -2,7 +2,6 @@
 import ServiceBase from '../scripts/class-service_base.js';
 import JWPage from '../scripts/class-page.js';
 import { StatusService } from './status.service.js';
-import ApplicationService from './application.service.js';
 /** @typedef {import('../scripts/class-cloud_base.js').JWFile} JWFile*/
 /**
  * @class
@@ -19,10 +18,9 @@ export default class ModelsService extends ServiceBase {
     this.jwPages = [];
 
     /* ----- サービスのインジェクション. ----- */
-    /** @type {{status: StatusService, application: ApplicationService}} */
+    /** @type {{status: StatusService}} */
     this.serviceInjection = {
       status: StatusService.prototype,
-      application: ApplicationService.prototype,
     };
 
     /* ----- コンポーネント取得. ----- */

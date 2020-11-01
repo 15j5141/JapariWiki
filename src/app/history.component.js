@@ -1,7 +1,6 @@
 // @ts-check
 import ComponentBase from '../scripts/class-component_base.js';
 import { StatusService } from './status.service.js';
-import ApplicationService from './application.service.js';
 import ModelsService from './models.service.js';
 import { filter } from 'rxjs/operators';
 
@@ -14,10 +13,9 @@ export default class HistoryComponent extends ComponentBase {
    */
   decorator() {
     /* ----- サービスのインジェクション. ----- */
-    /** @type {{status: StatusService, application: ApplicationService, models: ModelsService}} */
+    /** @type {{status: StatusService, models: ModelsService}} */
     this.serviceInjection = {
       status: StatusService.prototype,
-      application: ApplicationService.prototype,
       models: ModelsService.prototype,
     };
 

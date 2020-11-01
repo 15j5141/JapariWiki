@@ -2,7 +2,6 @@
 import PageRenderer from '../scripts/class-page_renderer.js';
 import ComponentBase from '../scripts/class-component_base.js';
 import { StatusService } from './status.service.js';
-import ApplicationService from './application.service.js';
 import ModelsService from './models.service.js';
 import WikiService from './wiki.service.js';
 import IndexService from './index.service.js';
@@ -18,10 +17,9 @@ export default class WikiApp extends ComponentBase {
     this.renderer = new PageRenderer(this.element, null);
 
     /* ----- サービスのインジェクション. ----- */
-    /** @type {{status: StatusService, application: ApplicationService, models: ModelsService, wiki: WikiService, index: IndexService}} */
+    /** @type {{status: StatusService, models: ModelsService, wiki: WikiService, index: IndexService}} */
     this.serviceInjection = {
       status: StatusService.prototype,
-      application: ApplicationService.prototype,
       models: ModelsService.prototype,
       wiki: WikiService.prototype,
       index: IndexService.prototype,
@@ -42,7 +40,6 @@ export default class WikiApp extends ComponentBase {
    * @override
    */
   async onInit() {
-    this.serviceInjection.application.wikiApp = this;
     /** リンク連打対策用. */
     this.doneAjax = true;
 

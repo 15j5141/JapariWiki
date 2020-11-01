@@ -1,6 +1,5 @@
 // @ts-check
 import IndexService from '../app/index.service.js';
-import ApplicationService from '../app/application.service.js';
 import { StatusService } from '../app/status.service.js';
 
 import HeaderComponent from '../app/header.component.js';
@@ -55,7 +54,6 @@ export class AppModule {
       // providers.
       services: [
         IndexService,
-        ApplicationService,
         StatusService,
         ModelsService,
         WikiService,

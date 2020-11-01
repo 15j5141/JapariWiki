@@ -3,7 +3,6 @@ import JWPage from '../scripts/class-page.js';
 import WikiSyntaxPlugin from '../scripts/class-wiki_syntax_plugin.js';
 import ComponentBase from '../scripts/class-component_base.js';
 import { StatusService } from './status.service.js';
-import ApplicationService from './application.service.js';
 import ModelsService from './models.service.js';
 import EditorService from './editor.service.js';
 import IndexService from './index.service.js';
@@ -15,10 +14,9 @@ export default class EditorApp extends ComponentBase {
   /** @override */
   decorator() {
     /* ----- サービスのインジェクション. ----- */
-    /** @type {{status: StatusService, application: ApplicationService, models: ModelsService, editor: EditorService, index: IndexService}} */
+    /** @type {{status: StatusService, models: ModelsService, editor: EditorService, index: IndexService}} */
     this.serviceInjection = {
       status: StatusService.prototype,
-      application: ApplicationService.prototype,
       models: ModelsService.prototype,
       editor: EditorService.prototype,
       index: IndexService.prototype,
@@ -38,7 +36,6 @@ export default class EditorApp extends ComponentBase {
   /** @override */
   async onInit() {
     const self = this;
-    this.serviceInjection.application.editorApp = this;
     /** リンク連打対策用. */
     this.doneAjax = true;
     this._isEdited = false;

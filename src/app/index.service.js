@@ -2,7 +2,6 @@
 import ServiceBase from '../scripts/class-service_base.js';
 import { BehaviorSubject } from 'rxjs';
 import { StatusService } from './status.service.js';
-import ApplicationService from './application.service.js';
 import ModelsService from './models.service.js';
 import WikiService from './wiki.service.js';
 import EditorService from './editor.service.js';
@@ -23,10 +22,9 @@ export default class IndexService extends ServiceBase {
     /* ----- デコレータセット. ----- */
 
     /* ----- サービスのインジェクション. ----- */
-    /** @type {{status: StatusService, application: ApplicationService, models: ModelsService, wiki: WikiService, editor: EditorService}} */
+    /** @type {{status: StatusService, models: ModelsService, wiki: WikiService, editor: EditorService}} */
     this.serviceInjection = {
       status: StatusService.prototype,
-      application: ApplicationService.prototype,
       models: ModelsService.prototype,
       wiki: WikiService.prototype,
       editor: EditorService.prototype,

@@ -1,6 +1,5 @@
 // @ts-check
 import ComponentBase from '../scripts/class-component_base.js';
-import ApplicationService from './application.service.js';
 import { StatusService } from './status.service.js';
 import ModelsService from './models.service.js';
 import WikiService from './wiki.service.js';
@@ -15,10 +14,9 @@ export default class HeaderComponent extends ComponentBase {
    * @override
    */
   decorator() {
-    /** @type {{status: StatusService, application: ApplicationService, models: ModelsService, wiki: WikiService, index: IndexService, uploader: UploaderService}} */
+    /** @type {{status: StatusService, models: ModelsService, wiki: WikiService, index: IndexService, uploader: UploaderService}} */
     this.serviceInjection = {
       status: StatusService.prototype,
-      application: ApplicationService.prototype,
       models: ModelsService.prototype,
       wiki: WikiService.prototype,
       index: IndexService.prototype,
