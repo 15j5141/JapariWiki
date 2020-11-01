@@ -56,7 +56,6 @@ export default class WikiApp extends ComponentBase {
         },
         e => {
           console.log('page$-onErr', e);
-          subscribe();
         },
         () => console.log('page$-onComp')
       );

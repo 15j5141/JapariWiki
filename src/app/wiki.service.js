@@ -21,6 +21,7 @@ import {
   takeUntil,
   filter,
   tap,
+  retry,
 } from 'rxjs/operators';
 
 /**
@@ -44,8 +45,10 @@ export default class WikiService extends ServiceBase {
     this.pulledJWPage$ = this.pageURI$.pipe(
       filter(v => v != null),
       switchMap(pageURI => {
+        console.log('ページデータ読込開始:', pageURI);
         // Promise を Observable へ変換する.
         return defer(() => self.serviceInjection.models.readPage(pageURI)).pipe(
+          retry(1), // エラー時に1度だけ再試行する.
           catchError(err => {
             // readPage() のエラー処理.
             switch (err.message) {
@@ -63,6 +66,7 @@ export default class WikiService extends ServiceBase {
                 // 指定ページへのアクセス権がない場合.
                 return of(new JWPage(pageURI, '権限がありません.', null));
               default:
+                console.log('JW:UnknownError:', err);
                 return throwError(err);
             }
           })
