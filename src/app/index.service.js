@@ -5,12 +5,14 @@ import { StatusService } from './status.service.js';
 import ModelsService from './models.service.js';
 import WikiService from './wiki.service.js';
 import EditorService from './editor.service.js';
+import { filter } from 'rxjs/operators';
 
 /**
  * @typedef {Object} SiteState
  * @property {string} appName
  * @property {string} pageURI
  * @property {Array<Object>=} windowComponents
+ * @property {boolean=} [noHistory=false] 履歴へ追加しないフラグ
  */
 
 /**
@@ -68,12 +70,10 @@ export default class IndexService extends ServiceBase {
     };
 
     // 履歴に追加してアプリを起動する.
-    this.siteHistory$.pipe().subscribe(app => {
-      if (app == null) {
-        // null なら読み込む.
-        status.load();
-        app = status._status.app;
-      } else {
+    this.siteHistory$.pipe(filter(s => s != null)).subscribe(app => {
+      console.log('siteHistory$:', app);
+      // フラグがfalseか未定義なら履歴に追加する.
+      if (!app.noHistory) {
         // 履歴に追加する.
         window.history.pushState(app, app.appName + ': ' + app.pageURI, null);
       }
@@ -94,11 +94,29 @@ export default class IndexService extends ServiceBase {
           history.state.pageURI
         );
         // アプリケーションを復帰する.
-        execute({
+        self.executeAppWithoutHistoryAPI({
           appName: history.state.appName,
           pageURI: uri,
         });
       }
     });
+
+    // サイト読み込み時にアプリを開く.
+    status.load();
+    this.executeAppWithoutHistoryAPI(status._status.app);
+  }
+  /**
+   * アプリを開く.
+   * @param {SiteState} state
+   */
+  executeApp(state) {
+    this.siteHistory$.next(state);
+  }
+  /**
+   * アプリをブラウザの履歴に追加しないで開く.
+   * @param {SiteState} state
+   */
+  executeAppWithoutHistoryAPI(state) {
+    this.executeApp({ ...state, noHistory: true });
   }
 }
