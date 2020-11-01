@@ -78,7 +78,10 @@ export default class HeaderComponent extends ComponentBase {
         // ページ名を取得する.
         const pageName = $(event.target).data('page');
         // ページを移動する.
-        self.serviceInjection.application.openWiki(pageName);
+        self.serviceInjection.index.siteHistory$.next({
+          appName: 'WikiApp',
+          pageURI: pageName,
+        });
         return false;
       });
       $(self.element).on('click', '#ajaxLoad_upload', function(event) {
