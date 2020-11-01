@@ -5,6 +5,7 @@ import { StatusService } from './status.service.js';
 import ModelsService from './models.service.js';
 import WikiService from './wiki.service.js';
 import IndexService from './index.service.js';
+import UploaderService from './uploader.service.js';
 
 /**
  * @class
@@ -14,13 +15,14 @@ export default class HeaderComponent extends ComponentBase {
    * @override
    */
   decorator() {
-    /** @type {{status: StatusService, application: ApplicationService, models: ModelsService, wiki: WikiService, index: IndexService}} */
+    /** @type {{status: StatusService, application: ApplicationService, models: ModelsService, wiki: WikiService, index: IndexService, uploader: UploaderService}} */
     this.serviceInjection = {
       status: StatusService.prototype,
       application: ApplicationService.prototype,
       models: ModelsService.prototype,
       wiki: WikiService.prototype,
       index: IndexService.prototype,
+      uploader: UploaderService.prototype,
     };
   }
   /**
@@ -87,7 +89,7 @@ export default class HeaderComponent extends ComponentBase {
       $(self.element).on('click', '#ajaxLoad_upload', function(event) {
         event.preventDefault();
         // 起動.
-        self.serviceInjection.application.toggleUploader();
+        self.serviceInjection.uploader.toggleUploader();
         return false;
       });
     });

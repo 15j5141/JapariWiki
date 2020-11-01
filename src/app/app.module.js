@@ -20,6 +20,7 @@ import ModelsService from './models.service.js';
 import WikiService from './wiki.service.js';
 import DebugWindowComponent from './debug_window.component.js';
 import EditorService from './editor.service.js';
+import UploaderService from './uploader.service.js';
 
 /**
  * @typedef {Object} Modules
@@ -59,6 +60,7 @@ export class AppModule {
         ModelsService,
         WikiService,
         EditorService,
+        UploaderService,
       ],
       bootstrap: [AppComponent],
     };
