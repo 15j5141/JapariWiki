@@ -4,6 +4,7 @@ import { StatusService } from './status.service.js';
 import ModelsService from './models.service.js';
 import WikiService from './wiki.service.js';
 import IndexService from './index.service.js';
+import { filter, map } from 'rxjs/operators';
 import UploaderService from './uploader.service.js';
 
 /**
@@ -42,13 +43,31 @@ export default class HeaderComponent extends ComponentBase {
    * @override
    */
   async onStart() {
-    this.serviceInjection.wiki.pulledJWPage$.subscribe(page => {
+    /**
+     * ヘッダーのページ名表記を更新する.
+     * @param {string} pageURI
+     */
+    const updatePageNameOnHeader = pageURI => {
       this.renderer.html$.next({
         selector: 'span#header-page_name',
-        value: `<a data-page="${page.pageURI}" class="ajaxLoad none_decoration">${page.pageURI}</a>`,
+        value: `<a data-page="${pageURI}" class="ajaxLoad none_decoration">${pageURI}</a>`,
         type: 'html',
       });
-    });
+    };
+    // ページデータ読込完了時に発火する.
+    this.serviceInjection.wiki.pulledJWPage$
+      .pipe(
+        filter(page => page != null),
+        map(page => page.pageURI)
+      )
+      .subscribe(updatePageNameOnHeader);
+    // アプリ読込によるページ遷移時に発火する.
+    this.serviceInjection.index.siteHistory$
+      .pipe(
+        filter(page => page != null),
+        map(state => state.pageURI)
+      )
+      .subscribe(updatePageNameOnHeader);
   }
   /**
    * @override
