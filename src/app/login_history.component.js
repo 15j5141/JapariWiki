@@ -1,5 +1,4 @@
 // @ts-check
-import CloudNCMB from '../scripts/class-cloud_ncmb.js';
 import ComponentBase from '../scripts/class-component_base.js';
 import { StatusService } from './status.service.js';
 
@@ -25,7 +24,7 @@ export default class LoginHistoryComponent extends ComponentBase {
     return {
       templateUrl: '../text/site_menu.txt',
       styleUrls: [],
-      selector: '#side-login_history',
+      selector: 'component-login_history',
     };
   }
 

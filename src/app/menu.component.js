@@ -1,7 +1,7 @@
 // @ts-check
 import ComponentBase from '../scripts/class-component_base.js';
 import PageRenderer from '../scripts/class-page_renderer.js';
-import ApplicationService from './application.service.js';
+import IndexService from './index.service.js';
 
 /**
  * @class
@@ -12,9 +12,9 @@ export default class MenuComponent extends ComponentBase {
    */
   decorator() {
     this.renderer = new PageRenderer(this.element, '/site_/SideMenu');
-    /** @type {{application: ApplicationService}} */
+    /** @type {{index: IndexService}} */
     this.serviceInjection = {
-      application: ApplicationService.prototype,
+      index: IndexService.prototype,
     };
   }
   /**
@@ -44,7 +44,10 @@ export default class MenuComponent extends ComponentBase {
         // ページ名を取得する.
         const pageName = $(e.target).data('page');
         // ページを移動する.
-        self.serviceInjection.application.openWiki(pageName);
+        self.serviceInjection.index.siteHistory$.next({
+          appName: 'WikiApp',
+          pageURI: pageName,
+        });
         return false; // <a>を無効化.
       });
     });

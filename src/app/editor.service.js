@@ -2,7 +2,7 @@
 import ServiceBase from '../scripts/class-service_base.js';
 import JWPage from '../scripts/class-page.js';
 import { StatusService } from './status.service.js';
-import ApplicationService from './application.service.js';
+import IndexService from './index.service.js';
 /** @typedef {import('../scripts/class-cloud_base.js').JWFile} JWFile*/
 import ModelsService from './models.service.js';
 
@@ -73,10 +73,10 @@ export default class EditorService extends ServiceBase {
     );
 
     /* ----- サービスのインジェクション. ----- */
-    /** @type {{status: StatusService, application: ApplicationService, models: ModelsService}} */
+    /** @type {{status: StatusService, index: IndexService, models: ModelsService}} */
     this.serviceInjection = {
       status: StatusService.prototype,
-      application: ApplicationService.prototype,
+      index: IndexService.prototype,
       models: ModelsService.prototype,
     };
 

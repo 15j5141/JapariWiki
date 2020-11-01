@@ -4,17 +4,14 @@
  * @fileoverview
  */
 import Renderer from './class-renderer.js';
-import JWStatus from './jw-status.js';
 /** @typedef {import("./class-service_manager").default} ServiceManager */
 /** @typedef {import("./class-service_base").default} ServiceBase */
 /**
  * @typedef {Object} ReferenceObject
- * @property {jQuery} jQuery
- * @property {JWStatus=} status
- * @property {string?} selector
+ * @property {string=} selectorForGetElement element取得用
  * @property {ServiceManager} serviceManager
  * @property {Array<typeof ComponentBase>} declarations
- * @property {Element} element
+ * @property {Element=} element
  */
 /**
  * Component の基本クラス.
@@ -30,9 +27,7 @@ export default class ComponentBase {
   constructor(referenceObject) {
     /** @type {ReferenceObject} */
     const originalReferenceObject = {
-      jQuery: null,
-      status: null,
-      selector: null,
+      selectorForGetElement: null,
       serviceManager: null,
       declarations: null,
       element: null,
@@ -42,12 +37,14 @@ export default class ComponentBase {
 
     // セットする.
     /** @type {jQuery}*/
-    this.$ = this.refObj.jQuery = this.refObj.jQuery || top.jQuery;
-    this.selector = this.refObj.selector || this.decoration.selector;
+    this.$ = top.jQuery;
+    this.selector = this.decoration.selector;
     // element が未指定なら selector から特定する.
-    this.element = this.refObj.element || this.$(this.selector).get(0);
+    this.element =
+      this.refObj.element ||
+      this.$(this.refObj.selectorForGetElement).get(0) ||
+      this.$(this.selector).get(0);
     this.$element = this.$(this.element);
-    this.refObj.status = this.refObj.status || new JWStatus();
     this.renderer = new Renderer(this.element);
     /** DOM 上に初期描画済みかどうか. onStart() 用. */
     this.wasInitDraw = false;
@@ -136,6 +133,8 @@ export default class ComponentBase {
       // 見つかった全てのコンポーネント要素を Component に変換する.
       for (let i = 0; i < foundElements.length; i++) {
         const element = foundElements[i];
+        // コンポーネントの共通クラスを付与する.
+        element.classList.add('jw-component');
         // コンポーネントに変換する.
         components.push(
           new Component({
@@ -218,7 +217,7 @@ export default class ComponentBase {
 
     // 初期描画時に一度だけ実行する.
     if (!this.wasInitDraw) {
-    await this._initChildComponents();
+      await this._initChildComponents();
       this.onStart();
       this.wasInitDraw = true;
     }

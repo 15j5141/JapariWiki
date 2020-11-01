@@ -1,7 +1,8 @@
 // @ts-check
+import { filter } from 'rxjs/operators';
 import ComponentBase from '../scripts/class-component_base.js';
-import ApplicationService from './application.service.js';
 import { StatusService } from './status.service.js';
+import UploaderService from './uploader.service.js';
 /**
  * 画像アップロード用のコンポーネント.
  * @class
@@ -22,24 +23,37 @@ export class UploaderComponent extends ComponentBase {
    */
   decorator() {
     /* ----- サービスのインジェクション. ----- */
-    /** @type {{status: StatusService, application: ApplicationService}} */
+    /** @type {{status: StatusService, uploader:UploaderService}} */
     this.serviceInjection = {
       status: StatusService.prototype,
-      application: ApplicationService.prototype,
+      uploader: UploaderService.prototype,
     };
 
     /* ----- プロパティ宣言. ----- */
     /** コンポーネント起動時に1度だけ処理する為のフラグ */
     this.isUploaderLoaded = false;
+    /** @type {boolean} アップロードコンポーネントが表示中かどうか. */
+    this.isOpen = false;
   }
   /**
    * @override
    */
   async onInit() {
     this.status = this.serviceInjection.status;
-    this.application = this.serviceInjection.application;
-    // サービスにコンポーネントを登録する.
-    this.application.uploaderApp = this;
+
+    // コンポーネント開閉の為のイベントを登録する.
+    const event$ = this.serviceInjection.uploader.event$.pipe(
+      filter(e => e != null)
+    );
+    event$.pipe(filter(e => e === 'open')).subscribe(e => this.open());
+    event$.pipe(filter(e => e === 'close')).subscribe(e => this.close());
+    event$.pipe(filter(e => e === 'toggle')).subscribe(e => {
+      if (this.isOpen) {
+        this.close();
+      } else {
+        this.open();
+      }
+    });
   }
   /**
    * @override
@@ -114,10 +128,12 @@ export class UploaderComponent extends ComponentBase {
   }
   /** */
   async open() {
+    this.isOpen = true;
     this.show();
   }
   /** */
   async close() {
+    this.isOpen = false;
     this.hide();
   }
   /**

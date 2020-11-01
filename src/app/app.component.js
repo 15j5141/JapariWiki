@@ -3,7 +3,6 @@
  * @fileoverview ルートコンポーネントへの一括読込を担う.
  */
 import ComponentBase from '../scripts/class-component_base.js';
-import ApplicationService from './application.service.js';
 import { StatusService } from './status.service.js';
 
 /**
@@ -16,10 +15,9 @@ export class AppComponent extends ComponentBase {
    */
   decorator() {
     /* ----- サービスのインジェクション. ----- */
-    /** @type {{status: StatusService, application: ApplicationService}} */
+    /** @type {{status: StatusService}} */
     this.serviceInjection = {
       status: StatusService.prototype,
-      application: ApplicationService.prototype,
     };
 
     /* ----- プロパティ宣言. ----- */

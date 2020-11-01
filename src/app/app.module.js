@@ -1,6 +1,5 @@
 // @ts-check
 import IndexService from '../app/index.service.js';
-import ApplicationService from '../app/application.service.js';
 import { StatusService } from '../app/status.service.js';
 
 import HeaderComponent from '../app/header.component.js';
@@ -20,6 +19,7 @@ import ModelsService from './models.service.js';
 import WikiService from './wiki.service.js';
 import DebugWindowComponent from './debug_window.component.js';
 import EditorService from './editor.service.js';
+import UploaderService from './uploader.service.js';
 
 /**
  * @typedef {Object} Modules
@@ -54,11 +54,11 @@ export class AppModule {
       // providers.
       services: [
         IndexService,
-        ApplicationService,
         StatusService,
         ModelsService,
         WikiService,
         EditorService,
+        UploaderService,
       ],
       bootstrap: [AppComponent],
     };

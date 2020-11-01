@@ -7,7 +7,7 @@
     background-attachment: fixed;
 }
 
-div#header {
+div#header, component-header {
     background: rgba(48, 48, 48, 0.8);
     padding: 10px;
     font-size: 32px;
@@ -67,7 +67,7 @@ div#content_body {
     display: flex;
 }
 
-div#footer {
+div#footer, component-footer {
     background: rgba(48, 48, 48, 0.8);
     min-height: 12px;
     text-align: center;
@@ -165,7 +165,7 @@ th {
     /* white-space: nowrap; */
 }
 
-#side-login_history {
+#side-login_history, component-login_history {
     height: 10em;
     width: 100%;
     overflow: auto;
@@ -197,4 +197,8 @@ iframe#content_add{
     position: relative;
     overflow-x: hidden;
     width: 100%;
+}
+
+.jw-component {
+    display: block;
 }
