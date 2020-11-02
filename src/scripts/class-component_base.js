@@ -140,7 +140,6 @@ export default class ComponentBase {
           new Component({
             ...this.refObj,
             element,
-            declarations: [],
           })
         );
       }
