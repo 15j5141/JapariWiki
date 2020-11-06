@@ -2,7 +2,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
 const CopyPlugin = require('copy-webpack-plugin');
 
-module.exports = {
+const main = {
   mode: process.env.NODE_ENV || 'development',
   entry: {
     index: './src/index.js',
@@ -47,6 +47,12 @@ module.exports = {
         { from: 'styles/*', to: '', context: 'src/' },
         { from: 'img/*', to: '', context: '' },
         { from: 'text/*', to: '', context: '' },
+        { from: 'require.js', to: 'lib/', context: 'node_modules/requirejs/' },
+        {
+          from: 'rxjs.umd.min.js',
+          to: 'lib/',
+          context: 'node_modules/rxjs/bundles/',
+        },
       ],
     }),
   ],
@@ -87,3 +93,24 @@ module.exports = {
     ],
   },
 };
+const library = {
+  mode: process.env.NODE_ENV || 'development',
+  entry: {
+    jw: './src/scripts/jw.js',
+  },
+  output: {
+    path: path.resolve(__dirname, 'dist'),
+    filename: '[name].min.js',
+    library: 'JW',
+    libraryExport: '',
+    libraryTarget: 'umd',
+    globalObject: 'this',
+  },
+  plugins: [],
+  externals: [],
+  module: {
+    rules: [],
+  },
+};
+
+module.exports = [main, library];
