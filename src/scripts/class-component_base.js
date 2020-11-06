@@ -46,8 +46,8 @@ export default class ComponentBase {
       this.$(this.selector).get(0);
     this.$element = this.$(this.element);
     this.renderer = new Renderer(this.element);
-    /** DOM 上に初期描画済みかどうか. onStart() 用. */
-    this.wasInitDraw = false;
+    /** コンポーネントが初期化済み（onInit,onDraw,onStart）かどうか.  */
+    this.isInitialized = false;
 
     /** @type {Object<string, ServiceBase>} */
     this.serviceInjection = {};
@@ -67,6 +67,9 @@ export default class ComponentBase {
     );
     // HTML を DL する.
     this.templateHTML = this.loadTemplate();
+
+    // serviceInjectionの解決, onInit(), onLoad() などを実行する.
+    this.init().then(() => {});
   }
   /**
    * 疑似デコレーターセット.
@@ -145,19 +148,7 @@ export default class ComponentBase {
       }
     });
 
-    // コンポーネントの初期化処理をする.
-    await Promise.all([...components.map(component => component.init())]);
-
-    // コンポーネントの描画処理をする.
-    await Promise.all([
-      ...components.map(component => {
-        // data-lazydraw 属性があれば描画しない.
-        if (component.$element.data('lazydraw') !== undefined) {
-          return Promise.resolve();
-        }
-        return component.draw();
-      }),
-    ]);
+    // コンポーネントの初期化, 描画処理はコンストラクタから呼ばれる.
   }
   /* ---------- abstract. ---------- */
   /**
@@ -197,11 +188,24 @@ export default class ComponentBase {
   async init() {
     // this.injection のサービスを解決する.
     await this._inject();
-    // FixMe move loadTemplate() to constructor.
-    // DOM にセットする.
-    // this.renderer.setHTML(this.templateHTML);
+
     // 実装された初期化処理を呼ぶ.
     await this.onInit();
+
+    // templateHTML読込完了まで待つ.
+    await this.templateHTML;
+    // templateHTML等をDOMにセットする.
+    await this.draw();
+
+    // 子コンポーネントのインスタンスを生成する.
+    await this._initChildComponents();
+
+    // 実装された開始処理を呼ぶ.
+    this.onStart();
+
+    // 初期化済みフラグをオンにする.
+    this.isInitialized = true;
+
     // イベント登録する.
     this.onLoad();
   }
@@ -213,13 +217,6 @@ export default class ComponentBase {
     // this.show();
     // 実装された描画処理を呼ぶ.
     await this.onRender();
-
-    // 初期描画時に一度だけ実行する.
-    if (!this.wasInitDraw) {
-      await this._initChildComponents();
-      this.onStart();
-      this.wasInitDraw = true;
-    }
   }
   /* ---------- その他メソッド. ---------- */
   /**

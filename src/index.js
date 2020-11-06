@@ -27,10 +27,6 @@ function bootstrapModule(Module) {
     });
     // 各コンポーネントを登録する.
     componentsManager.register(component);
-    (async () => {
-      await component.init();
-      await component.draw();
-    })();
   });
 }
 
