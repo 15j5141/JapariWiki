@@ -1,0 +1,39 @@
+@startuml ComponentLifecycle
+[*] --> 動的コンポーネント読込 : サイト訪問時
+動的コンポーネント読込 --> Constructor : index.html,\n app.component読込後
+Constructor --> [*]
+
+
+動的コンポーネント読込 : async promise(requirejs(...))
+
+state AnyComponent {
+    state Constructor {
+        [*] ->  decorator
+        decorator : 依存サービス,プロパティを登録する
+        --
+
+        [*] -> _サービス解決
+        _サービス解決 : 依存サービス解決待ち
+        --
+
+        [*] -> onInit : サービス解決後
+        onInit --> onRender
+        onRender --> _子コンポーネント生成
+        _子コンポーネント生成 --> onStart
+        onStart --> onLoad
+
+        onInit : ex) 初期化処理
+        onRender : ex) 描画処理する
+        onRender : default) tempalteHTML等を\nDOMに描画する
+        _子コンポーネント生成 : async _initChildComponents()
+        onStart : ex) データバインドなどDOM解決後にする処理
+        onLoad : ex) jQuery等でイベント登録する
+    }
+}
+
+
+
+' (*) -->[new Component()] "constructor()" as constructor
+' onInit --> (*)
+
+@enduml
