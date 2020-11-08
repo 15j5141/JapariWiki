@@ -21,10 +21,6 @@ export class AppComponent extends ComponentBase {
     };
 
     /* ----- プロパティ宣言. ----- */
-
-    /** History API 使用の可否. */
-    this.isCanBeHistory =
-      history && history.pushState && history.state !== undefined;
   }
   /**
    * @override
@@ -42,26 +38,36 @@ export class AppComponent extends ComponentBase {
   async onInit() {
     this.status = this.serviceInjection.status._status;
     this.cloud = this.serviceInjection.status.getCloud();
+    this.renderer.setHTML('<progress value="0.2"></progress><br>');
+    this.renderer.print('Initialize...');
   }
   /**
    * @override
    */
   async onRender() {
     const status = this.serviceInjection.status;
+    const progress = (message, v) => {
+      this.renderer.print('OK<br>' + message + '...');
+      if (!v) v = parseFloat('' + this.$element.find('progress').val()) + 0.1;
+      this.$element.find('progress').val('' + v);
+    };
 
     // ログインセッション切れを確認する.
-    this.renderer.setHTML('認証確認中...');
+    progress('Authorize', 0.6);
     const user = await this.cloud.isLogin();
     // 未ログインなら
     if (user == null) location.href = './logout.html';
     status.setUser(user);
 
     // 動的コンポーネント一覧を取得する.
+    progress('Get dynamic components list');
     const paths = await this.getDynamicComponentPaths();
     // 動的コンポーネントを取得する.
+    progress('Load dynamic components', 0.9);
     await this.loadDynamicComponents(paths);
 
     // 描画する.
+    progress('Render', 1.0);
     this.renderer.setHTML(await this.templateHTML);
   }
   /**
