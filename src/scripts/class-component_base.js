@@ -17,7 +17,9 @@ import Renderer from './class-renderer.js';
  * @typedef {Object} ComponentDecoration
  * @property {string} selector
  * @property {string=} templateUrl
+ * @property {string=} template
  * @property {Array<string>=} styleUrls
+ * @property {Array<string>=} styles
  */
 
 /**
@@ -72,6 +74,10 @@ export default class ComponentBase {
       },
       ''
     );
+    // <style>...</style>をdecoration.stylesから追加する.
+    this.stylesLinkTag += this.decoration.styles
+      ? '<style>' + this.decoration.styles.join('\n') + '</style>'
+      : '';
     // HTML を DL する.
     this.templateHTML = this.loadTemplate();
 
@@ -86,7 +92,9 @@ export default class ComponentBase {
   static get decoration() {
     return {
       templateUrl: null,
+      template: '',
       styleUrls: [],
+      styles: [],
       selector: '',
     };
   }
@@ -246,7 +254,9 @@ export default class ComponentBase {
     const self = this;
     const url = self.decoration.templateUrl;
     if (url == null) {
-      return Promise.resolve('');
+      return Promise.resolve(
+        self.stylesLinkTag + (self.decoration.template || '')
+      );
     }
     return new Promise((resolve, reject) => {
       self.$.ajax({
