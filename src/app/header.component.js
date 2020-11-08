@@ -27,7 +27,7 @@ export default class HeaderComponent extends ComponentBase {
   /**
    * @override
    */
-  static get decoration() {
+  get decoration() {
     return {
       templateUrl: './header.component.html',
       styleUrls: [],

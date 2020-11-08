@@ -24,7 +24,7 @@ export default class DebugWindowComponent extends ComponentBase {
   /**
    * @override
    */
-  static get decoration() {
+  get decoration() {
     return {
       selector: '#debug_window',
       templateUrl: './debug_window.component.html',

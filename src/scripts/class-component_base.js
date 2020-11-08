@@ -86,10 +86,31 @@ export default class ComponentBase {
   }
   /**
    * 疑似デコレーターセット.
-   * @abstract
+   * 静的プロパティ参照用.
    * @return {ComponentDecoration}
    */
   static get decoration() {
+    // 静的プロパティアクセスはprototypeから渡す.
+    return this.prototype.decoration;
+  }
+  /**
+   * 疑似デコレーターセット.
+   * オーバーライドしてgetterとしてdecorationを参照させることも可能.
+   * @abstract
+   * @return {ComponentDecoration}
+   * @example
+   *   get decoration() {
+   *     return {
+   *       ...super.decoration,
+   *       templateUrl: 'https://sample/sample.txt',
+   *       template: 'sample',
+   *       styleUrls: ['https://sample/sample.css'],
+   *       styles: [`component-sample {}`],
+   *       selector: 'component-sample',
+   *     };
+   *   }
+   */
+  get decoration() {
     return {
       templateUrl: null,
       template: '',
@@ -97,14 +118,6 @@ export default class ComponentBase {
       styles: [],
       selector: '',
     };
-  }
-  /**
-   * インスタンス内参照用.
-   * @abstract
-   * @return {ComponentDecoration}
-   */
-  get decoration() {
-    return this.constructor.decoration;
   }
   /**
    * @abstract

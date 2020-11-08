@@ -11,7 +11,7 @@ export class UploaderComponent extends ComponentBase {
   /**
    * @override
    */
-  static get decoration() {
+  get decoration() {
     return {
       templateUrl: './uploader.component.html',
       styleUrls: ['./uploader.component.css'],

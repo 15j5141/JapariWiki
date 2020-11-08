@@ -28,7 +28,7 @@ export default class WikiApp extends ComponentBase {
   /**
    * @override
    */
-  static get decoration() {
+  get decoration() {
     return {
       selector: '#app-wiki',
       templateUrl: './wiki.component.html',

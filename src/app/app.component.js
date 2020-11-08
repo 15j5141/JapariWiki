@@ -29,7 +29,7 @@ export class AppComponent extends ComponentBase {
   /**
    * @override
    */
-  static get decoration() {
+  get decoration() {
     return {
       templateUrl: './app.component.html',
       styleUrls: ['../styles/style.css'],

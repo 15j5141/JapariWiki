@@ -25,7 +25,7 @@ export default class EditorApp extends ComponentBase {
   /**
    * @override
    */
-  static get decoration() {
+  get decoration() {
     return {
       selector: '#app-editor',
       templateUrl: './editor.component.html',
