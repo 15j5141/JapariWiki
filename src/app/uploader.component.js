@@ -1,23 +1,18 @@
 // @ts-check
 import { filter } from 'rxjs/operators';
-import ComponentBase from '../scripts/class-component_base.js';
+import { atComponent } from '../scripts/decorations';
 import { StatusService } from './status.service.js';
 import UploaderService from './uploader.service.js';
+
 /**
  * 画像アップロード用のコンポーネント.
  * @class
  */
-export class UploaderComponent extends ComponentBase {
-  /**
-   * @override
-   */
-  get decoration() {
-    return {
-      templateUrl: './uploader.component.html',
-      styleUrls: ['./uploader.component.css'],
-      selector: '#app-uploader',
-    };
-  }
+export class UploaderComponent extends atComponent({
+  templateUrl: './uploader.component.html',
+  styleUrls: ['./uploader.component.css'],
+  selector: '#app-uploader',
+})() {
   /**
    * @override
    */

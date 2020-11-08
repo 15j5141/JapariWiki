@@ -5,11 +5,11 @@ import { StatusService } from './status.service.js';
 import ModelsService from './models.service.js';
 import WikiService from './wiki.service.js';
 import IndexService from './index.service.js';
-
+import { atComponent } from '../scripts/decorations';
 /**
  * @class
  */
-export default class WikiApp extends ComponentBase {
+class WikiApp extends ComponentBase {
   /**
    * @override
    */
@@ -23,16 +23,6 @@ export default class WikiApp extends ComponentBase {
       models: ModelsService.prototype,
       wiki: WikiService.prototype,
       index: IndexService.prototype,
-    };
-  }
-  /**
-   * @override
-   */
-  get decoration() {
-    return {
-      selector: '#app-wiki',
-      templateUrl: './wiki.component.html',
-      styleUrls: [],
     };
   }
 
@@ -168,3 +158,13 @@ export default class WikiApp extends ComponentBase {
     this.$('html,body').animate({ scrollTop: 0 }, 100, 'swing');
   }
 }
+
+// デコレーションする.
+atComponent({
+  selector: '#app-wiki',
+  templateUrl: './wiki.component.html',
+  styleUrls: [],
+  styles: [],
+})(WikiApp);
+
+export default WikiApp;
