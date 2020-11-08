@@ -14,6 +14,13 @@ import Renderer from './class-renderer.js';
  * @property {Element=} element
  */
 /**
+ * @typedef {Object} ComponentDecoration
+ * @property {string} selector
+ * @property {string=} templateUrl
+ * @property {Array<string>=} styleUrls
+ */
+
+/**
  * Component の基本クラス.
  * @class
  * @property {Object} decoration
@@ -74,7 +81,7 @@ export default class ComponentBase {
   /**
    * 疑似デコレーターセット.
    * @abstract
-   * @return {{templateUrl:string, styleUrls:Array<string>, selector:string}}
+   * @return {ComponentDecoration}
    */
   static get decoration() {
     return {
@@ -86,7 +93,7 @@ export default class ComponentBase {
   /**
    * インスタンス内参照用.
    * @abstract
-   * @return {{templateUrl:string, styleUrls:Array<string>, selector:string}}
+   * @return {ComponentDecoration}
    */
   get decoration() {
     return this.constructor.decoration;
