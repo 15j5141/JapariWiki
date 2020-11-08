@@ -71,3 +71,8 @@ export class AppModule {
     return this.constructor.decoration;
   }
 }
+
+// コンポーネントをstaticな値に追加する.
+AppModule.decoration.declarations.forEach(Component => {
+  ComponentBase.classes$.next(Component);
+});

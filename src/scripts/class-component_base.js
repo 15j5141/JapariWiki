@@ -3,6 +3,7 @@
 /**
  * @fileoverview
  */
+import { ReplaySubject } from 'rxjs';
 import Renderer from './class-renderer.js';
 /** @typedef {import("./class-service_manager").default} ServiceManager */
 /** @typedef {import("./class-service_base").default} ServiceBase */
@@ -83,6 +84,16 @@ export default class ComponentBase {
 
     // serviceInjectionの解決, onInit(), onLoad() などを実行する.
     this.init().then(() => {});
+  }
+  /**
+   * declarationsの代わりにコンポーネントクラスを読み取れるようする.
+   * @deprecated 仮設置.
+   * @static
+   * @return {ReplaySubject<ComponentBase>}
+   */
+  static get classes$() {
+    this._classes$ = this._classes$ || new ReplaySubject();
+    return this._classes$;
   }
   /**
    * 疑似デコレーターセット.
