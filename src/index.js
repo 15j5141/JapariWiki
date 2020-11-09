@@ -27,12 +27,22 @@ function bootstrapModule(Module) {
     });
     // 各コンポーネントを登録する.
     componentsManager.register(component);
-    (async () => {
-      await component.init();
-      await component.draw();
-    })();
   });
 }
+
+// RequireJS での読み込み設定をする.
+(() => {
+  window.requirejs.config({
+    paths: {
+      jquery: 'https://code.jquery.com/jquery-3.5.1.min',
+      rxjs: 'lib/rxjs.umd.min',
+      jw: 'jw.min',
+    },
+    shim: {},
+    config: {},
+  });
+  console.log(JSON.stringify(window.requirejs.s.contexts._.config, null, '  '));
+})();
 
 // app.component を起動する.
 bootstrapModule(AppModule);

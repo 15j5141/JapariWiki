@@ -3,6 +3,7 @@
 /**
  * @fileoverview
  */
+import { ReplaySubject } from 'rxjs';
 import Renderer from './class-renderer.js';
 /** @typedef {import("./class-service_manager").default} ServiceManager */
 /** @typedef {import("./class-service_base").default} ServiceBase */
@@ -13,6 +14,15 @@ import Renderer from './class-renderer.js';
  * @property {Array<typeof ComponentBase>} declarations
  * @property {Element=} element
  */
+/**
+ * @typedef {Object} ComponentDecoration
+ * @property {string} selector
+ * @property {string=} templateUrl
+ * @property {string=} template
+ * @property {Array<string>=} styleUrls
+ * @property {Array<string>=} styles
+ */
+
 /**
  * Component の基本クラス.
  * @class
@@ -46,8 +56,8 @@ export default class ComponentBase {
       this.$(this.selector).get(0);
     this.$element = this.$(this.element);
     this.renderer = new Renderer(this.element);
-    /** DOM 上に初期描画済みかどうか. onStart() 用. */
-    this.wasInitDraw = false;
+    /** コンポーネントが初期化済み（onInit,onDraw,onStart）かどうか.  */
+    this.isInitialized = false;
 
     /** @type {Object<string, ServiceBase>} */
     this.serviceInjection = {};
@@ -65,28 +75,60 @@ export default class ComponentBase {
       },
       ''
     );
+    // <style>...</style>をdecoration.stylesから追加する.
+    this.stylesLinkTag += this.decoration.styles
+      ? '<style>' + this.decoration.styles.join('\n') + '</style>'
+      : '';
     // HTML を DL する.
     this.templateHTML = this.loadTemplate();
+
+    // serviceInjectionの解決, onInit(), onLoad() などを実行する.
+    this.init().then(() => {});
+  }
+  /**
+   * declarationsの代わりにコンポーネントクラスを読み取れるようする.
+   * @deprecated 仮設置.
+   * @static
+   * @return {ReplaySubject<ComponentBase>}
+   */
+  static get classes$() {
+    this._classes$ = this._classes$ || new ReplaySubject();
+    return this._classes$;
   }
   /**
    * 疑似デコレーターセット.
-   * @abstract
-   * @return {{templateUrl:string, styleUrls:Array<string>, selector:string}}
+   * 静的プロパティ参照用.
+   * @return {ComponentDecoration}
    */
   static get decoration() {
-    return {
-      templateUrl: null,
-      styleUrls: [],
-      selector: '',
-    };
+    // 静的プロパティアクセスはprototypeから渡す.
+    return this.prototype.decoration;
   }
   /**
-   * インスタンス内参照用.
+   * 疑似デコレーターセット.
+   * オーバーライドしてgetterとしてdecorationを参照させることも可能.
    * @abstract
-   * @return {{templateUrl:string, styleUrls:Array<string>, selector:string}}
+   * @return {ComponentDecoration}
+   * @example
+   *   get decoration() {
+   *     return {
+   *       ...super.decoration,
+   *       templateUrl: 'https://sample/sample.txt',
+   *       template: 'sample',
+   *       styleUrls: ['https://sample/sample.css'],
+   *       styles: [`component-sample {}`],
+   *       selector: 'component-sample',
+   *     };
+   *   }
    */
   get decoration() {
-    return this.constructor.decoration;
+    return {
+      templateUrl: null,
+      template: '',
+      styleUrls: [],
+      styles: [],
+      selector: '',
+    };
   }
   /**
    * @abstract
@@ -140,25 +182,12 @@ export default class ComponentBase {
           new Component({
             ...this.refObj,
             element,
-            declarations: [],
           })
         );
       }
     });
 
-    // コンポーネントの初期化処理をする.
-    await Promise.all([...components.map(component => component.init())]);
-
-    // コンポーネントの描画処理をする.
-    await Promise.all([
-      ...components.map(component => {
-        // data-lazydraw 属性があれば描画しない.
-        if (component.$element.data('lazydraw') !== undefined) {
-          return Promise.resolve();
-        }
-        return component.draw();
-      }),
-    ]);
+    // コンポーネントの初期化, 描画処理はコンストラクタから呼ばれる.
   }
   /* ---------- abstract. ---------- */
   /**
@@ -198,11 +227,24 @@ export default class ComponentBase {
   async init() {
     // this.injection のサービスを解決する.
     await this._inject();
-    // FixMe move loadTemplate() to constructor.
-    // DOM にセットする.
-    // this.renderer.setHTML(this.templateHTML);
+
     // 実装された初期化処理を呼ぶ.
     await this.onInit();
+
+    // templateHTML読込完了まで待つ.
+    await this.templateHTML;
+    // templateHTML等をDOMにセットする.
+    await this.draw();
+
+    // 子コンポーネントのインスタンスを生成する.
+    await this._initChildComponents();
+
+    // 実装された開始処理を呼ぶ.
+    this.onStart();
+
+    // 初期化済みフラグをオンにする.
+    this.isInitialized = true;
+
     // イベント登録する.
     this.onLoad();
   }
@@ -214,13 +256,6 @@ export default class ComponentBase {
     // this.show();
     // 実装された描画処理を呼ぶ.
     await this.onRender();
-
-    // 初期描画時に一度だけ実行する.
-    if (!this.wasInitDraw) {
-      await this._initChildComponents();
-      this.onStart();
-      this.wasInitDraw = true;
-    }
   }
   /* ---------- その他メソッド. ---------- */
   /**
@@ -243,7 +278,9 @@ export default class ComponentBase {
     const self = this;
     const url = self.decoration.templateUrl;
     if (url == null) {
-      return Promise.resolve('');
+      return Promise.resolve(
+        self.stylesLinkTag + (self.decoration.template || '')
+      );
     }
     return new Promise((resolve, reject) => {
       self.$.ajax({

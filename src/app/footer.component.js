@@ -11,7 +11,7 @@ export default class FooterComponent extends ComponentBase {
   /**
    * @override
    */
-  static get decoration() {
+  get decoration() {
     return {
       selector: 'component-footer',
       templateUrl: './footer.component.html',

@@ -20,7 +20,7 @@ export default class MenuComponent extends ComponentBase {
   /**
    * @override
    */
-  static get decoration() {
+  get decoration() {
     return {
       templateUrl: null,
       styleUrls: [],

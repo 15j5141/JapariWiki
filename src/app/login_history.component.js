@@ -20,7 +20,7 @@ export default class LoginHistoryComponent extends ComponentBase {
   /**
    * @override
    */
-  static get decoration() {
+  get decoration() {
     return {
       templateUrl: '../text/site_menu.txt',
       styleUrls: [],

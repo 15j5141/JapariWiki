@@ -1,6 +1,6 @@
 {
   "name": "japariwiki",
-  "version": "1.0.0",
+  "version": "2.2.0",
   "description": "Wiki.",
   "main": "index.js",
   "directories": {
@@ -43,7 +43,7 @@
     "core-js": "^3.5.0",
     "html-webpack-plugin": "^4.2.0",
     "json-loader": "^0.5.7",
-    "jquery": "^3.5.1",
+    "requirejs": "^2.3.6",
     "rxjs": "^6.5.5",
     "webpack": "^4.42.1",
     "webpack-cli": "^3.3.11"
