@@ -36,7 +36,7 @@ function bootstrapModule(Module) {
     paths: {
       jquery: 'https://code.jquery.com/jquery-3.5.1.min',
       rxjs: 'lib/rxjs.umd.min',
-      jw: 'jw.min',
+      jw: 'lib/jw.min',
     },
     shim: {},
     config: {},

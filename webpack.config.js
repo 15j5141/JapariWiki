@@ -99,7 +99,7 @@ const library = {
     jw: './src/scripts/jw.js',
   },
   output: {
-    path: path.resolve(__dirname, 'dist'),
+    path: path.resolve(__dirname, 'dist', 'lib'),
     filename: '[name].min.js',
     library: 'JW',
     libraryExport: '',
