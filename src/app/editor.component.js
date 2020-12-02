@@ -55,7 +55,7 @@ export default class EditorApp extends ComponentBase {
       this.open(pageURI)
         .then(result => {
           // 編集したページを表示する.
-          self.serviceInjection.index.siteHistory$.next({
+          self.serviceInjection.index.executeApp({
             appName: 'WikiApp',
             pageURI: pageURI,
           });

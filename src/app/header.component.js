@@ -86,7 +86,7 @@ export default class HeaderComponent extends ComponentBase {
         // 現在のページ URI を取得する.
         const pageURI = self.serviceInjection.wiki.pageURI$.getValue();
         // 編集画面起動.
-        self.serviceInjection.index.siteHistory$.next({
+        self.serviceInjection.index.executeApp({
           appName: 'Editor',
           pageURI: pageURI,
         });
@@ -97,7 +97,7 @@ export default class HeaderComponent extends ComponentBase {
         // ページ名を取得する.
         const pageName = $(event.target).data('page');
         // ページを移動する.
-        self.serviceInjection.index.siteHistory$.next({
+        self.serviceInjection.index.executeApp({
           appName: 'WikiApp',
           pageURI: pageName,
         });
