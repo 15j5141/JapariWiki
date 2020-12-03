@@ -6,6 +6,7 @@ import { StatusService } from './status.service.js';
 import ModelsService from './models.service.js';
 import EditorService from './editor.service.js';
 import IndexService from './index.service.js';
+import { filter, map } from 'rxjs/operators';
 
 /**
  * @class
@@ -42,8 +43,14 @@ export default class EditorApp extends ComponentBase {
     /** @type {string} */
     this._editedResult = null;
 
+    /** アプリ呼び出しの検知用. */
+    const calledMe$ = this.serviceInjection.index.siteHistory$.pipe(
+      filter(state => state && state.appName === 'Editor'),
+      map(state => state.pageURI)
+    );
+
     // 編集画面が呼ばれたときエディタを開く.
-    this.serviceInjection.editor.pageURI$.subscribe(pageURI => {
+    calledMe$.subscribe(pageURI => {
       if (pageURI == null) {
         // 閉じる処理.
         self.forceClose();

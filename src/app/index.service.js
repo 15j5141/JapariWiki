@@ -63,7 +63,8 @@ export default class IndexService extends ServiceBase {
         self.serviceInjection.wiki.pageURI$.next(state.pageURI);
       } else if (state.appName === 'Editor') {
         // Editor を起動する.
-        self.serviceInjection.editor.pageURI$.next(state.pageURI);
+        // self.serviceInjection.editor.pageURI$.next(state.pageURI);
+        // self.calledSiteHistory$.next(state);
       } else {
         console.log('対応アプリがありません.', state);
       }
