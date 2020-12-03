@@ -42,6 +42,27 @@ export default class EditorApp extends ComponentBase {
     this._isEdited = false;
     /** @type {string} */
     this._editedResult = null;
+    /** バインディング一覧. */
+    this.binds = {
+      get $pageName() {
+        return self.$element.find('#ajax_edit__form__page-name');
+      },
+      get $submit() {
+        return self.$element.find('#app_edit-submit');
+      },
+      get $cancel() {
+        return self.$element.find('input.btn-cancel');
+      },
+      get $textarea() {
+        return self.$element.find('#ajax_edit__textarea');
+      },
+      get $preview() {
+        return self.$element.find('#ajax_edit__preview');
+      },
+      get $form() {
+        return self.$element.find('#ajax_edit');
+      },
+    };
 
     /** アプリ呼び出しの検知用. */
     const calledMe$ = this.serviceInjection.index.siteHistory$.pipe(
@@ -80,11 +101,11 @@ export default class EditorApp extends ComponentBase {
   async onLoad() {
     const $ = this.$;
     const self = this;
-    $(function() {
-      self.$element.on('click', 'input.btn-cancel', event => {
-        self.forceClose();
-        return false;
-      });
+    const binds = self.binds;
+
+    binds.$cancel.on('click', event => {
+      self.forceClose();
+      return false;
     });
   }
   /** @override */
@@ -142,36 +163,18 @@ export default class EditorApp extends ComponentBase {
     const $ = this.$;
     let oldValue = '';
     const syntax = new WikiSyntaxPlugin(page.rawText);
-
-    const ajaxEditView = {
-      form: {
-        _page_name: '',
-        get page_name() {
-          this._page_name = '' + $('#ajax_edit__form__page-name').val();
-          return this._page_name;
-        },
-        /** @param {string} param ページ名 */
-        set page_name(param) {
-          this._page_name = param;
-          $('#ajax_edit__form__page-name').val('' + param);
-        },
-      },
-      init: function() {
-        // ページ名表示.
-        this.form.page_name = JapariWiki.status.wiki.page;
-      },
-    };
+    const binds = this.binds;
 
     // ページ名を表示.
-    $('#ajax_edit__form__page-name').val(page.pageURI);
+    binds.$pageName.val(page.pageURI);
     // 編集内容セット.
-    $('#ajax_edit__textarea').val(page.rawText);
+    binds.$textarea.val(page.rawText);
 
     /* ---------- イベント登録. ---------- */
     // 一定時間ごとに編集内容を確認して変化があればプレビューを更新する.
     const changeTimerId = setInterval(async function() {
       /** @type {string} 編集中の内容 */
-      const newEditingText = '' + $('#ajax_edit__textarea').val();
+      const newEditingText = '' + binds.$textarea.val();
       // 編集エリアが消えたら == 閉じたらタイマーを削除.
       if (newEditingText == null) {
         clearInterval(changeTimerId);
@@ -182,7 +185,7 @@ export default class EditorApp extends ComponentBase {
         // 構文解析.
         const html = syntax.replaceSyntax(newEditingText);
         // プレビューに反映.
-        $('#ajax_edit__preview').html(html);
+        binds.$preview.html(html);
         // 内容を退避.
         oldValue = newEditingText;
       }
@@ -190,19 +193,19 @@ export default class EditorApp extends ComponentBase {
 
     /* ----- 保存ボタン. ----- */
     // 複数回イベントリスナーを登録する場合は毎回解除しないと多重に登録される.
-    $(document).off('submit.editor', '#ajax_edit');
-    $(document).on('submit.editor', '#ajax_edit', event => {
+    binds.$form.off('submit.editor');
+    binds.$form.on('submit.editor', event => {
       event.preventDefault(); // 本来のPOSTを打ち消すおまじない
       if (changeTimerId != null) {
         clearInterval(changeTimerId);
       }
       // 送信ボタン無効化
-      $('#app_edit-submit').prop('disabled', 'true');
+      binds.$submit.prop('disabled', 'true');
       // 編集枠無効化
-      $('#ajax_edit__textarea').prop('readonly', 'true');
+      binds.$textarea.prop('readonly', 'true');
 
       /** @type {string} 編集後の内容 */
-      const newEditedText = '' + $('#ajax_edit__textarea').val();
+      const newEditedText = '' + binds.$textarea.val();
       // 保存前構文解析を実行.
       syntax.checkBeforeSavingPage(newEditedText).then(result => {
         this._editedResult = result;
