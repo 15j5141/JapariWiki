@@ -92,7 +92,34 @@ export default class HeaderComponent extends ComponentBase {
         });
         return false;
       });
-      // メニューのリンクからもページを移動できるようにする.
+
+      // 「新規作成」ボタンを押したら.
+      $(self.element).on('click', '.onclick_createPage', function(event) {
+        event.preventDefault();
+        // 最新ステータス取得する.
+        const status = statusObj;
+        status.load();
+
+        /* 新規作成用のURIを取得する. */
+        let path = status.getPageURI().split('/');
+        const user = self.serviceInjection.status.getUser();
+        if (path[1] === user.id) {
+          // 現在のURIがユーザーのディレクトリ下なら利用する.
+          path[path.length - 1] = 'untitled';
+        } else {
+          // それ以外は現在のユーザーIDからURIを設定する.
+          path = ['', user.id, 'untitled'];
+        }
+
+        // 編集画面起動.
+        self.serviceInjection.index.executeApp({
+          appName: 'Editor',
+          pageURI: path.join('/'),
+        });
+        return false;
+      });
+
+      // ヘッダーのリンクからもページを移動できるようにする.
       $(self.element).on('click', 'a.ajaxLoad', function(event) {
         // ページ名を取得する.
         const pageName = $(event.target).data('page');
