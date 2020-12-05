@@ -32,8 +32,6 @@ export class StatusService extends ServiceBase {
     /** @type {BehaviorSubject<string>} 画面に表示する状態文字列(1行). */
     this.displayState$ = new BehaviorSubject(null);
 
-
-
     /* ----- コンポーネント取得. ----- */
   }
   /**
@@ -49,7 +47,7 @@ export class StatusService extends ServiceBase {
    */
   getUser() {
     // ステータスオブジェクトを取得する.
-    return this.status$.getValue()._status.user;
+    return this.user$.getValue();
   }
   /**
    * @param {{id:string, name:string}} user

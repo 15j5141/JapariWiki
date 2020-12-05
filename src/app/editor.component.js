@@ -63,6 +63,9 @@ export default class EditorApp extends ComponentBase {
       get $form() {
         return self.$element.find('#ajax_edit');
       },
+      get $pageDir() {
+        return self.$element.find('#app-editor__dir_path');
+      },
     };
     // 変換処理をしてプレビュー表示する.
     this.binds.preview$
@@ -188,6 +191,9 @@ export default class EditorApp extends ComponentBase {
       /** @type {string} 編集後の内容 */
       const editedText = '' + binds.$textarea.val();
       const pageData = self._pageData;
+      // フォームからページ名を取得する.
+      pageData.pageURI =
+        self.getURI2Directory(pageData.pageURI) + binds.$pageName.val();
       (async function() {
         // 保存前構文解析を実行.
         pageData.rawText = await self.serviceInjection.editor.checkBeforeSavingPage(
@@ -210,6 +216,17 @@ export default class EditorApp extends ComponentBase {
 
       return false;
     });
+
+    /* ----- ページ名のフォーム. ----- */
+    binds.$pageName.on('change', event => {
+      // フォームからページ名を取得してURIに変換する.
+      const pageURI = self.binds.$pageDir.text() + binds.$pageName.val();
+      if (self._pageData.pageURI !== pageURI) {
+        binds.$pageName.css({ 'background-color': 'orange' });
+      } else {
+        binds.$pageName.css({ 'background-color': 'white' });
+      }
+    });
   }
   /** @override */
   show() {
@@ -231,7 +248,9 @@ export default class EditorApp extends ComponentBase {
     const binds = this.binds;
 
     // ページ名を表示.
-    binds.$pageName.val(page.pageURI);
+    binds.$pageName.val(this.getURI2Name(page.pageURI));
+    // ディレクトリ名を表示.
+    binds.$pageDir.html(this.getURI2Directory(page.pageURI));
     // 編集内容セット.
     binds.$textarea.val(page.rawText);
 
@@ -270,5 +289,24 @@ export default class EditorApp extends ComponentBase {
    */
   forceClose() {
     this.hide();
+  }
+  /**
+   * ページ名を取得する.
+   * @param {string} uri
+   * @return {string}
+   */
+  getURI2Name(uri) {
+    const path = uri.split('/');
+    return path.pop();
+  }
+  /**
+   * ディレクトリ名を取得する.
+   * @param {string} uri
+   * @return {string}
+   */
+  getURI2Directory(uri) {
+    const path = uri.split('/');
+    path[path.length - 1] = '';
+    return path.join('/');
   }
 }
