@@ -216,6 +216,17 @@ export default class EditorApp extends ComponentBase {
 
       return false;
     });
+
+    /* ----- ページ名のフォーム. ----- */
+    binds.$pageName.on('change', event => {
+      // フォームからページ名を取得してURIに変換する.
+      const pageURI = self.binds.$pageDir.text() + binds.$pageName.val();
+      if (self._pageData.pageURI !== pageURI) {
+        binds.$pageName.css({ 'background-color': 'orange' });
+      } else {
+        binds.$pageName.css({ 'background-color': 'white' });
+      }
+    });
   }
   /** @override */
   show() {
@@ -295,6 +306,7 @@ export default class EditorApp extends ComponentBase {
    */
   getURI2Directory(uri) {
     const path = uri.split('/');
-    return path.join('/') + '/';
+    path[path.length - 1] = '';
+    return path.join('/');
   }
 }
