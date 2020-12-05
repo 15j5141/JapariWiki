@@ -18,7 +18,15 @@
     transform: none;
     opacity: 0;
 }
-
+/* プレビューの追加差分 */
+.app-editor__added_diff {
+    background-color: rgb(0, 255, 0, 0.5);
+}
+/* プレビューの現在の行 */
+.app-editor__now_line {
+    background-color: rgb(255, 255, 255, 0.5);
+    border: 2px solid rgb(255, 255, 255);
+}
 #ajax_edit__body {
     height: 100%;
 }
@@ -50,6 +58,7 @@
 .ajax_edit__main {
     display: flex;
     flex: 1;
+    overflow: scroll;
 }
 
 .ajax_edit__btn {

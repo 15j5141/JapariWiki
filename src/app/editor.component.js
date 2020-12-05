@@ -7,6 +7,7 @@ import EditorService from './editor.service.js';
 import IndexService from './index.service.js';
 import { debounceTime, filter, map } from 'rxjs/operators';
 import { BehaviorSubject } from 'rxjs';
+import * as Diff from 'diff';
 
 /**
  * @class
@@ -70,7 +71,45 @@ export default class EditorApp extends ComponentBase {
         debounceTime(500) // 連続してくるのを抑制する.
       )
       .subscribe(rawText => {
-        const html = rawText;
+        let html = rawText;
+
+        // 現在の編集位置を取得する.
+        const selectionStart = this.binds.$textarea.get(0).selectionStart;
+        const nEditingLine = (html.slice(0, selectionStart).match(/\n/g) || [])
+          .length;
+
+        // 編集中の行に目印をつける.
+        html = html
+          .split('\n')
+          .map((t, i) => (i !== nEditingLine ? t : t + ' '))
+          .join('\n');
+
+        // 差分を取得する.
+        const lines = Diff.diffLines(
+          (this._pageData && this._pageData.rawText) || '',
+          html
+        );
+
+        /** 何行目を処理しているか. */
+        let nLine = 0;
+        // 差分を可視化する.
+        html = lines
+          .map(line => {
+            if (line.removed) return '';
+            const isNowLine =
+              nLine <= nEditingLine && nEditingLine < nLine + line.count;
+            nLine += line.count || 0;
+            // 現在の行なら見た目を変える.
+            if (isNowLine) {
+              return `<div class="app-editor__now_line">\n${line.value}\n</div>`;
+            }
+            // 変更がある行なら見た目を変える.
+            return line.added
+              ? `<div class="app-editor__added_diff">\n${line.value}</div>`
+              : line.value;
+          })
+          .join('');
+
         // 構文解析する.
         html = this.serviceInjection.editor.replaceSyntax(html);
         // プレビューに反映する.

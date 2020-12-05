@@ -46,7 +46,7 @@ export default class ComponentBase {
     this.refObj = { ...originalReferenceObject, ...referenceObject };
 
     // セットする.
-    /** @type {jQuery}*/
+    /** @type {JQueryStatic}*/
     this.$ = top.jQuery;
     this.selector = this.decoration.selector;
     // element が未指定なら selector から特定する.
