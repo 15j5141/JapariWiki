@@ -44,7 +44,7 @@ export default class MenuComponent extends ComponentBase {
         // ページ名を取得する.
         const pageName = $(e.target).data('page');
         // ページを移動する.
-        self.serviceInjection.index.siteHistory$.next({
+        self.serviceInjection.index.executeApp({
           appName: 'WikiApp',
           pageURI: pageName,
         });

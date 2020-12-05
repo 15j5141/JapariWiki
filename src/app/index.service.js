@@ -57,13 +57,11 @@ export default class IndexService extends ServiceBase {
 
       // ページの描画は各コンポーネント側のオブザーバで受け取って処理する.
       if (state.appName === 'WikiApp') {
-        // Editor を非表示にする.
-        self.serviceInjection.editor.pageURI$.next(null);
         // WikiApp に通知する.
         self.serviceInjection.wiki.pageURI$.next(state.pageURI);
       } else if (state.appName === 'Editor') {
         // Editor を起動する.
-        self.serviceInjection.editor.pageURI$.next(state.pageURI);
+        // コンポーネント側で siteHistory$ を監視している.
       } else {
         console.log('対応アプリがありません.', state);
       }

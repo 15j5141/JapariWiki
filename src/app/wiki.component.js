@@ -118,7 +118,7 @@ class WikiApp extends ComponentBase {
     this.scroll2Top();
 
     // ページの読み込みを開始する.
-    this.serviceInjection.index.siteHistory$.next({
+    this.serviceInjection.index.executeApp({
       appName: 'WikiApp',
       pageURI: uri,
     });
