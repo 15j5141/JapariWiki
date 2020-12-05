@@ -84,7 +84,7 @@ export default class HeaderComponent extends ComponentBase {
         const status = statusObj;
         status.load();
         // 現在のページ URI を取得する.
-        const pageURI = self.serviceInjection.wiki.pageURI$.getValue();
+        const pageURI = status.getPageURI();
         // 編集画面起動.
         self.serviceInjection.index.executeApp({
           appName: 'Editor',
