@@ -6,15 +6,7 @@ import IndexService from './index.service.js';
 /** @typedef {import('../scripts/class-cloud_base.js').JWFile} JWFile*/
 import ModelsService from './models.service.js';
 
-import {
-  Subject,
-  BehaviorSubject,
-  of,
-  defer,
-  throwError,
-  Observable,
-} from 'rxjs';
-import { switchMap, map, catchError, takeUntil, filter } from 'rxjs/operators';
+import WikiSyntaxPlugin from '../scripts/class-wiki_syntax_plugin.js';
 
 /**
  * @class
@@ -27,50 +19,11 @@ export default class EditorService extends ServiceBase {
     /* ----- デコレータセット. ----- */
 
     /* ----- プロパティ宣言. ----- */
-    const self = this;
-    /** @type {Subject} 履歴移動等で割り込みキャンセル用 */
-    this.exitSignal$ = new Subject();
-    /** @type {BehaviorSubject<string>} ページ移動用 */
-    this.pageURI$ = new BehaviorSubject(null);
-
-    /** @type {Observable<JWPage>} 取得したページデータ */
-    this.pulledJWPage$ = this.pageURI$.pipe(
-      filter(v => v != null),
-      switchMap(pageURI => {
-        // Promise を Observable へ変換する.
-        return defer(() => self.serviceInjection.models.readPage(pageURI)).pipe(
-          catchError(err => {
-            // readPage() のエラー処理.
-            switch (err.message) {
-              case 'Page:NotFound':
-                // 指定ページが存在しない場合.
-                return of(
-                  new JWPage(
-                    pageURI,
-                    'ページがありません。<br>編集ボタンで作成します<br>' +
-                      pageURI,
-                    null
-                  )
-                );
-              case 'Page:PermissionError':
-                // 指定ページへのアクセス権がない場合.
-                return of(new JWPage(pageURI, '権限がありません.', null));
-              default:
-                return throwError(err);
-            }
-          })
-        );
-      }),
-      map(page => {
-        // エラーチェックをする.
-        if (page == null) {
-          throw new Error('JW:UnknownError');
-        }
-
-        return page;
-      }),
-      takeUntil(self.exitSignal$)
-    );
+    /**
+     * 構文解析用クラスのインスタンス一覧を保持.
+     * @property {Array<SyntaxPluginBase>}
+     */
+    this.syntaxes = [new WikiSyntaxPlugin('')];
 
     /* ----- サービスのインジェクション. ----- */
     /** @type {{status: StatusService, index: IndexService, models: ModelsService}} */
@@ -81,5 +34,48 @@ export default class EditorService extends ServiceBase {
     };
 
     /* ----- コンポーネント取得. ----- */
+  }
+  /**
+   * 編集後の保存前の処理. コメントID割り当て等.
+   * @param {string} rawText
+   * @return {Promise<string>}
+   */
+  async checkBeforeSavingPage(rawText) {
+    return this.syntaxes[0].checkBeforeSavingPage(rawText);
+  }
+  /**
+   * 置換方式の構文チェック.
+   * @param {string} rawText
+   * @return {string}
+   */
+  replaceSyntax(rawText) {
+    return this.syntaxes[0].replaceSyntax(rawText);
+  }
+  /**
+   * ページデータを読み込む.
+   * @param {string} pageURI
+   */
+  async readPage(pageURI) {
+    const models = this.serviceInjection.models;
+    const pageData = await models.readPage(pageURI).catch(err => {
+      if (err.message === 'Page:NotFound') {
+        // ページがなければ新規作成して処理続行.
+        return new JWPage(pageURI, 'Hello, World!', {});
+      } else if (err.message === 'Page:PermissionError') {
+        // 指定ページへのアクセス権がない場合.
+        alert('権限がありません.');
+      } else {
+        throw err;
+      }
+    });
+    return pageData;
+  }
+  /**
+   * ページデータを書き込む.
+   * @param {JWPage} pageData
+   */
+  async writePage(pageData) {
+    const models = this.serviceInjection.models;
+    await models.writePage(pageData);
   }
 }

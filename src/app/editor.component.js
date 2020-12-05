@@ -1,12 +1,12 @@
 // @ts-check
 import JWPage from '../scripts/class-page.js';
-import WikiSyntaxPlugin from '../scripts/class-wiki_syntax_plugin.js';
 import ComponentBase from '../scripts/class-component_base.js';
 import { StatusService } from './status.service.js';
 import ModelsService from './models.service.js';
 import EditorService from './editor.service.js';
 import IndexService from './index.service.js';
-import { filter, map } from 'rxjs/operators';
+import { debounceTime, filter, map } from 'rxjs/operators';
+import { BehaviorSubject } from 'rxjs';
 
 /**
  * @class
@@ -39,9 +39,8 @@ export default class EditorApp extends ComponentBase {
     const self = this;
     /** リンク連打対策用. */
     this.doneAjax = true;
-    this._isEdited = false;
-    /** @type {string} */
-    this._editedResult = null;
+    /** @type {JWPage} 現在編集中のページデータが入る. */
+    this._pageData = null;
     /** バインディング一覧. */
     this.binds = {
       get $pageName() {
@@ -59,38 +58,43 @@ export default class EditorApp extends ComponentBase {
       get $preview() {
         return self.$element.find('#ajax_edit__preview');
       },
+      preview$: new BehaviorSubject(null),
       get $form() {
         return self.$element.find('#ajax_edit');
       },
     };
+    // 変換処理をしてプレビュー表示する.
+    this.binds.preview$
+      .pipe(
+        filter(v => v != null),
+        debounceTime(500) // 連続してくるのを抑制する.
+      )
+      .subscribe(rawText => {
+        const html = rawText;
+        // 構文解析する.
+        html = this.serviceInjection.editor.replaceSyntax(html);
+        // プレビューに反映する.
+        this.binds.$preview.html(html);
+      });
 
     /** アプリ呼び出しの検知用. */
     const calledMe$ = this.serviceInjection.index.siteHistory$.pipe(
-      filter(state => state && state.appName === 'Editor'),
+      filter(state => {
+        // エディタが開いている場合は閉じる.
+        self.forceClose();
+        return state && state.appName === 'Editor';
+      }),
       map(state => state.pageURI)
     );
 
     // 編集画面が呼ばれたときエディタを開く.
     calledMe$.subscribe(pageURI => {
       if (pageURI == null) {
-        // 閉じる処理.
-        self.forceClose();
+        // キャンセルする.
         return;
       }
       // 開く処理.
-      // エディタが開いている場合は閉じる.
-      this.forceClose();
-      this.open(pageURI)
-        .then(result => {
-          // 編集したページを表示する.
-          self.serviceInjection.index.executeApp({
-            appName: 'WikiApp',
-            pageURI: pageURI,
-          });
-        })
-        .catch(err => {
-          console.log(err);
-        });
+      this.open(pageURI);
     });
   }
   /** @override */
@@ -103,8 +107,54 @@ export default class EditorApp extends ComponentBase {
     const self = this;
     const binds = self.binds;
 
+    /* ----- エディタ操作. ----- */
+    binds.$textarea.on('keyup click', event => {
+      const text = '' + binds.$textarea.val();
+      self.binds.preview$.next(text);
+    });
+
+    /* ----- キャンセルボタン. ----- */
     binds.$cancel.on('click', event => {
       self.forceClose();
+      // 編集したページを表示する.
+      self.serviceInjection.index.executeApp({
+        appName: 'WikiApp',
+        pageURI: this._pageData.pageURI,
+      });
+      return false;
+    });
+
+    /* ----- 保存ボタン. ----- */
+    binds.$form.on('submit', event => {
+      event.preventDefault(); // 本来のイベントを抑制する.
+      // 送信ボタン無効化
+      binds.$submit.prop('disabled', true);
+      // 編集枠無効化
+      binds.$textarea.prop('disabled', true);
+
+      /** @type {string} 編集後の内容 */
+      const editedText = '' + binds.$textarea.val();
+      const pageData = self._pageData;
+      (async function() {
+        // 保存前構文解析を実行.
+        pageData.rawText = await self.serviceInjection.editor.checkBeforeSavingPage(
+          editedText
+        );
+
+        // 保存する.
+        self.serviceInjection.status.displayState$.next('保存中...');
+        await self.serviceInjection.editor.writePage(pageData);
+
+        // 編集アプリ正常終了.
+        self.forceClose();
+
+        // 編集したページを表示する.
+        self.serviceInjection.index.executeApp({
+          appName: 'WikiApp',
+          pageURI: pageData.pageURI,
+        });
+      })();
+
       return false;
     });
   }
@@ -125,44 +175,6 @@ export default class EditorApp extends ComponentBase {
    */
   async editingPage(page) {
     const page_ = page; // 文字エンコード.
-    // 基本的な HTML を描画する.
-    await this.draw();
-
-    // イベント登録等.
-    await this.htmlScript(page_);
-
-    let timerId;
-    // 保存ボタンが押されるまで待機.
-    const isSuccess = await new Promise((resolve, reject) => {
-      timerId = setInterval(() => {
-        // 編集結果に中身が入るまで Promise を解決させない.
-        if (this._isEdited) {
-          clearInterval(timerId);
-          if (this._editedResult == null) {
-            // 結果が null なら異常終了と判断する.
-            resolve(false);
-          }
-          resolve(true);
-        }
-      }, 500);
-    });
-    if (!isSuccess) throw new Error('Editor:Cancel');
-
-    // 編集結果をセット.
-    page_.rawText = this._editedResult;
-
-    return page_;
-    // throw new Error('Editor:Cancel');
-  }
-  /**
-   *  イベント登録等.
-   * @param {JWPage} page
-   */
-  async htmlScript(page) {
-    const self = this;
-    const $ = this.$;
-    let oldValue = '';
-    const syntax = new WikiSyntaxPlugin(page.rawText);
     const binds = this.binds;
 
     // ページ名を表示.
@@ -170,51 +182,13 @@ export default class EditorApp extends ComponentBase {
     // 編集内容セット.
     binds.$textarea.val(page.rawText);
 
-    /* ---------- イベント登録. ---------- */
-    // 一定時間ごとに編集内容を確認して変化があればプレビューを更新する.
-    const changeTimerId = setInterval(async function() {
-      /** @type {string} 編集中の内容 */
-      const newEditingText = '' + binds.$textarea.val();
-      // 編集エリアが消えたら == 閉じたらタイマーを削除.
-      if (newEditingText == null) {
-        clearInterval(changeTimerId);
-        return;
-      }
-      // 変化があったらpreviewを更新
-      if (oldValue !== newEditingText) {
-        // 構文解析.
-        const html = syntax.replaceSyntax(newEditingText);
-        // プレビューに反映.
-        binds.$preview.html(html);
-        // 内容を退避.
-        oldValue = newEditingText;
-      }
-    }, 1000);
-
-    /* ----- 保存ボタン. ----- */
-    // 複数回イベントリスナーを登録する場合は毎回解除しないと多重に登録される.
-    binds.$form.off('submit.editor');
-    binds.$form.on('submit.editor', event => {
-      event.preventDefault(); // 本来のPOSTを打ち消すおまじない
-      if (changeTimerId != null) {
-        clearInterval(changeTimerId);
-      }
-      // 送信ボタン無効化
-      binds.$submit.prop('disabled', 'true');
-      // 編集枠無効化
-      binds.$textarea.prop('readonly', 'true');
-
-      /** @type {string} 編集後の内容 */
-      const newEditedText = '' + binds.$textarea.val();
-      // 保存前構文解析を実行.
-      syntax.checkBeforeSavingPage(newEditedText).then(result => {
-        this._editedResult = result;
-        this._isEdited = true;
-      });
-      return false;
-    });
-
-    return;
+    // プレビューを表示する.
+    this.binds.preview$.next(page.rawText);
+    // 送信ボタン有効にする.
+    binds.$submit.prop('disabled', false);
+    // 編集枠有効にする.
+    binds.$textarea.prop('disabled', false);
+    return page_;
   }
   /**
    * エディタアプリを開く.
@@ -222,41 +196,20 @@ export default class EditorApp extends ComponentBase {
    * @return {Promise<boolean>}
    */
   async open(pageURI) {
-    const models = this.serviceInjection.models;
-    this._isEdited = false;
-    this._editedResult = null;
+    const editor = this.serviceInjection.editor;
     this.show();
     // ページ読み込み.
-    let pageData = await models.readPage(pageURI).catch(err => {
-      if (err.message === 'Page:NotFound') {
-        // ページがなければ新規作成して処理続行.
-        return new JWPage(pageURI, '', {});
-      } else {
-        throw err;
-      }
-    });
+    this._pageData = await editor.readPage(pageURI);
+
     // 編集画面を読み込む.
-    pageData = await this.editingPage(pageData).catch(err => {
+    await this.editingPage(this._pageData).catch(err => {
       if (err.text === 'Editor:Cancel') {
         return null;
       } else {
         throw err;
       }
     });
-    this.renderer.setHTML('保存中...');
-    console.log('edited:', pageData);
 
-    if (!pageData) {
-      // null なら編集アプリ中断終了.
-      return false;
-    }
-
-    // 保存する.
-    await models.writePage(pageData);
-    this.renderer.setHTML('');
-
-    // 編集アプリ正常終了.
-    this.forceClose();
     return true;
   }
   /**
@@ -264,6 +217,5 @@ export default class EditorApp extends ComponentBase {
    */
   forceClose() {
     this.hide();
-    this._isEdited = false;
   }
 }
