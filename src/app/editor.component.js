@@ -114,6 +114,20 @@ export default class EditorApp extends ComponentBase {
         html = this.serviceInjection.editor.replaceSyntax(html);
         // プレビューに反映する.
         this.binds.$preview.html(html);
+
+        /* プレビューをスクロールする. */
+        const $element = this.binds.$preview.find('.app-editor__now_line');
+        const preview = this.binds.$preview[0];
+        if ($element.length !== 0) {
+          // スクロール値を求める.
+          const scroll =
+            $element[0].getBoundingClientRect().top -
+            preview.getBoundingClientRect().top +
+            preview.scrollTop -
+            100;
+          // スクロールする.
+          this.binds.$preview.animate({ scrollTop: scroll }, 300, 'swing');
+        }
       });
 
     /** アプリ呼び出しの検知用. */
