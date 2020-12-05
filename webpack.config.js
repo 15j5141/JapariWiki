@@ -92,6 +92,7 @@ const main = {
       },
     ],
   },
+  devtool: 'inline-source-map',
 };
 const library = {
   mode: process.env.NODE_ENV || 'development',
@@ -111,6 +112,7 @@ const library = {
   module: {
     rules: [],
   },
+  devtool: 'inline-source-map',
 };
 
 module.exports = [main, library];
