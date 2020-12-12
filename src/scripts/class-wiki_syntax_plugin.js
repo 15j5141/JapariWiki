@@ -220,7 +220,7 @@ class WikiSyntaxPlugin extends SyntaxPluginBase {
     syntaxes.push([/#code((.|\s)+?)#end/g, '<code>$1</code>']);
 
     // その他
-    syntaxes.push([/(?<!https:)(?<!http:)\/\/.*/g, '__NewLine__']); // 「//」以降をコメントアウト.
+    syntaxes.push([/(^|[^:])\/\/.*/g, '__NewLine__']); // 「//」以降をコメントアウト.
     // syntaxes.push([/(?<!https:)(?<!http:)#.*/g, '__NewLine__']); // 「#」以降をコメントアウト.動作が怪しいので廃止.
     // syntaxes.push([/\/\*(.|\s)*?\*\//g, '']); // 「/**/」内をコメントアウト. 「.」は改行には一致しない.
     // syntaxes.push([/\/\*\/?([^\/]|[^*]\/|\r|\n)*\*\//g, '']); // 「/**/」内をコメントアウト.詳細は不明...
