@@ -86,9 +86,9 @@ const main = {
         },
       },
       {
-        // npm install json-loader --save-dev
         test: /\.json$/,
-        loader: 'json',
+        type: 'javascript/auto',
+        use: { loader: 'json-loader' },
       },
     ],
   },
@@ -110,7 +110,13 @@ const library = {
   plugins: [],
   externals: [],
   module: {
-    rules: [],
+    rules: [
+      {
+        test: /\.json$/,
+        type: 'javascript/auto',
+        use: { loader: 'json-loader' },
+      },
+    ],
   },
   devtool: 'inline-source-map',
 };
