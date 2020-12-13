@@ -216,8 +216,8 @@ class WikiSyntaxPlugin extends SyntaxPluginBase {
     // 水平線. #hr
     syntaxes.push([/#hr\s*/g, '<hr>']);
 
-    //
-    syntaxes.push([/#code((.|\s)+?)#end/g, '<code>$1</code>']);
+    // #code ~ #end
+    syntaxes.push([/#[cC]ode([\s\S]*?)#[eE]nd/g, '<code>$1</code>']);
 
     // その他
     syntaxes.push([/(^|[^:])\/\/.*/g, '__NewLine__']); // 「//」以降をコメントアウト.
