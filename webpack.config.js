@@ -20,24 +20,28 @@ const main = {
       chunks: ['index'],
       template: path.resolve(__dirname, './src/index.html'),
       filename: 'index.html',
+      hash: true,
     }),
     new HtmlWebpackPlugin({
       // inject: false,
       chunks: ['login'],
       template: path.resolve(__dirname, './src/login.html'),
       filename: 'login.html',
+      hash: true,
     }),
     new HtmlWebpackPlugin({
       // inject: false,
       chunks: ['logout'],
       template: path.resolve(__dirname, './src/logout.html'),
       filename: 'logout.html',
+      hash: true,
     }),
     new HtmlWebpackPlugin({
       // inject: false,
       chunks: ['signup'],
       template: path.resolve(__dirname, './src/signup.html'),
       filename: 'signup.html',
+      hash: true,
     }),
     new CopyPlugin({
       patterns: [
