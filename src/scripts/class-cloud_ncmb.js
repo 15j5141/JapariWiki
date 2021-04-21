@@ -1,9 +1,10 @@
 /* eslint-disable new-cap */
+// @ts-check
 import CloudBase from './class-cloud_base.js';
 import JWPage from './class-page.js';
 /** @typedef {import('./class-cloud_base.js').JWFile} JWFile*/
 /** @typedef {import('./class-cloud_base.js').JWUser} JWUser*/
-// import config from './config.json';
+import env from '../.env.json';
 /**
  * ニフクラクラス.
  * @class
@@ -12,18 +13,9 @@ class CloudNCMB extends CloudBase {
   /** @override */
   constructor() {
     super();
-    const ncmb = {
-      name: 'ncmb',
-      appKey:
-        '73214ee5293b310aba334aaf6b58cb41cb89873a1eb88ab505fa7d48dcc2b911',
-      clientKey:
-        '79d3a32839ef780c0fe16236d8efc7bdd338312ec1d969945346a181ffc9442f',
-      instance: null,
-      APPLICATION_ID: 'Q5BkzYpYGt0sshPj',
-    };
-    this.appKey = ncmb.appKey || '';
-    this.clientKey = ncmb.clientKey || '';
-    this.APPLICATION_ID = ncmb.APPLICATION_ID;
+    this.appKey = env.JW_CLOUD_APP_KEY || '';
+    this.clientKey = env.JW_CLOUD_CLIENT_KEY || '';
+    this.APPLICATION_ID = env.JW_CLOUD_APPLICATION_ID;
     this.instance = this;
     this.ncmb = new this.NCMB(this.appKey, this.clientKey);
 

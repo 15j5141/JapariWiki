@@ -2,6 +2,20 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
 const CopyPlugin = require('copy-webpack-plugin');
 
+const fs = require('fs');
+// .env環境変数を読み込む.
+require('dotenv').config();
+// JW独自の設定を読み込む.
+const env = Object.keys(process.env)
+  .filter(key => key.startsWith('JW_')) // prefix JW_ を抽出する.
+  .reduce((acc, key) => {
+    acc[key] = process.env[key];
+    return acc;
+  }, {});
+// JW独自の設定をJSから読めるようにJSONで書き込む.
+fs.writeFileSync(path.join(__dirname, 'src', '.env.json'), JSON.stringify(env));
+
+
 const main = {
   mode: process.env.NODE_ENV || 'development',
   entry: {
@@ -20,24 +34,28 @@ const main = {
       chunks: ['index'],
       template: path.resolve(__dirname, './src/index.html'),
       filename: 'index.html',
+      hash: true,
     }),
     new HtmlWebpackPlugin({
       // inject: false,
       chunks: ['login'],
       template: path.resolve(__dirname, './src/login.html'),
       filename: 'login.html',
+      hash: true,
     }),
     new HtmlWebpackPlugin({
       // inject: false,
       chunks: ['logout'],
       template: path.resolve(__dirname, './src/logout.html'),
       filename: 'logout.html',
+      hash: true,
     }),
     new HtmlWebpackPlugin({
       // inject: false,
       chunks: ['signup'],
       template: path.resolve(__dirname, './src/signup.html'),
       filename: 'signup.html',
+      hash: true,
     }),
     new CopyPlugin({
       patterns: [
@@ -53,6 +71,7 @@ const main = {
           to: 'lib/',
           context: 'node_modules/rxjs/bundles/',
         },
+        { from: '.env.json', to: '', context: 'src/' },
       ],
     }),
   ],
@@ -86,9 +105,9 @@ const main = {
         },
       },
       {
-        // npm install json-loader --save-dev
         test: /\.json$/,
-        loader: 'json',
+        type: 'javascript/auto',
+        use: { loader: 'json-loader' },
       },
     ],
   },
@@ -110,7 +129,13 @@ const library = {
   plugins: [],
   externals: [],
   module: {
-    rules: [],
+    rules: [
+      {
+        test: /\.json$/,
+        type: 'javascript/auto',
+        use: { loader: 'json-loader' },
+      },
+    ],
   },
   devtool: 'inline-source-map',
 };
