@@ -43,6 +43,7 @@
     "copy-webpack-plugin": "^6.0.2",
     "core-js": "^3.5.0",
     "diff": "^5.0.0",
+    "dotenv": "^8.2.0",
     "html-webpack-plugin": "^4.2.0",
     "json-loader": "^0.5.7",
     "requirejs": "^2.3.6",
