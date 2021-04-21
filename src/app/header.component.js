@@ -6,7 +6,7 @@ import WikiService from './wiki.service.js';
 import IndexService from './index.service.js';
 import { filter, map } from 'rxjs/operators';
 import UploaderService from './uploader.service.js';
-
+import env from '../.env.json';
 /**
  * @class
  */
@@ -43,6 +43,13 @@ export default class HeaderComponent extends ComponentBase {
    * @override
    */
   async onStart() {
+    // サイト名を表示する.
+    this.renderer.html$.next({
+      selector: '#header-site_name',
+      value: `${env.JW_SITE_NAME}`,
+      type: 'html',
+    });
+
     /**
      * ヘッダーのページ名表記を更新する.
      * @param {string} pageURI
