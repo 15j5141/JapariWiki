@@ -20,12 +20,14 @@ img/*
 .well-known/acme-challenge/*
 .well-known_/acme-challenge/*
 up/*
+.env
 
 # node
 node_modules
 package-lock.json
 /dist
 /typings
+debug.log
 
 # editor
 .vscode

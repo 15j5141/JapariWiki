@@ -1,9 +1,10 @@
 /* eslint-disable new-cap */
+// @ts-check
 import CloudBase from './class-cloud_base.js';
 import JWPage from './class-page.js';
 /** @typedef {import('./class-cloud_base.js').JWFile} JWFile*/
 /** @typedef {import('./class-cloud_base.js').JWUser} JWUser*/
-import config from '../config.json';
+import env from '../.env.json';
 /**
  * ニフクラクラス.
  * @class
@@ -12,9 +13,9 @@ class CloudNCMB extends CloudBase {
   /** @override */
   constructor() {
     super();
-    this.appKey = config.clouds.ncmb.appKey || '';
-    this.clientKey = config.clouds.ncmb.clientKey || '';
-    this.APPLICATION_ID = config.clouds.ncmb.APPLICATION_ID;
+    this.appKey = env.JW_CLOUD_APP_KEY || '';
+    this.clientKey = env.JW_CLOUD_CLIENT_KEY || '';
+    this.APPLICATION_ID = env.JW_CLOUD_APPLICATION_ID;
     this.instance = this;
     this.ncmb = new this.NCMB(this.appKey, this.clientKey);
 
