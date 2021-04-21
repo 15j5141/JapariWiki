@@ -1,0 +1,83 @@
+<!-- html/css -->
+
+<!-- html/body -->
+<!-- 
+<div>
+  <p>アフィエリア</p>
+</div><br />
+<div>
+  <p>仮想通貨エリア</p>
+  <iframe id="widget-ticker-preview" src="//www.coingecko.com/en/widget_component/ticker/bitzeny/jpy"
+    style="border:none; height:125px; width: 275px;" scrolling="no" frameborder="0" allowtransparency="true"></iframe>
+  <iframe id="widget-ticker-preview" src="//www.coingecko.com/en/widget_component/ticker/monacoin/jpy"
+    style="border:none; height:125px; width: 275px;" scrolling="no" frameborder="0" allowtransparency="true"></iframe>
+  <iframe id="widget-ticker-preview" src="//www.coingecko.com/en/widget_component/ticker/bitcoin/jpy"
+    style="border:none; height:125px; width: 275px;" scrolling="no" frameborder="0" allowtransparency="true"></iframe>
+  </div>
+-->
+<div>
+  <!-- JapariWiki's version is ""<br /> -->
+  <pre style="text-align: left;">
+    # v2.2.3 at 2020/12/12.
+    - fix
+      - Safariで動かない正規表現の後読みを除去した.
+    # v2.2.2 at 2020/12/06.
+    - add
+      - プレビューに差分と現在位置を表示するようにした.
+      - プレビューを編集位置に合わせてスクロールするようにした.
+      - 編集画面でページ名を変更できるようにした.
+      - 新規作成ボタンをヘッダーに追加した.
+    - fix
+      - 編集画面でリロードした時にURIが取得出来ない問題を修正した.
+    - change
+      - editor.serviceをObservable方式に書き直した.
+      - ＃のコメントアウト構文を動作が怪しいので廃止した.
+    # v2.2.1 at 2020/11/24.
+    - fix
+      - ライブラリの位置を修正した.
+    # v2.2.0 at 2020/11/09.
+    - add
+      - 各クラスをUMD形式で外部ライブラリ化した.
+      - コンポーネントのデコレータにtemplateとstylesを追加した.
+      - デコレータのセット方法にatComponent()を使う方法を増やした.
+      - バンドルされていないコンポーネントを/components/*.componentから読み込む機能を追加した.
+      - サイト訪問時の読込中の画面をいい感じにした.
+      - コンポーネントのライフサイクルのUML図を追加した.
+    - fix
+      - 子コンポーネントにクラス定義の一覧が正しく渡されていなかった問題を修正した.
+    - change
+      - コンポーネントの初期化処理のタイミングを調整した.
+    # v2.1.6 at 2020/11/02.
+    - fix
+      - Wiki構文のコメントアウト文法にて正規表現バックトラック問題を修正した.
+      - 編集画面でもページ名をヘッダーに表示するように修正した.
+      - セッション切れなどのページ読込失敗時に無限再試行される問題を修正した.
+    - change
+      - コンポーネントのセレクタをIDからタグに変更した.
+
+    # v2.1.5 at 2020/10/15.
+    - add
+      - 認証に失敗したらログイン画面へ遷移するようにした.
+      - 現在のステータスを表示するようにした.
+
+    # v2.1.4 at 2020/10/10.
+    - add
+      - 更新履歴を取得して表示するようにした.
+    - fix
+      - サイト訪問時に不要な履歴が追加される点を修正した.
+
+    # v2.1.3 at 2020/10/08.
+    - add
+      - 編集画面を履歴に記録するようにした.
+    - fix
+      - 編集画面と通常画面でページ名が正常にやり取りできない場合がある不具合を修正した.
+
+    # v2.1.2 at 2020/09/17.
+    - add
+      - デバッグ表示用のウィンドウを追加する.
+    - fix
+      - 初期描画後にデータバインディングを実行する.
+      - アカウント名を正しく表示する.
+      - イベントの多重登録を減らす.
+  </pre><br />
+</div>

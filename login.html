@@ -1,0 +1,50 @@
+<!--
+  // ログイン履歴を適当に残す by 2018/02/06
+  $today = date("Y-m-d H:i:s");
+  $fileData .= $today . ";". $loginResult. ';'.  $user_id . "\n";
+?>
+-->
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>
+    <!-- $JWConfig["siteTitle"] -->
+  </title>
+  <link rel="stylesheet" type="text/css" href="styles/login.css" />
+</head>
+
+<body>
+  <div class='body'>
+    <!-- $JWConfig['isWarnNotHTTPS']&&!$JWConfig["isHTTPS"]? 'Wiki警告：HTTPSの利用を推奨します。（当警告はconfig.phpより非表示にできます。）': '' -->
+    <form id="form_id">
+      <fieldset>
+        <legend align='center'>
+          <img src='img/site_loginTitleLogo.png' id='TitleLogo'>
+        </legend>
+        <div>
+          <p>
+            ID：<br />
+            <input type="text" id="id" name="user_id" size="40">
+          </p>
+          <p>
+            PASS:<br />
+            <input type="password" id="pass" name="user_pass" size="40">
+          </p>
+          <p>
+            <input type="submit" value="ログイン">
+          </p>
+          <p id="result"></p>
+        </div>
+      </fieldset>
+    </form>
+  </div>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script type="text/javascript" src="lib/md5.js"></script>
+  <script src="lib/ncmb.min.js"></script>
+<script src="login.bundle.js?94c8a9ec3fc0d6bf63a5"></script></body>
+
+</html>

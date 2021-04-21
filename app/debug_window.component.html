@@ -1,0 +1,38 @@
+<!-- css -->
+<style>
+    .debug_info__container {
+        /* 右上表示. */
+        position: fixed;
+        top: 0;
+        right: 0;
+        border: solid 1px #ff0000;
+        color: white;
+    }
+
+    .debug_info__container>div {
+        background: rgba(0, 0, 0, 0.8);
+        border: solid 1px #ffffff;
+        color: white;
+    }
+
+    .debug_info__main,
+    .debug_info__log {
+        display: none;
+    }
+    .debug_info__now {
+        min-width: 20em;
+    }
+
+</style>
+
+<!-- html>body -->
+<div class="debug_info__container">
+    <!-- .debug_info__container -->
+    <div class="debug_info__main">
+    </div>
+    <div class="debug_info__log">
+    </div>
+    Info:<br>
+    <div class="debug_info__now">
+    </div>
+</div>
