@@ -2,9 +2,9 @@
 import JWPage from '../scripts/class-page.js';
 import ComponentBase from '../scripts/class-component_base.js';
 import { StatusService } from './status.service.js';
-import ModelsService from './models.service.js';
-import EditorService from './editor.service.js';
-import IndexService from './index.service.js';
+import { ModelsService } from './models.service.js';
+import { EditorService } from './editor.service.js';
+import { IndexService } from './index.service.js';
 import { debounceTime, filter, map } from 'rxjs/operators';
 import { BehaviorSubject } from 'rxjs';
 import * as Diff from 'diff';

@@ -1,5 +1,5 @@
 // @ts-check
-import ServiceBase from '../scripts/class-service_base.js';
+import { ServiceBase } from '../scripts/class-service_base.js';
 import CloudNCMB from '../scripts/class-cloud_ncmb.js';
 import JWStatus from '../scripts/jw-status.js';
 import { BehaviorSubject } from 'rxjs';

@@ -1,7 +1,7 @@
 // @ts-check
 import ComponentBase from '../scripts/class-component_base.js';
 import PageRenderer from '../scripts/class-page_renderer.js';
-import IndexService from './index.service.js';
+import { IndexService } from './index.service.js';
 
 /**
  * @class

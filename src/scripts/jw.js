@@ -1,6 +1,5 @@
 // @ts-check
-export { default as ComponentBase } from '../scripts/class-component_base.js';
-export { default as ServiceBase } from '../scripts/class-service_base.js';
+export { ServiceBase } from '../scripts/class-service_base.js';
 export { default as Renderer } from '../scripts/class-renderer.js';
 import * as decorations from '../scripts/decorations';
 export { decorations };

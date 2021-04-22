@@ -1,10 +1,10 @@
 // @ts-check
-import ServiceBase from '../scripts/class-service_base.js';
+import { ServiceBase } from '../scripts/class-service_base.js';
 import { BehaviorSubject } from 'rxjs';
 import { StatusService } from './status.service.js';
-import ModelsService from './models.service.js';
-import WikiService from './wiki.service.js';
-import EditorService from './editor.service.js';
+import { ModelsService } from './models.service.js';
+import { WikiService } from './wiki.service.js';
+import { EditorService } from './editor.service.js';
 import { filter } from 'rxjs/operators';
 
 /**
@@ -18,7 +18,7 @@ import { filter } from 'rxjs/operators';
 /**
  * @class
  */
-export default class IndexService extends ServiceBase {
+export class IndexService extends ServiceBase {
   /** @override */
   get [Symbol.toStringTag]() {
     return 'IndexService';

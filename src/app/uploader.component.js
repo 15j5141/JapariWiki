@@ -2,7 +2,7 @@
 import { filter } from 'rxjs/operators';
 import { atComponent } from '../scripts/decorations';
 import { StatusService } from './status.service.js';
-import UploaderService from './uploader.service.js';
+import { UploaderService } from './uploader.service.js';
 
 /**
  * 画像アップロード用のコンポーネント.

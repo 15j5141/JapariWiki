@@ -1,5 +1,5 @@
 // @ts-check
-import IndexService from '../app/index.service.js';
+import { IndexService } from '../app/index.service.js';
 import { StatusService } from '../app/status.service.js';
 
 import HeaderComponent from '../app/header.component.js';
@@ -13,13 +13,13 @@ import LoginHistoryComponent from '../app/login_history.component.js';
 import { AppComponent } from './app.component.js';
 
 import ComponentBase from '../scripts/class-component_base.js';
-import ServiceBase from '../scripts/class-service_base.js';
+import { ServiceBase } from '../scripts/class-service_base.js';
 import { UploaderComponent } from './uploader.component.js';
-import ModelsService from './models.service.js';
-import WikiService from './wiki.service.js';
+import { ModelsService } from './models.service.js';
+import { WikiService } from './wiki.service.js';
 import DebugWindowComponent from './debug_window.component.js';
-import EditorService from './editor.service.js';
-import UploaderService from './uploader.service.js';
+import { EditorService } from './editor.service.js';
+import { UploaderService } from './uploader.service.js';
 
 /**
  * @typedef {Object} Modules

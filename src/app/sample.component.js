@@ -1,9 +1,9 @@
 // @ts-check
 import ComponentBase from '../scripts/class-component_base.js';
-import IndexService from './index.service.js';
-import ModelsService from './models.service.js';
+import { IndexService } from './index.service.js';
+import { ModelsService } from './models.service.js';
 import { StatusService } from './status.service.js';
-import WikiService from './wiki.service.js';
+import { WikiService } from './wiki.service.js';
 /**
  * コンポーネントのサンプルコード.
  * @class

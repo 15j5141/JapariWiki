@@ -6,7 +6,7 @@
 import { ReplaySubject } from 'rxjs';
 import Renderer from './class-renderer.js';
 /** @typedef {import("./class-service_manager").default} ServiceManager */
-/** @typedef {import("./class-service_base").default} ServiceBase */
+/** @typedef {import("./class-service_base").ServiceBase} ServiceBase */
 /**
  * @typedef {Object} ReferenceObject
  * @property {string=} selectorForGetElement element取得用

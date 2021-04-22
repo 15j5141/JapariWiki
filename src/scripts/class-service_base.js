@@ -5,7 +5,7 @@
 /**
  * @class
  */
-export default class ServiceBase {
+export class ServiceBase {
   /**
    * @param {{componentsManager: ComponentsManager, serviceManager: ServiceManager}} referenceObject
    */

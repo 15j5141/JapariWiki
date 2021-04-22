@@ -1,12 +1,12 @@
 // @ts-check
-import ServiceBase from '../scripts/class-service_base.js';
+import { ServiceBase } from '../scripts/class-service_base.js';
 import JWPage from '../scripts/class-page.js';
 import { StatusService } from './status.service.js';
 /** @typedef {import('../scripts/class-cloud_base.js').JWFile} JWFile*/
 /**
  * @class
  */
-export default class ModelsService extends ServiceBase {
+export class ModelsService extends ServiceBase {
   /** @override */
   get [Symbol.toStringTag]() {
     return 'ModelsService';

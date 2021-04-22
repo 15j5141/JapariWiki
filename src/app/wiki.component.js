@@ -2,9 +2,9 @@
 import PageRenderer from '../scripts/class-page_renderer.js';
 import ComponentBase from '../scripts/class-component_base.js';
 import { StatusService } from './status.service.js';
-import ModelsService from './models.service.js';
-import WikiService from './wiki.service.js';
-import IndexService from './index.service.js';
+import { ModelsService } from './models.service.js';
+import { WikiService } from './wiki.service.js';
+import { IndexService } from './index.service.js';
 import { atComponent } from '../scripts/decorations';
 /**
  * @class

@@ -1,5 +1,5 @@
 // @ts-check
-/** @typedef {import("./class-service_base").default} ServiceBase */
+/** @typedef {import("./class-service_base").ServiceBase} ServiceBase */
 import { Observable } from 'rxjs';
 import { ReplaySubject } from 'rxjs';
 import { find } from 'rxjs/operators';
