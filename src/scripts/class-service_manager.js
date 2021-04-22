@@ -34,8 +34,9 @@ export default class ServiceManager {
     return this.services$.pipe(
       // 検索する.
       find(
-        service =>
-          service.constructor.name === serviceClassPrototype.constructor.name
+        service => service.toString() === serviceClassPrototype.toString()
+        // constructor.name はminifyされると怪しい.
+        // instanceof はlib/jwと内蔵jwとでclassがminifyによって一致しない.
       )
     );
   }

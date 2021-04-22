@@ -7,6 +7,10 @@ import { StatusService } from './status.service.js';
  * @class
  */
 export default class ModelsService extends ServiceBase {
+  /** @override */
+  get [Symbol.toStringTag]() {
+    return 'ModelsService';
+  }
   /**
    * @override
    */

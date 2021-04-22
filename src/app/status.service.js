@@ -12,6 +12,10 @@ import { BehaviorSubject } from 'rxjs';
  */
 export class StatusService extends ServiceBase {
   /** @override */
+  get [Symbol.toStringTag]() {
+    return 'StatusService';
+  }
+  /** @override */
   decorator() {
     /* ----- デコレータセット. ----- */
     /* ----- プロパティ宣言. ----- */

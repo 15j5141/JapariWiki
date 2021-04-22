@@ -12,6 +12,10 @@ import WikiSyntaxPlugin from '../scripts/class-wiki_syntax_plugin.js';
  * @class
  */
 export default class EditorService extends ServiceBase {
+  /** @override */
+  get [Symbol.toStringTag]() {
+    return 'EditorService';
+  }
   /**
    * @override
    */

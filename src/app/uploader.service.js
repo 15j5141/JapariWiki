@@ -11,6 +11,10 @@ import { BehaviorSubject } from 'rxjs';
  * @class
  */
 export default class UploaderService extends ServiceBase {
+  /** @override */
+  get [Symbol.toStringTag]() {
+    return 'UploaderService';
+  }
   /**
    * @override
    */

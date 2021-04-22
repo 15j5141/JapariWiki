@@ -20,6 +20,10 @@ import { filter } from 'rxjs/operators';
  */
 export default class IndexService extends ServiceBase {
   /** @override */
+  get [Symbol.toStringTag]() {
+    return 'IndexService';
+  }
+  /** @override */
   decorator() {
     /* ----- デコレータセット. ----- */
 

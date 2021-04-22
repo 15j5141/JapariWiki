@@ -28,6 +28,10 @@ import {
  * @class
  */
 export default class WikiService extends ServiceBase {
+  /** @override */
+  get [Symbol.toStringTag]() {
+    return 'WikiService';
+  }
   /**
    * @override
    */
