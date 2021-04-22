@@ -15,9 +15,9 @@ const env = Object.keys(process.env)
 // JW独自の設定をJSから読めるようにJSONで書き込む.
 fs.writeFileSync(path.join(__dirname, 'src', '.env.json'), JSON.stringify(env));
 
-
+const MODE = process.env.NODE_ENV || 'development';
 const main = {
-  mode: process.env.NODE_ENV || 'development',
+  mode: MODE,
   entry: {
     index: './src/index.js',
     login: './src/login.js',
@@ -111,10 +111,10 @@ const main = {
       },
     ],
   },
-  devtool: 'inline-source-map',
+  devtool: MODE === 'development' ? 'inline-source-map' : '',
 };
 const library = {
-  mode: process.env.NODE_ENV || 'development',
+  mode: 'development',
   entry: {
     jw: './src/scripts/jw.js',
   },
@@ -137,7 +137,7 @@ const library = {
       },
     ],
   },
-  devtool: 'inline-source-map',
+  devtool: MODE === 'development' ? 'inline-source-map' : '',
 };
 
 module.exports = [main, library];
