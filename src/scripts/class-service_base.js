@@ -30,6 +30,14 @@ export class ServiceBase {
     });
   }
   /**
+   * 依存解決用のサービス名.
+   * @abstract
+   */
+  get [Symbol.toStringTag]() {
+    return 'PleaseOverrideServiceName';
+  }
+
+  /**
    * 疑似デコレーター.
    * @abstract
    */
