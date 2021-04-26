@@ -7,7 +7,7 @@ import { WikiService } from './wiki.service.js';
  * デバッグ情報表示用コンポーネント.
  * @class
  */
-export default class DebugWindowComponent extends ComponentBase {
+export class DebugWindowComponent extends ComponentBase {
   /**
    * @override
    */

@@ -10,7 +10,7 @@ import env from '../.env.json';
 /**
  * @class
  */
-export default class HeaderComponent extends ComponentBase {
+export class HeaderComponent extends ComponentBase {
   /**
    * @override
    */

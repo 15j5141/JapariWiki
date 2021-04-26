@@ -7,7 +7,7 @@ import { filter } from 'rxjs/operators';
 /**
  * @class
  */
-export default class HistoryComponent extends ComponentBase {
+export class HistoryComponent extends ComponentBase {
   /**
    * @override
    */

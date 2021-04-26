@@ -5,7 +5,7 @@ import { StatusService } from './status.service.js';
 /**
  * @class
  */
-export default class LoginHistoryComponent extends ComponentBase {
+export class LoginHistoryComponent extends ComponentBase {
   /**
    * @override
    */

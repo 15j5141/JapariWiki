@@ -6,7 +6,7 @@ import { IndexService } from './index.service.js';
 /**
  * @class
  */
-export default class MenuComponent extends ComponentBase {
+export class MenuComponent extends ComponentBase {
   /**
    * @override
    */

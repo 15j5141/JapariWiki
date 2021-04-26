@@ -167,4 +167,4 @@ atComponent({
   styles: [],
 })(WikiApp);
 
-export default WikiApp;
+export { WikiApp };

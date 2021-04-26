@@ -12,7 +12,7 @@ import * as Diff from 'diff';
 /**
  * @class
  */
-export default class EditorApp extends ComponentBase {
+export class EditorApp extends ComponentBase {
   /** @override */
   decorator() {
     /* ----- サービスのインジェクション. ----- */

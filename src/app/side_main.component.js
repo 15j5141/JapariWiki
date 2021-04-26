@@ -6,7 +6,7 @@ import { filter } from 'rxjs/operators';
 /**
  * @class
  */
-export default class SideMainComponent extends ComponentBase {
+export class SideMainComponent extends ComponentBase {
   /**
    * @override
    */
