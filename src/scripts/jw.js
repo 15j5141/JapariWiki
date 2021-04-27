@@ -2,6 +2,7 @@
 export { ComponentBase, ServiceBase } from '../scripts';
 export { Renderer } from '../scripts';
 import * as decorations from '../scripts/decorations';
+import * as services from '../app/services';
 export { decorations };
 // import jQuery from 'jquery';
 
@@ -14,11 +15,4 @@ export const components = AppModule.decoration.declarations.reduce(
   },
   {}
 );
-
-export const services = AppModule.decoration.services.reduce(
-  (result, service) => {
-    result[service.name] = service;
-    return result;
-  },
-  {}
-);
+export { services };
