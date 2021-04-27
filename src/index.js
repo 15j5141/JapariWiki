@@ -1,6 +1,5 @@
 // @ts-check
-import ServiceManager from './scripts/class-service_manager.js';
-import ComponentsManager from './scripts/class-components_manager.js';
+import { ServiceManager, ComponentsManager } from './scripts';
 import { AppModule } from './app/app.module.js';
 
 /**

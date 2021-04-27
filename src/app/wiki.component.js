@@ -1,15 +1,24 @@
 // @ts-check
-import PageRenderer from '../scripts/class-page_renderer.js';
-import ComponentBase from '../scripts/class-component_base.js';
+import { PageRenderer } from '../scripts';
+import { ComponentBase } from '../scripts';
 import { StatusService } from './status.service.js';
 import { ModelsService } from './models.service.js';
 import { WikiService } from './wiki.service.js';
 import { IndexService } from './index.service.js';
 import { atComponent } from '../scripts/decorations';
+
+// デコレーションする.
+const Component = atComponent({
+  selector: '#app-wiki',
+  templateUrl: './wiki.component.html',
+  styleUrls: [],
+  styles: [],
+})();
+
 /**
  * @class
  */
-class WikiApp extends ComponentBase {
+export class WikiApp extends Component {
   /**
    * @override
    */
@@ -158,13 +167,3 @@ class WikiApp extends ComponentBase {
     this.$('html,body').animate({ scrollTop: 0 }, 100, 'swing');
   }
 }
-
-// デコレーションする.
-atComponent({
-  selector: '#app-wiki',
-  templateUrl: './wiki.component.html',
-  styleUrls: [],
-  styles: [],
-})(WikiApp);
-
-export { WikiApp };

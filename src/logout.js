@@ -1,5 +1,5 @@
-import NCMBCloud from './scripts/class-cloud_ncmb.js';
-const cloud = new NCMBCloud();
+import { CloudNCMB } from './scripts';
+const cloud = new CloudNCMB();
 setTimeout(function() {
   cloud
     .signOut()

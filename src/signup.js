@@ -1,6 +1,6 @@
 // @ts-check
-import Cloud from './scripts/class-cloud_ncmb.js';
-import JWStatus from './scripts/jw-status.js';
+import { CloudNCMB as Cloud } from './scripts';
+import { JWStatus } from './scripts';
 // NCMB用の設定.
 const cloud = new Cloud();
 const jWStatus = new JWStatus();

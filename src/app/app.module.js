@@ -14,8 +14,8 @@ import { DebugWindowComponent } from './debug_window.component.js';
 import { UploaderComponent } from './uploader.component.js';
 import { AppComponent } from './app.component.js';
 
-import ComponentBase from '../scripts/class-component_base.js';
-import { ServiceBase } from '../scripts/class-service_base.js';
+import { ComponentBase } from '../scripts';
+import { ServiceBase } from '../scripts';
 import { ModelsService } from './models.service.js';
 import { WikiService } from './wiki.service.js';
 import { EditorService } from './editor.service.js';

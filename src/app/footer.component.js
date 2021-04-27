@@ -1,5 +1,5 @@
 // @ts-check
-import ComponentBase from '../scripts/class-component_base.js';
+import { ComponentBase } from '../scripts';
 /**
  * @class
  */

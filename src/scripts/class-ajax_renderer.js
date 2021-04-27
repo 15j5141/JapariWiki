@@ -1,6 +1,6 @@
-import Renderer from './class-renderer.js';
+import { Renderer } from './';
 /** */
-class AjaxRenderer extends Renderer {
+export class AjaxRenderer extends Renderer {
   /**
    * @override
    * @param {string} selector
@@ -39,4 +39,3 @@ class AjaxRenderer extends Renderer {
     });
   }
 }
-export default AjaxRenderer;

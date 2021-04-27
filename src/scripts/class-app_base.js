@@ -1,5 +1,5 @@
 // @ts-check
-/** @typedef {import("./class-renderer").default} Renderer */
+/** @typedef {import("./").Renderer} Renderer */
 
 /**
  * @class

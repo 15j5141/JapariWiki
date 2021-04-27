@@ -1,6 +1,6 @@
 // @ts-check
-/** @typedef {import("./class-components_manager").default} ComponentsManager */
-/** @typedef {import("./class-service_manager").default} ServiceManager */
+/** @typedef {import("./").ComponentsManager} ComponentsManager */
+/** @typedef {import("./").ServiceManager} ServiceManager */
 
 /**
  * @class

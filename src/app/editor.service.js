@@ -1,12 +1,12 @@
 // @ts-check
-import { ServiceBase } from '../scripts/class-service_base.js';
-import JWPage from '../scripts/class-page.js';
+import { ServiceBase } from '../scripts';
+import { JWPage } from '../scripts';
 import { StatusService } from './status.service.js';
 import { IndexService } from './index.service.js';
-/** @typedef {import('../scripts/class-cloud_base.js').JWFile} JWFile*/
+/** @typedef {import('../scripts').JWFile} JWFile*/
 import { ModelsService } from './models.service.js';
 
-import WikiSyntaxPlugin from '../scripts/class-wiki_syntax_plugin.js';
+import { WikiSyntaxPlugin } from '../scripts';
 
 /**
  * @class

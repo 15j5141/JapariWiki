@@ -1,6 +1,6 @@
 // @ts-check
-export { ServiceBase } from '../scripts/class-service_base.js';
-export { default as Renderer } from '../scripts/class-renderer.js';
+export { ComponentBase, ServiceBase } from '../scripts';
+export { Renderer } from '../scripts';
 import * as decorations from '../scripts/decorations';
 export { decorations };
 // import jQuery from 'jquery';

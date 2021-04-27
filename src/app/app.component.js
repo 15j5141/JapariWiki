@@ -2,7 +2,7 @@
 /**
  * @fileoverview ルートコンポーネントへの一括読込を担う.
  */
-import ComponentBase from '../scripts/class-component_base.js';
+import { ComponentBase } from '../scripts';
 import { StatusService } from './status.service.js';
 
 /**

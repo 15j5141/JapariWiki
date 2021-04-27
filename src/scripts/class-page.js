@@ -2,7 +2,7 @@
 /**
  * ページデータの構造体.
  */
-class JWPage {
+export class JWPage {
   /**
    * @param {string} pageURI ページ名
    * @param {string} rawText 生のテキスト
@@ -30,5 +30,3 @@ class JWPage {
     return uri.indexOf('/') === 0;
   }
 }
-
-export default JWPage;

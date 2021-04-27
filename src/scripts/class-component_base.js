@@ -4,8 +4,8 @@
  * @fileoverview
  */
 import { ReplaySubject } from 'rxjs';
-import Renderer from './class-renderer.js';
-/** @typedef {import("./class-service_manager").default} ServiceManager */
+import { Renderer } from './';
+/** @typedef {import("./").ServiceManager} ServiceManager */
 /** @typedef {import("./class-service_base").ServiceBase} ServiceBase */
 /**
  * @typedef {Object} ReferenceObject
@@ -28,7 +28,7 @@ import Renderer from './class-renderer.js';
  * @class
  * @property {Object} decoration
  */
-export default class ComponentBase {
+export class ComponentBase {
   /**
    * コンストラクタ.
    * 子クラスはオーバーライドしない.

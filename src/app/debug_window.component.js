@@ -1,5 +1,5 @@
 // @ts-check
-import ComponentBase from '../scripts/class-component_base.js';
+import { ComponentBase } from '../scripts';
 import { ModelsService } from './models.service.js';
 import { StatusService } from './status.service.js';
 import { WikiService } from './wiki.service.js';

@@ -1,6 +1,6 @@
 // @ts-check
-import JWPage from '../scripts/class-page.js';
-import ComponentBase from '../scripts/class-component_base.js';
+import { JWPage } from '../scripts';
+import { ComponentBase } from '../scripts';
 import { StatusService } from './status.service.js';
 import { ModelsService } from './models.service.js';
 import { EditorService } from './editor.service.js';

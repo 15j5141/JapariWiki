@@ -1,10 +1,10 @@
 // @ts-check
-import CloudNCMB from './class-cloud_ncmb.js';
+import { CloudNCMB } from './';
 /**
  * Wiki 構文解析用プラグインクラス.
  * @class
  */
-class SyntaxPluginBase {
+export class SyntaxPluginBase {
   /**
    * @param {string} text
    */
@@ -50,5 +50,3 @@ class SyntaxPluginBase {
     throw new Error('Not Implemented');
   }
 }
-
-export default SyntaxPluginBase;

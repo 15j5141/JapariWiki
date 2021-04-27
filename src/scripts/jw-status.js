@@ -1,11 +1,11 @@
 // @ts-check
-import JWPage from './class-page.js';
+import { JWPage } from './';
 
 /**
  * サイトの状態を保持.
  * リロード等されたときに再現するために必要.
  */
-class JWStatus {
+export class JWStatus {
   /** */
   constructor() {
     // 初期値.
@@ -117,5 +117,3 @@ class JWStatus {
     return null;
   }
 }
-
-export default JWStatus;

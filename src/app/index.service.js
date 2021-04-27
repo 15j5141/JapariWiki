@@ -1,5 +1,5 @@
 // @ts-check
-import { ServiceBase } from '../scripts/class-service_base.js';
+import { ServiceBase } from '../scripts';
 import { BehaviorSubject } from 'rxjs';
 import { StatusService } from './status.service.js';
 import { ModelsService } from './models.service.js';

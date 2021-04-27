@@ -1,5 +1,5 @@
 // @ts-check
-/** @typedef {import("./class-page").default} JWPage */
+/** @typedef {import("./").JWPage} JWPage */
 /**
  * @typedef {Object} JWFile
  * @property {Object=} acl
@@ -20,7 +20,7 @@
 /**
  * クラウドの継承元クラス.
  */
-class CloudBase {
+export class CloudBase {
   /** */
   constructor() {}
   /**
@@ -176,5 +176,3 @@ class CloudBase {
     throw new Error('Not Implemented');
   }
 }
-
-export default CloudBase;
