@@ -1,12 +1,12 @@
 /* eslint-disable new-cap */
 // @ts-check
-import CloudNCMB from './class-cloud_ncmb.js';
-import SyntaxPluginBase from './class-syntax_plugin_base.js';
+import { CloudNCMB } from './';
+import { SyntaxPluginBase } from './';
 /**
  * Wiki 構文解析用プラグインクラス.
  * @class
  */
-class WikiSyntaxPlugin extends SyntaxPluginBase {
+export class WikiSyntaxPlugin extends SyntaxPluginBase {
   /**
    * @param {string} text
    */
@@ -360,5 +360,3 @@ class NCMBComment {
     return result;
   }
 }
-
-export default WikiSyntaxPlugin;

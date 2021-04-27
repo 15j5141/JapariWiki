@@ -1,13 +1,12 @@
 // @ts-check
-import ComponentBase from '../scripts/class-component_base.js';
-import { StatusService } from './status.service.js';
-import ModelsService from './models.service.js';
+import { ComponentBase } from '../scripts';
+import { StatusService, ModelsService } from './services';
 import { filter } from 'rxjs/operators';
 
 /**
  * @class
  */
-export default class HistoryComponent extends ComponentBase {
+export class HistoryComponent extends ComponentBase {
   /**
    * @override
    */

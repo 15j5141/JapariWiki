@@ -1,7 +1,6 @@
 /* eslint-disable new-cap */
 // @ts-check
-import CloudBase from './class-cloud_base.js';
-import JWPage from './class-page.js';
+import { CloudBase, JWPage } from './';
 /** @typedef {import('./class-cloud_base.js').JWFile} JWFile*/
 /** @typedef {import('./class-cloud_base.js').JWUser} JWUser*/
 import env from '../.env.json';
@@ -9,7 +8,7 @@ import env from '../.env.json';
  * ニフクラクラス.
  * @class
  */
-class CloudNCMB extends CloudBase {
+export class CloudNCMB extends CloudBase {
   /** @override */
   constructor() {
     super();
@@ -464,4 +463,3 @@ class CloudNCMB extends CloudBase {
       });
   }
 }
-export default CloudNCMB;

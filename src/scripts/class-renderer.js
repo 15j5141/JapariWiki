@@ -3,7 +3,7 @@
 import { Subject } from 'rxjs';
 
 /** */
-class Renderer {
+export class Renderer {
   /**
    * @param {Element} element
    */
@@ -110,4 +110,3 @@ class Renderer {
     return html;
   }
 }
-export default Renderer;

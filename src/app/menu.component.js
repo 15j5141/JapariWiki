@@ -1,12 +1,11 @@
 // @ts-check
-import ComponentBase from '../scripts/class-component_base.js';
-import PageRenderer from '../scripts/class-page_renderer.js';
-import IndexService from './index.service.js';
+import { ComponentBase, PageRenderer } from '../scripts';
+import { IndexService } from './services';
 
 /**
  * @class
  */
-export default class MenuComponent extends ComponentBase {
+export class MenuComponent extends ComponentBase {
   /**
    * @override
    */

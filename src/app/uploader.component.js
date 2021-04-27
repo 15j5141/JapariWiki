@@ -1,8 +1,7 @@
 // @ts-check
 import { filter } from 'rxjs/operators';
 import { atComponent } from '../scripts/decorations';
-import { StatusService } from './status.service.js';
-import UploaderService from './uploader.service.js';
+import { StatusService, UploaderService } from './services';
 
 /**
  * 画像アップロード用のコンポーネント.

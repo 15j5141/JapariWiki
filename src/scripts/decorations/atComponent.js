@@ -1,4 +1,4 @@
-import ComponentBase from '../class-component_base.js';
+import { ComponentBase } from '../../scripts';
 /** @typedef {(clazz?: typeof ComponentBase) => typeof ComponentBase} ComponentDecorator */
 /** @typedef {import("../class-component_base.js").ComponentDecoration} ComponentDecoration */
 

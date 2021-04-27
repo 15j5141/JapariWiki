@@ -1,11 +1,11 @@
 // @ts-check
-/** @typedef {import("./class-components_manager").default} ComponentsManager */
-/** @typedef {import("./class-service_manager").default} ServiceManager */
+/** @typedef {import("./").ComponentsManager} ComponentsManager */
+/** @typedef {import("./").ServiceManager} ServiceManager */
 
 /**
  * @class
  */
-export default class ServiceBase {
+export class ServiceBase {
   /**
    * @param {{componentsManager: ComponentsManager, serviceManager: ServiceManager}} referenceObject
    */
@@ -29,6 +29,14 @@ export default class ServiceBase {
       this.onStart();
     });
   }
+  /**
+   * 依存解決用のサービス名.
+   * @abstract
+   */
+  get [Symbol.toStringTag]() {
+    return 'PleaseOverrideServiceName';
+  }
+
   /**
    * 疑似デコレーター.
    * @abstract

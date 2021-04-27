@@ -1,9 +1,9 @@
 // @ts-check
-import ComponentBase from '../scripts/class-component_base.js';
+import { ComponentBase } from '../scripts';
 /**
  * @class
  */
-export default class FooterComponent extends ComponentBase {
+export class FooterComponent extends ComponentBase {
   /**
    * @override
    */

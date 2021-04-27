@@ -1,5 +1,5 @@
 // @ts-check
-/** @typedef {import("./class-service_base").default} ServiceBase */
+/** @typedef {import("./class-service_base").ServiceBase} ServiceBase */
 import { Observable } from 'rxjs';
 import { ReplaySubject } from 'rxjs';
 import { find } from 'rxjs/operators';
@@ -8,7 +8,7 @@ import { find } from 'rxjs/operators';
  * 全サービス管理用.
  * @class
  */
-export default class ServiceManager {
+export class ServiceManager {
   /** */
   constructor() {
     // 追加後に購読しても拾えるように ReplaySubject で処理する.
@@ -34,8 +34,9 @@ export default class ServiceManager {
     return this.services$.pipe(
       // 検索する.
       find(
-        service =>
-          service.constructor.name === serviceClassPrototype.constructor.name
+        service => service.toString() === serviceClassPrototype.toString()
+        // constructor.name はminifyされると怪しい.
+        // instanceof はlib/jwと内蔵jwとでclassがminifyによって一致しない.
       )
     );
   }

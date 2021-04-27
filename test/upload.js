@@ -1,4 +1,4 @@
-import CloudNCMB from '../src/scripts/class-cloud_ncmb.js';
+import { CloudNCMB } from '../src/scripts';
 const nc = new CloudNCMB();
 console.log(nc);
 (async function() {

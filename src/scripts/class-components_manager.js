@@ -2,13 +2,13 @@
 import { ReplaySubject } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { Observable } from 'rxjs';
-/** @typedef {import('./class-component_base.js').default} ComponentBase */
+/** @typedef {import('./').ComponentBase} ComponentBase */
 
 /**
  * 全サービス管理用.
  * @class
  */
-export default class ComponentsManager {
+export class ComponentsManager {
   /** */
   constructor() {
     // 追加後に購読しても拾えるように ReplaySubject で処理する.

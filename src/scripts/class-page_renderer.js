@@ -1,10 +1,10 @@
 // @ts-check
-import Renderer from './class-renderer.js';
-import CloudNCMB from './class-cloud_ncmb.js';
-import JWStatus from './jw-status.js';
-import WikiSyntaxPlugin from './class-wiki_syntax_plugin.js';
+import { Renderer } from './';
+import { CloudNCMB } from './';
+import { JWStatus } from './';
+import { WikiSyntaxPlugin } from './';
 /** */
-class PageRenderer extends Renderer {
+export class PageRenderer extends Renderer {
   /**
    * @override
    * @param {Element} element
@@ -12,7 +12,7 @@ class PageRenderer extends Renderer {
    */
   constructor(element, pageURI) {
     super(element);
-    this._cloud = new CloudNCMB();
+    this._cloud = new CloudNCMB(); // FixMe to delete.
     this._jwStatus = new JWStatus();
     this._pageURI = pageURI;
     /**
@@ -63,4 +63,3 @@ class PageRenderer extends Renderer {
     return result;
   }
 }
-export default PageRenderer;

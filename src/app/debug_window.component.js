@@ -1,13 +1,11 @@
 // @ts-check
-import ComponentBase from '../scripts/class-component_base.js';
-import ModelsService from './models.service.js';
-import { StatusService } from './status.service.js';
-import WikiService from './wiki.service.js';
+import { ComponentBase } from '../scripts';
+import { ModelsService, StatusService, WikiService } from './services';
 /**
  * デバッグ情報表示用コンポーネント.
  * @class
  */
-export default class DebugWindowComponent extends ComponentBase {
+export class DebugWindowComponent extends ComponentBase {
   /**
    * @override
    */

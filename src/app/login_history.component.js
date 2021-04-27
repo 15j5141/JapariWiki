@@ -1,11 +1,11 @@
 // @ts-check
-import ComponentBase from '../scripts/class-component_base.js';
-import { StatusService } from './status.service.js';
+import { ComponentBase } from '../scripts';
+import { StatusService } from './services';
 
 /**
  * @class
  */
-export default class LoginHistoryComponent extends ComponentBase {
+export class LoginHistoryComponent extends ComponentBase {
   /**
    * @override
    */
