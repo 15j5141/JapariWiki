@@ -8,6 +8,8 @@ import { IndexService } from './services';
 import { debounceTime, filter, map } from 'rxjs/operators';
 import { BehaviorSubject } from 'rxjs';
 import * as Diff from 'diff';
+import MarkdownIt from 'markdown-it';
+const markdown = new MarkdownIt({ html: true, breaks: true });
 
 /**
  * @class
@@ -113,8 +115,15 @@ export class EditorApp extends ComponentBase {
           })
           .join('');
 
+        const pageName = '' + self.binds.$pageName.val();
         // 構文解析する.
-        html = this.serviceInjection.editor.replaceSyntax(html);
+        if (/\.md$/.test(pageName.toLowerCase())) {
+          // Markdownで解析する.
+          html = markdown.render(html);
+        } else {
+          // JW構文で解析する.
+          html = this.serviceInjection.editor.replaceSyntax(html);
+        }
         // プレビューに反映する.
         this.binds.$preview.html(html);
 
