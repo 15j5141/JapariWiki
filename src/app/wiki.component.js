@@ -7,6 +7,8 @@ import {
   IndexService,
 } from './services';
 import { atComponent } from '../scripts/decorations';
+import MarkdownIt from 'markdown-it';
+const markdown = new MarkdownIt({ breaks: true });
 
 // デコレーションする.
 const Component = atComponent({
@@ -52,7 +54,13 @@ export class WikiApp extends Component {
           this.doneAjax = true;
 
           // 受信してものを構文解析して描画する.
-          this.renderer.html$.next({ value: jwPage.rawText });
+          if (/\.md$/.test(jwPage.pageURI.toLowerCase())) {
+            // Markdownで描画する.
+            this.drawByMarkdown(jwPage.rawText);
+          } else {
+            // 拡張子が無ければJWの構文で描画する.
+            this.renderer.html$.next({ value: jwPage.rawText });
+          }
         },
         e => {
           console.log('page$-onErr', e);
@@ -166,5 +174,14 @@ export class WikiApp extends Component {
    */
   scroll2Top() {
     this.$('html,body').animate({ scrollTop: 0 }, 100, 'swing');
+  }
+  /**
+   * MarkdownでHTMLを書き換える.
+   * @param {string} rawText
+   */
+  drawByMarkdown(rawText) {
+    // convert markdown to HTML.
+    const html = markdown.render(rawText);
+    this.$element.html(html);
   }
 }
