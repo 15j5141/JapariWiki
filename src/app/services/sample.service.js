@@ -1,8 +1,6 @@
 // @ts-check
-import { ServiceBase } from '../scripts';
-import { StatusService } from './status.service.js';
-import { IndexService } from './index.service.js';
-import { ModelsService } from './models.service.js';
+import { ServiceBase } from '../../scripts';
+import { StatusService, IndexService, ModelsService } from './';
 
 /** @typedef {import('rxjs').Subject} Subject*/
 import { BehaviorSubject } from 'rxjs';
@@ -10,11 +8,7 @@ import { BehaviorSubject } from 'rxjs';
 /**
  * @class
  */
-export class UploaderService extends ServiceBase {
-  /** @override */
-  get [Symbol.toStringTag]() {
-    return 'UploaderService';
-  }
+export class SampleService extends ServiceBase {
   /**
    * @override
    */
@@ -32,11 +26,10 @@ export class UploaderService extends ServiceBase {
       index: IndexService.prototype,
       models: ModelsService.prototype,
     };
-  }
-  /**
-   * アップローダコンポーネントを開け閉めする.
-   */
-  toggleUploader() {
-    this.event$.next('toggle');
+
+    /*
+    サービスでのコンポーネントの取得は極力行わない.
+    コンポーネント側でサービスのプロパティのオブザーバを購読する.
+    */
   }
 }

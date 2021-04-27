@@ -1,10 +1,8 @@
 // @ts-check
-import { ServiceBase } from '../scripts';
-import { CloudNCMB } from '../scripts';
-import { JWStatus } from '../scripts';
+import { ServiceBase, CloudNCMB, JWStatus } from '../../scripts';
 import { BehaviorSubject } from 'rxjs';
-/** @typedef {import("../scripts").CloudBase} CloudBase */
-/** @typedef {import("../scripts").JWUser} JWUser */
+/** @typedef {import("../../scripts").CloudBase} CloudBase */
+/** @typedef {import("../../scripts").JWUser} JWUser */
 
 /**
  * ユーザー名やログイン状況等を管理する.

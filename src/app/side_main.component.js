@@ -1,6 +1,6 @@
 // @ts-check
 import { ComponentBase } from '../scripts';
-import { StatusService } from './status.service.js';
+import { StatusService } from './services';
 import { filter } from 'rxjs/operators';
 
 /**

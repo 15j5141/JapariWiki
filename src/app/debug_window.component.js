@@ -1,8 +1,6 @@
 // @ts-check
 import { ComponentBase } from '../scripts';
-import { ModelsService } from './models.service.js';
-import { StatusService } from './status.service.js';
-import { WikiService } from './wiki.service.js';
+import { ModelsService, StatusService, WikiService } from './services';
 /**
  * デバッグ情報表示用コンポーネント.
  * @class

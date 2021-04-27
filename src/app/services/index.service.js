@@ -1,10 +1,7 @@
 // @ts-check
-import { ServiceBase } from '../scripts';
+import { ServiceBase } from '../../scripts';
+import { StatusService, ModelsService, WikiService, EditorService } from './';
 import { BehaviorSubject } from 'rxjs';
-import { StatusService } from './status.service.js';
-import { ModelsService } from './models.service.js';
-import { WikiService } from './wiki.service.js';
-import { EditorService } from './editor.service.js';
 import { filter } from 'rxjs/operators';
 
 /**

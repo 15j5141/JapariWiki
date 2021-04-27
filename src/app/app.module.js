@@ -1,7 +1,4 @@
 // @ts-check
-import { IndexService } from '../app/index.service.js';
-import { StatusService } from '../app/status.service.js';
-
 import { HeaderComponent } from '../app/header.component.js';
 import { FooterComponent } from '../app/footer.component.js';
 import { WikiApp } from '../app/wiki.component.js';
@@ -16,10 +13,7 @@ import { AppComponent } from './app.component.js';
 
 import { ComponentBase } from '../scripts';
 import { ServiceBase } from '../scripts';
-import { ModelsService } from './models.service.js';
-import { WikiService } from './wiki.service.js';
-import { EditorService } from './editor.service.js';
-import { UploaderService } from './uploader.service.js';
+import * as services from '../app/services';
 
 /**
  * @typedef {Object} Modules
@@ -52,14 +46,7 @@ export class AppModule {
         DebugWindowComponent,
       ],
       // providers.
-      services: [
-        IndexService,
-        StatusService,
-        ModelsService,
-        WikiService,
-        EditorService,
-        UploaderService,
-      ],
+      services: Object.keys(services).map(key => services[key]),
       bootstrap: [AppComponent],
     };
   }

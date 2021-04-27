@@ -1,10 +1,7 @@
 // @ts-check
-import { ServiceBase } from '../scripts';
-import { JWPage } from '../scripts';
-import { StatusService } from './status.service.js';
-import { IndexService } from './index.service.js';
-/** @typedef {import('../scripts').JWFile} JWFile */
-import { ModelsService } from './models.service.js';
+import { ServiceBase, JWPage } from '../../scripts';
+import { StatusService, IndexService, ModelsService } from './';
+/** @typedef {import('../../scripts').JWFile} JWFile */
 
 import {
   Subject,

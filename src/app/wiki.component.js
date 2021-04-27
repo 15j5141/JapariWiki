@@ -1,10 +1,11 @@
 // @ts-check
-import { PageRenderer } from '../scripts';
-import { ComponentBase } from '../scripts';
-import { StatusService } from './status.service.js';
-import { ModelsService } from './models.service.js';
-import { WikiService } from './wiki.service.js';
-import { IndexService } from './index.service.js';
+import { PageRenderer, ComponentBase } from '../scripts';
+import {
+  StatusService,
+  ModelsService,
+  WikiService,
+  IndexService,
+} from './services';
 import { atComponent } from '../scripts/decorations';
 
 // デコレーションする.
